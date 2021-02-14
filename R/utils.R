@@ -17,12 +17,12 @@
 #' @export
 identify_unused_records <- function(gedcom) {
   
-  xrefs_indi <- tidyged:::xrefs_individuals(gedcom)
-  xrefs_fam <- tidyged:::xrefs_families(gedcom)
-  xrefs_media <- tidyged:::xrefs_multimedia(gedcom)
-  xrefs_sour <- tidyged:::xrefs_sources(gedcom)
-  xrefs_repo <- tidyged:::xrefs_repositories(gedcom)
-  xrefs_note <- tidyged:::xrefs_notes(gedcom)
+  xrefs_indi <- xrefs_individuals(gedcom)
+  xrefs_fam <- xrefs_families(gedcom)
+  xrefs_media <- xrefs_multimedia(gedcom)
+  xrefs_sour <- xrefs_sources(gedcom)
+  xrefs_repo <- xrefs_repositories(gedcom)
+  xrefs_note <- xrefs_notes(gedcom)
   
   # get unattached individuals
   attached <- unique(dplyr::filter(gedcom, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$value)
@@ -69,7 +69,7 @@ identify_unused_records <- function(gedcom) {
 remove_change_dates <- function(gedcom) {
   
   gedcom %>% 
-    tidyged:::remove_section(1, "CHAN", "")
+    remove_section(1, "CHAN", "")
   
 }
 
@@ -95,7 +95,7 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
   
   for(note in note_dupes) {
     
-    existing_notes <- tidyged:::xrefs_notes(gedcom)
+    existing_notes <- xrefs_notes(gedcom)
     
     # get xrefs of existing note record
     xref <- gedcom %>%
@@ -107,7 +107,7 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
       gedcom <- gedcom %>% 
         tidyged::add_note(note)
       
-      new_notes <- tidyged:::xrefs_notes(gedcom)
+      new_notes <- xrefs_notes(gedcom)
       
       xref <- dplyr::setdiff(new_notes, existing_notes)
     } 
@@ -142,7 +142,7 @@ identify_descendants <- function(gedcom,
                                  include_spouses = FALSE,
                                  include_families = FALSE) {
   
-  xref <- tidyged:::get_valid_xref(gedcom, individual, .pkgenv$record_string_indi, is_indi)
+  xref <- get_valid_xref(gedcom, individual, .pkgenv$record_string_indi, is_indi)
   
   return_xrefs <- NULL
   
