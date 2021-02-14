@@ -142,7 +142,7 @@ identify_descendants <- function(gedcom,
                                  include_spouses = FALSE,
                                  include_families = FALSE) {
   
-  xref <- get_valid_xref(gedcom, individual, .pkgenv$record_string_indi, is_indi)
+  xref <- get_valid_xref(gedcom, individual, .pkgenv$record_string_indi, tidyged::is_indi)
   
   return_xrefs <- NULL
   
