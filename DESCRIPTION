@@ -16,6 +16,7 @@ RoxygenNote: 7.1.1
 Imports: 
     dplyr,
     tidyged,
+    tidyged.internals,
     magrittr
 Suggests: 
     testthat (>= 3.0.0),
@@ -25,6 +26,7 @@ Suggests:
     gedcompendium
 Remotes: 
     jl5000/tidyged, 
+    jl5000/tidyged.internals,
     jl5000/gedcompendium
 Config/testthat/edition: 3
 VignetteBuilder: knitr

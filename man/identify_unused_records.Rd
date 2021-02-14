@@ -20,6 +20,6 @@ You would expect every record to be referenced by another in some way. For examp
 records should reference Family Group records (and vice-versa), Repository records should be referenced
 by Source records, and Source records should be cited by other records.
 
-You can use the output of this function with remove_records() to remove them, or describe_records() to
-find out more about them.
+You can use the output of this function with tidyged::remove_records() to remove them, or
+tidyged::describe_records() to find out more about them.
 }

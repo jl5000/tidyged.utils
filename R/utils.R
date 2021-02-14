@@ -17,12 +17,12 @@
 #' @export
 identify_unused_records <- function(gedcom) {
   
-  xrefs_indi <- xrefs_individuals(gedcom)
-  xrefs_fam <- xrefs_families(gedcom)
-  xrefs_media <- xrefs_multimedia(gedcom)
-  xrefs_sour <- xrefs_sources(gedcom)
-  xrefs_repo <- xrefs_repositories(gedcom)
-  xrefs_note <- xrefs_notes(gedcom)
+  xrefs_indi <- tidyged::xrefs_indi(gedcom)
+  xrefs_fam <- tidyged::xrefs_famg(gedcom)
+  xrefs_media <- tidyged::xrefs_media(gedcom)
+  xrefs_sour <- tidyged::xrefs_sour(gedcom)
+  xrefs_repo <- tidyged::xrefs_repo(gedcom)
+  xrefs_note <- tidyged::xrefs_note(gedcom)
   
   # get unattached individuals
   attached <- unique(dplyr::filter(gedcom, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$value)
@@ -95,7 +95,7 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
   
   for(note in note_dupes) {
     
-    existing_notes <- xrefs_notes(gedcom)
+    existing_notes <- tidyged::xrefs_note(gedcom)
     
     # get xrefs of existing note record
     xref <- gedcom %>%
@@ -107,7 +107,7 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
       gedcom <- gedcom %>% 
         tidyged::add_note(note)
       
-      new_notes <- xrefs_notes(gedcom)
+      new_notes <- tidyged::xrefs_note(gedcom)
       
       xref <- dplyr::setdiff(new_notes, existing_notes)
     } 
@@ -201,5 +201,68 @@ remove_dates_for_tests <- function(gedcom) {
   gedcom %>% 
     remove_change_dates() %>% 
     dplyr::filter(!(level == 1 & record == "HD" & tag == "DATE"))
+  
+}
+
+
+#' Split a tidygedcom object into two
+#'
+#' @param gedcom A tidygedcom object to split.
+#' @param xrefs A vector of xrefs to put into the new tidyged object.
+#' @param remove_dead_refs Whether to remove references to records not in the new tidyged object.
+#'
+#' @return A new tidyged object containing the xrefs specified. It will also have the same
+#' header and submitter information as the input tidyged object.
+#' @export
+#' @tests
+#' expect_snapshot_value(split_gedcom(sample555, c("@I1@","@S1@")), "json2")
+#' expect_snapshot_value(split_gedcom(sample555, c("@I1@","@S1@"), FALSE), "json2")
+split_gedcom <- function(gedcom,
+                         xrefs,
+                         remove_dead_refs = TRUE) {
+  
+  xrefs <- c(xrefs, tidyged::xrefs_subm(gedcom))
+  
+  new <- gedcom %>% 
+    dplyr::filter(record %in% c("HD", "TR", xrefs))
+  
+  links <- dplyr::filter(new, grepl(xref_pattern(), value)) %>% 
+    dplyr::pull(value) %>% 
+    unique()
+  
+  #links to records not retained
+  absent <- dplyr::setdiff(c(xrefs, links), xrefs)
+  
+  if(length(absent) > 0) {
+    if(remove_dead_refs) {
+      absent_rows <- dplyr::filter(new, value %in% absent)
+      
+      for (i in 1:nrow(absent_rows)) {
+        new <- remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
+      }
+    } else {
+      message("Some record references are dead: ", paste(absent, collapse = ", "))
+    }
+  }  
+  
+  new
+}
+
+#' Merge two tidygedcom objects
+#'
+#' @param gedcom1 The first tidygedcom object to merge.
+#' @param gedcom2 The second tidygedcom object to merge.
+#'
+#' @return A new tidyged object containing the records of both input objects. 
+#' It will also have the same header and submitter information as the first input tidyged object.
+#' @export
+merge_gedcoms <- function(gedcom1, gedcom2) {
+  
+  #find duplicate records
+  
+  #use header/subm info from first gedcom
+  
+  # make all xrefs unique
+  
   
 }
