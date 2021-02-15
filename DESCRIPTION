@@ -23,10 +23,16 @@ Suggests:
     roxytest,
     rmarkdown,
     knitr,
-    gedcompendium
+    visged,
+    autoged,
+    geddown,
+    tidyged.io
 Remotes: 
     jl5000/tidyged,
     jl5000/tidyged.internals,
-    jl5000/gedcompendium
+    jl5000/tidyged.io,
+    jl5000/visged,
+    jl5000/autoged,
+    jl5000/geddown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
