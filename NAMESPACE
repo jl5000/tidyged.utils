@@ -2,10 +2,8 @@
 
 export("%>%")
 export(consolidate_notes)
-export(identify_descendants)
 export(identify_unused_records)
 export(merge_gedcoms)
 export(remove_change_dates)
 export(split_gedcom)
 importFrom(magrittr,"%>%")
-importFrom(tidyged.internals,xref_pattern)

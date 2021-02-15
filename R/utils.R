@@ -69,7 +69,7 @@ identify_unused_records <- function(gedcom) {
 remove_change_dates <- function(gedcom) {
   
   gedcom %>% 
-    remove_section(1, "CHAN", "")
+    tidyged.internals::remove_section(1, "CHAN", "")
   
 }
 
@@ -123,86 +123,6 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 }
 
 
-#' Identify all descendants for an individual
-#' 
-#' This function identifies records in an entire branch of the family tree below a certain individual.
-#' 
-#' @param gedcom A tidyged object.
-#' @param individual The xref or name of an Individual record to act on if one 
-#' is not activated (will override active record).
-#' @param include_individual Whether to also include the individual themselves.
-#' @param include_spouses Whether to also include all spouses of this individual (and their descendants).
-#' @param include_families Whether to also include all Family Group records where this individual is a spouse.
-#'
-#' @return A vector of xrefs of descendants.
-#' @export
-identify_descendants <- function(gedcom,
-                                 individual = character(),
-                                 include_individual = FALSE,
-                                 include_spouses = FALSE,
-                                 include_families = FALSE) {
-  
-  xref <- get_valid_xref(gedcom, individual, .pkgenv$record_string_indi, tidyged::is_indi)
-  
-  return_xrefs <- NULL
-  
-  spou_xref <- tidyged::get_spouses(gedcom, xref)
-  chil_xref <- tidyged::get_children(gedcom, xref)
-  fams_xref <- tidyged::get_families_as_spouse(gedcom, xref)
-  
-  # if spouse is to be included, add their children to be included
-  if (include_spouses) {
-    # we don't use purrr::map here because the return values could vary in length
-    spou_chil <- NULL
-    for(i in seq_along(spou_xref)) {
-      spou_chil <- c(spou_chil, tidyged::get_children(gedcom, spou_xref[i]))
-    }
-    chil_xref <- unique(c(chil_xref, spou_chil))
-  }
-  
-  #deal with family groups first (while the individuals are still in them)
-  if (include_families) return_xrefs <- c(return_xrefs, fams_xref)
-  if (include_spouses) return_xrefs <- c(return_xrefs, spou_xref)
-  if (include_individual) return_xrefs <- c(return_xrefs, xref)
-  
-  # identify children
-  for(i in seq_along(chil_xref)) {
-    return_xrefs <- c(return_xrefs,
-                      identify_descendants(gedcom, chil_xref[i], TRUE, TRUE,TRUE))
-  }
-  
-  return_xrefs
-}
-
-
-identify_ancestors <- function(gedcom,
-                               individual = character(),
-                               include_individual = TRUE,
-                               include_siblings = FALSE,
-                               include_families = FALSE) {
-  
-  
-  
-}
-
-
-#' Remove all creation dates from a tidyged object
-#' 
-#' @details This is a function used in tests so that the objects created do not
-#' change every time.
-#'
-#' @param gedcom A tidyged object.
-#'
-#' @return The tidyged object with creation dates removed.
-#' @tests
-#' expect_snapshot_value(remove_dates_for_tests(tidyged::sample555), "json2")
-remove_dates_for_tests <- function(gedcom) {
-  
-  gedcom %>% 
-    remove_change_dates() %>% 
-    dplyr::filter(!(level == 1 & record == "HD" & tag == "DATE"))
-  
-}
 
 
 #' Split a tidygedcom object into two
@@ -226,7 +146,7 @@ split_gedcom <- function(gedcom,
   new <- gedcom %>% 
     dplyr::filter(record %in% c("HD", "TR", xrefs))
   
-  links <- dplyr::filter(new, grepl(xref_pattern(), value)) %>% 
+  links <- dplyr::filter(new, grepl(tidyged.internals::xref_pattern(), value)) %>% 
     dplyr::pull(value) %>% 
     unique()
   
@@ -238,7 +158,7 @@ split_gedcom <- function(gedcom,
       absent_rows <- dplyr::filter(new, value %in% absent)
       
       for (i in 1:nrow(absent_rows)) {
-        new <- remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
+        new <- tidyged.internals::remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
       }
     } else {
       message("Some record references are dead: ", paste(absent, collapse = ", "))

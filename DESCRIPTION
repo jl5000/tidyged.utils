@@ -22,17 +22,9 @@ Suggests:
     testthat (>= 3.0.0),
     roxytest,
     rmarkdown,
-    knitr,
-    visged,
-    autoged,
-    geddown,
-    tidyged.io
+    knitr
 Remotes: 
     jl5000/tidyged,
-    jl5000/tidyged.internals,
-    jl5000/tidyged.io,
-    jl5000/visged,
-    jl5000/autoged,
-    jl5000/geddown
+    jl5000/tidyged.internals
 Config/testthat/edition: 3
 VignetteBuilder: knitr
