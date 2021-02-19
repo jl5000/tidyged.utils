@@ -11,12 +11,14 @@
 [![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
-Various utilities to maintain and clean family tree
-[`tidyged`](https://jl5000.github.io/tidyged/) objects.
+Various utilities to maintain and clean family tree GEDCOM files.
 
-This package is part of the
-[`gedcompendium`](https://github.com/jl5000/gedcompendium) ecosystem of
-packages.
+The package is part of the `gedcompendium` ecosystem of packages. This
+ecosystem enables the handling of `tidyged` objects (tibble
+representations of GEDCOM files), and the main package of this ecosystem
+is [`tidyged`](https://jl5000.github.io/tidyged/).
+
+<img src="man/figures/allhex.png" width="65%" style="display: block; margin: auto;" />
 
 ## Installation
 
