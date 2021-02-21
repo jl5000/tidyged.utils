@@ -2,19 +2,19 @@
 % Please edit documentation in R/utils.R
 \name{merge_gedcoms}
 \alias{merge_gedcoms}
-\title{Merge two tidygedcom objects}
+\title{Merge two tidyged objects}
 \usage{
 merge_gedcoms(gedcom1, gedcom2)
 }
 \arguments{
-\item{gedcom1}{The first tidygedcom object to merge.}
+\item{gedcom1}{The first tidyged object to merge.}
 
-\item{gedcom2}{The second tidygedcom object to merge.}
+\item{gedcom2}{The second tidyged object to merge.}
 }
 \value{
 A new tidyged object containing the records of both input objects.
 It will also have the same header and submitter information as the first input tidyged object.
 }
 \description{
-Merge two tidygedcom objects
+Merge two tidyged objects
 }

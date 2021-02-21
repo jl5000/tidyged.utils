@@ -15,6 +15,9 @@ Roxygen: list(markdown = TRUE, roclets = c("namespace", "rd", "roxytest::testtha
 RoxygenNote: 7.1.1
 Imports: 
     dplyr,
+    tibble,
+    purrr,
+    stringr,
     tidyged,
     tidyged.internals,
     magrittr

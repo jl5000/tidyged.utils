@@ -15,6 +15,9 @@
 #'
 #' @return A vector of xrefs that are not referenced anywhere else in the tidyged object.
 #' @export
+#' @tests
+#' expect_equal(tidyged::gedcom() %>% tidyged::add_indi() %>% tidyged::add_famg() %>% identify_unused_records(),
+#'              c("@I1@","@F1@"))
 identify_unused_records <- function(gedcom) {
   
   xrefs_indi <- tidyged::xrefs_indi(gedcom)
@@ -66,6 +69,8 @@ identify_unused_records <- function(gedcom) {
 #'
 #' @return A tidyged object with all CHAN structures removed.
 #' @export
+#' @tests
+#' expect_snapshot_value(tidyged::gedcom() %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
 remove_change_dates <- function(gedcom) {
   
   gedcom %>% 
@@ -125,9 +130,9 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 
 
 
-#' Split a tidygedcom object into two
+#' Split a tidyged object into two
 #'
-#' @param gedcom A tidygedcom object to split.
+#' @param gedcom A tidyged object to split.
 #' @param xrefs A vector of xrefs to put into the new tidyged object.
 #' @param remove_dead_refs Whether to remove references to records not in the new tidyged object.
 #'
@@ -135,8 +140,8 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 #' header and submitter information as the input tidyged object.
 #' @export
 #' @tests
-#' expect_snapshot_value(split_gedcom(sample555, c("@I1@","@S1@")), "json2")
-#' expect_snapshot_value(split_gedcom(sample555, c("@I1@","@S1@"), FALSE), "json2")
+#' expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@")), "json2")
+#' expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@"), FALSE), "json2")
 split_gedcom <- function(gedcom,
                          xrefs,
                          remove_dead_refs = TRUE) {
@@ -157,7 +162,7 @@ split_gedcom <- function(gedcom,
     if(remove_dead_refs) {
       absent_rows <- dplyr::filter(new, value %in% absent)
       
-      for (i in 1:nrow(absent_rows)) {
+      for (i in seq_len(nrow(absent_rows))) {
         new <- tidyged.internals::remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
       }
     } else {
@@ -168,21 +173,82 @@ split_gedcom <- function(gedcom,
   new
 }
 
-#' Merge two tidygedcom objects
+#' Merge two tidyged objects
 #'
-#' @param gedcom1 The first tidygedcom object to merge.
-#' @param gedcom2 The second tidygedcom object to merge.
+#' @param gedcom1 The first tidyged object to merge.
+#' @param gedcom2 The second tidyged object to merge.
 #'
 #' @return A new tidyged object containing the records of both input objects. 
 #' It will also have the same header and submitter information as the first input tidyged object.
 #' @export
 merge_gedcoms <- function(gedcom1, gedcom2) {
   
+   gedcom <- migrate_records(gedcom1, gedcom2)
+  
   #find duplicate records
+  gedcom
+}
+
+
+potential_duplicates <- function(gedcom) {
+  # given + surname identical, yob, yod (2 year error)
+  ind_xrefs <- tidyged::xrefs_indi(gedcom)
   
-  #use header/subm info from first gedcom
+  given <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "GIVN", level = 2)
+  surname <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "SURN", level = 2)
+  dob <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "DATE", level = 2, after_tag = "BIRT")
+  dod <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "DATE", level = 2, after_tag = "DEAT")
   
-  # make all xrefs unique
+  yob <- stringr::str_extract(dob, "\\d{3,4}")
+  yod <- stringr::str_extract(dod, "\\d{3,4}")
   
+  comb <- tibble::tibble(xref = ind_xrefs,
+                         given = given,
+                         surname = surname,
+                         yob = yob,
+                         yod = yod) %>% 
+    dplyr::filter(!is.na(given), !is.na(surname))
   
+  comb
+}
+
+
+migrate_records <- function(gedcom1, gedcom2) {
+  
+ # update xrefs in gedcom2
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_indi, tidyged.internals::assign_xref_indi)
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_famg, tidyged.internals::assign_xref_famg)
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_sour, tidyged.internals::assign_xref_sour)
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_repo, tidyged.internals::assign_xref_repo)
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_media, tidyged.internals::assign_xref_media)
+  gedcom2 <- update_xrefs_of_type(gedcom1, gedcom2, tidyged::xrefs_note, tidyged.internals::assign_xref_note)
+  
+  new_xrefs <- c(tidyged::xrefs_indi(gedcom2), tidyged::xrefs_famg(gedcom2),
+                 tidyged::xrefs_sour(gedcom2), tidyged::xrefs_repo(gedcom2),
+                 tidyged::xrefs_media(gedcom2), tidyged::xrefs_note(gedcom2))
+  
+# move xrefs to gedcom1
+  records_to_move <- dplyr::filter(gedcom2, record %in% new_xrefs)
+  tibble::add_row(gedcom1, records_to_move, .before = nrow(gedcom1))
+}
+
+update_xrefs_of_type <- function(gedcom1, gedcom2, all_xrefs_fn, assign_xref_fn) {
+
+  old_xrefs <- all_xrefs_fn(gedcom2)
+  if (length(old_xrefs) == 0) return(gedcom2)
+  
+  new_xrefs <- assign_xref_fn(gedcom1, quantity = length(old_xrefs))
+  for (i in seq_along(old_xrefs)) {
+    gedcom2 <- replace_all_xrefs(gedcom2, old_xrefs[i], new_xrefs[i])
+  }
+
+  gedcom2
+  
+}
+
+replace_all_xrefs <- function(gedcom, old_xref, new_xref) {
+  
+  gedcom %>% 
+    dplyr::mutate(record = ifelse(record == old_xref, new_xref, record),
+                  value = ifelse(value == old_xref, new_xref, value))
 }

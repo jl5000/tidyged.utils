@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{split_gedcom}
 \alias{split_gedcom}
-\title{Split a tidygedcom object into two}
+\title{Split a tidyged object into two}
 \usage{
 split_gedcom(gedcom, xrefs, remove_dead_refs = TRUE)
 }
 \arguments{
-\item{gedcom}{A tidygedcom object to split.}
+\item{gedcom}{A tidyged object to split.}
 
 \item{xrefs}{A vector of xrefs to put into the new tidyged object.}
 
@@ -18,5 +18,5 @@ A new tidyged object containing the xrefs specified. It will also have the same
 header and submitter information as the input tidyged object.
 }
 \description{
-Split a tidygedcom object into two
+Split a tidyged object into two
 }
