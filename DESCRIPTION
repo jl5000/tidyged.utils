@@ -17,6 +17,7 @@ Imports:
     dplyr,
     tibble,
     purrr,
+    tidyr,
     stringr,
     tidyged,
     tidyged.internals,

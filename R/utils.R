@@ -103,14 +103,11 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
     existing_notes <- tidyged::xrefs_note(gedcom)
     
     # get xrefs of existing note record
-    xref <- gedcom %>%
-      dplyr::filter(level == 0, tag == "NOTE", value == note) %>% 
-      dplyr::pull(record)
+    xref <- dplyr::filter(gedcom, level == 0, tag == "NOTE", value == note)$record
     
     # if it doesn't exist create it
     if(length(xref) == 0) {
-      gedcom <- gedcom %>% 
-        tidyged::add_note(note)
+      gedcom <- tidyged::add_note(gedcom, note)
       
       new_notes <- tidyged::xrefs_note(gedcom)
       
@@ -183,14 +180,16 @@ split_gedcom <- function(gedcom,
 #' @export
 merge_gedcoms <- function(gedcom1, gedcom2) {
   
-   gedcom <- migrate_records(gedcom1, gedcom2)
-  
-  #find duplicate records
-  gedcom
+   migrate_records(gedcom1, gedcom2) %>% 
+    potential_duplicates_indi() %>% 
+    potential_duplicates_famg() %>% 
+    potential_duplicates_sour() %>% 
+    potential_duplicates_repo() %>% 
+    potential_duplicates_media()
 }
 
 
-potential_duplicates <- function(gedcom) {
+potential_duplicates_indi <- function(gedcom) {
   # given + surname identical, yob, yod (2 year error)
   ind_xrefs <- tidyged::xrefs_indi(gedcom)
   
@@ -207,11 +206,55 @@ potential_duplicates <- function(gedcom) {
                          surname = surname,
                          yob = yob,
                          yod = yod) %>% 
-    dplyr::filter(!is.na(given), !is.na(surname))
+    dplyr::filter(!is.na(given), !is.na(surname)) %>% 
+    dplyr::mutate(full = paste(given, surname))
   
+  # use a join to identify similar rows
+  for (i in seq_along(nrow(comb))) {
+    this_row <- comb[i,]
+    dupes <- dplyr::left_join(this_row, comb, by = "full")$xref
+    
+  }
+  # give user option of merging them
   comb
 }
 
+
+merge_records <- function(gedcom, xrefs) {
+  
+  # check records are of the same type
+  
+  
+  # merge and then remove duplicate subrecords
+  gedcom <- merge_subrecords(gedcom, xrefs)
+  
+  for (xref in xrefs) {
+    gedcom <- remove_duplicate_subrecords(gedcom, xref)
+  }
+  
+}
+
+merge_subrecords <- function(gedcom, xrefs) {
+  
+  
+}
+
+remove_duplicate_subrecords <- function(gedcom, xref) {
+  
+  record <- dplyr::filter(gedcom, record == xref)
+    
+  new_record <- dplyr::mutate(record, new_sub = level == 1,
+                              subrecord_no = cumsum(new_sub)) %>% 
+    dplyr::select(-new_sub) %>% 
+    dplyr::group_nest(subrecord_no) %>% 
+    dplyr::distinct() %>% 
+    tidyr::unnest(data) %>% 
+    dplyr::select(-subrecord_no)
+  
+  dplyr::filter(gedcom, record != xref) %>% 
+    tibble::add_row(new_record, .before = nrow(.))
+  
+}
 
 migrate_records <- function(gedcom1, gedcom2) {
   
@@ -239,16 +282,12 @@ update_xrefs_of_type <- function(gedcom1, gedcom2, all_xrefs_fn, assign_xref_fn)
   
   new_xrefs <- assign_xref_fn(gedcom1, quantity = length(old_xrefs))
   for (i in seq_along(old_xrefs)) {
-    gedcom2 <- replace_all_xrefs(gedcom2, old_xrefs[i], new_xrefs[i])
+    gedcom2 <- dplyr::mutate(gedcom2,
+                             record = ifelse(record == old_xrefs[i], new_xrefs[i], record),
+                             value = ifelse(value == old_xrefs[i], new_xrefs[i], value))
   }
 
   gedcom2
   
 }
 
-replace_all_xrefs <- function(gedcom, old_xref, new_xref) {
-  
-  gedcom %>% 
-    dplyr::mutate(record = ifelse(record == old_xref, new_xref, record),
-                  value = ifelse(value == old_xref, new_xref, value))
-}
