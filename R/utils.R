@@ -70,7 +70,7 @@ identify_unused_records <- function(gedcom) {
 #' @return A tidyged object with all CHAN structures removed.
 #' @export
 #' @tests
-#' expect_snapshot_value(tidyged::gedcom() %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
+#' expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
 remove_change_dates <- function(gedcom) {
   
   gedcom %>% 
@@ -181,11 +181,11 @@ split_gedcom <- function(gedcom,
 merge_gedcoms <- function(gedcom1, gedcom2) {
   
    migrate_records(gedcom1, gedcom2) %>% 
-    potential_duplicates_indi() %>% 
-    potential_duplicates_famg() %>% 
-    potential_duplicates_sour() %>% 
-    potential_duplicates_repo() %>% 
-    potential_duplicates_media()
+    potential_duplicates_indi() #%>% 
+    # potential_duplicates_famg() %>% 
+    # potential_duplicates_sour() %>% 
+    # potential_duplicates_repo() %>% 
+    # potential_duplicates_media()
 }
 
 
@@ -198,8 +198,8 @@ potential_duplicates_indi <- function(gedcom) {
   dob <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "DATE", level = 2, after_tag = "BIRT")
   dod <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "DATE", level = 2, after_tag = "DEAT")
   
-  yob <- stringr::str_extract(dob, "\\d{3,4}")
-  yod <- stringr::str_extract(dod, "\\d{3,4}")
+  yob <- as.numeric(stringr::str_extract(dob, "\\d{3,4}"))
+  yod <- as.numeric(stringr::str_extract(dod, "\\d{3,4}"))
   
   comb <- tibble::tibble(xref = ind_xrefs,
                          given = given,
@@ -210,13 +210,27 @@ potential_duplicates_indi <- function(gedcom) {
     dplyr::mutate(full = paste(given, surname))
   
   # use a join to identify similar rows
-  for (i in seq_along(nrow(comb))) {
-    this_row <- comb[i,]
-    dupes <- dplyr::left_join(this_row, comb, by = "full")$xref
+  while(nrow(comb) > 0) {
+    this_row <- comb[1,]
+    dupes <- dplyr::left_join(this_row, comb, by = "full") %>% 
+      dplyr::filter(is.na(yob.x) | dplyr::between(yob.x, comb$yob[1]-2, comb$yob[1]+2)) %>% 
+      dplyr::pull(xref.y)
     
+    if (length(dupes) > 1) {
+      # give user option of merging them
+      xrefs_to_merge <- utils::select.list(title = "Which of these individuals would you like to merge?",
+                                           choices = tidyged::describe_records(gedcom, dupes),
+                                           multiple = TRUE)
+      
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      
+      gedcom <- merge_records(gedcom, xrefs_to_merge)
+    }
+    
+    comb <- dplyr::filter(comb, !xref %in% dupes)
   }
-  # give user option of merging them
-  comb
+  
+  gedcom
 }
 
 
@@ -236,6 +250,7 @@ merge_records <- function(gedcom, xrefs) {
 
 merge_subrecords <- function(gedcom, xrefs) {
   
+  # combine xrefs into one
   
 }
 
