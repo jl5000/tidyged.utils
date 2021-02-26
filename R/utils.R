@@ -181,11 +181,14 @@ split_gedcom <- function(gedcom,
 merge_gedcoms <- function(gedcom1, gedcom2) {
   
    migrate_records(gedcom1, gedcom2) %>% 
-    potential_duplicates_indi() #%>% 
+    potential_duplicates_indi() %>% 
     # potential_duplicates_famg() %>% 
     # potential_duplicates_sour() %>% 
     # potential_duplicates_repo() %>% 
-    # potential_duplicates_media()
+    # potential_duplicates_media() %>% 
+    purrr::map(unique(.$record), remove_duplicate_subrecords, gedcom = .)
+ 
+
 }
 
 
@@ -213,7 +216,8 @@ potential_duplicates_indi <- function(gedcom) {
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
     dupes <- dplyr::left_join(this_row, comb, by = "full") %>% 
-      dplyr::filter(is.na(yob.x) | dplyr::between(yob.x, comb$yob[1]-2, comb$yob[1]+2)) %>% 
+      dplyr::filter(is.na(yob.y) | dplyr::between(yob.y, comb$yob[1]-2, comb$yob[1]+2)) %>% 
+      dplyr::filter(is.na(yod.y) | dplyr::between(yod.y, comb$yod[1]-2, comb$yod[1]+2)) %>%
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -224,7 +228,7 @@ potential_duplicates_indi <- function(gedcom) {
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      gedcom <- merge_records(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1)  gedcom <- merge_records(gedcom, xrefs_to_merge)
     }
     
     comb <- dplyr::filter(comb, !xref %in% dupes)
@@ -234,6 +238,11 @@ potential_duplicates_indi <- function(gedcom) {
 }
 
 
+potential_duplicates_famg <- function(gedcom) {
+  
+  
+}
+
 merge_records <- function(gedcom, xrefs) {
   
   # check records are of the same type
@@ -242,15 +251,25 @@ merge_records <- function(gedcom, xrefs) {
   # merge and then remove duplicate subrecords
   gedcom <- merge_subrecords(gedcom, xrefs)
   
-  for (xref in xrefs) {
-    gedcom <- remove_duplicate_subrecords(gedcom, xref)
-  }
+  
   
 }
 
 merge_subrecords <- function(gedcom, xrefs) {
   
+  first_line <- dplyr::filter(gedcom, record == xrefs[1], level == 0)
+  
   # combine xrefs into one
+  subrecords <- dplyr::filter(gedcom, record %in% xrefs, level != 0)
+  
+  merged <- dplyr::bind_rows(first_line, subrecords)
+  
+  gedcom %>% 
+    dplyr::filter(!record %in% xrefs) %>% 
+    tibble::add_row(merged, .before = nrow(.)) %>% 
+    dplyr::mutate(value = ifelse(value %in% xrefs, xrefs[1], value),
+                  record = ifelse(record %in% xrefs, xrefs[1], record))
+  
   
 }
 
@@ -262,9 +281,9 @@ remove_duplicate_subrecords <- function(gedcom, xref) {
                               subrecord_no = cumsum(new_sub)) %>% 
     dplyr::select(-new_sub) %>% 
     dplyr::group_nest(subrecord_no) %>% 
+    dplyr::select(-subrecord_no) %>% 
     dplyr::distinct() %>% 
-    tidyr::unnest(data) %>% 
-    dplyr::select(-subrecord_no)
+    tidyr::unnest(data)
   
   dplyr::filter(gedcom, record != xref) %>% 
     tibble::add_row(new_record, .before = nrow(.))
