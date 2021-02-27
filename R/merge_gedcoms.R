@@ -97,15 +97,13 @@ potential_duplicates <- function(gedcom) {
     potential_duplicates_famg() %>%
     potential_duplicates_sour() %>%
     potential_duplicates_repo() %>%
-    potential_duplicates_media() %>%
-    potential_duplicates_note()
+    potential_duplicates_media()
   
   records <- c(tidyged::xrefs_indi(gedcom),
                tidyged::xrefs_famg(gedcom),
                tidyged::xrefs_sour(gedcom),
                tidyged::xrefs_repo(gedcom),
-               tidyged::xrefs_media(gedcom),
-               tidyged::xrefs_note(gedcom))
+               tidyged::xrefs_media(gedcom))
   
   for (record in records) {
     gedcom <- remove_duplicate_subrecords(gedcom, record)
@@ -201,23 +199,108 @@ potential_duplicates_famg <- function(gedcom) {
 
 potential_duplicates_sour <- function(gedcom) {
   
+  sour_xrefs <- tidyged::xrefs_sour(gedcom)
+  
+  title <- purrr::map_chr(sour_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "TITL", level = 1)
+  
+  comb <- tibble::tibble(xref = sour_xrefs,
+                         title = title) %>% 
+    dplyr::filter(title != "")
+  
+  while(nrow(comb) > 0) {
+    this_row <- comb[1,]
+    dupes <- dplyr::left_join(this_row, comb, by = "title") %>% 
+      dplyr::pull(xref.y)
+    
+    if (length(dupes) > 1) {
+      # give user option of merging them
+      xrefs_to_merge <- utils::select.list(title = "Which of these sources would you like to merge?",
+                                           choices = tidyged::describe_records(gedcom, dupes),
+                                           multiple = TRUE)
+      
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      
+    }
+    
+    comb <- dplyr::filter(comb, !xref %in% dupes)
+  }
+  
+  gedcom
   
 }
 
 potential_duplicates_repo <- function(gedcom) {
   
+  repo_xrefs <- tidyged::xrefs_repo(gedcom)
+  
+  name <- purrr::map_chr(repo_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "NAME", level = 1)
+  
+  comb <- tibble::tibble(xref = repo_xrefs,
+                         name = name) %>% 
+    dplyr::filter(name != "")
+  
+  while(nrow(comb) > 0) {
+    this_row <- comb[1,]
+    dupes <- dplyr::left_join(this_row, comb, by = "name") %>% 
+      dplyr::pull(xref.y)
+    
+    if (length(dupes) > 1) {
+      # give user option of merging them
+      xrefs_to_merge <- utils::select.list(title = "Which of these repositories would you like to merge?",
+                                           choices = tidyged::describe_records(gedcom, dupes),
+                                           multiple = TRUE)
+      
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      
+    }
+    
+    comb <- dplyr::filter(comb, !xref %in% dupes)
+  }
+  
+  gedcom
   
 }
 
 potential_duplicates_media <- function(gedcom) {
   
+  media_xrefs <- tidyged::xrefs_media(gedcom)
+  
+  file_ref <- purrr::map_chr(media_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "FILE", level = 1)
+  format <- purrr::map_chr(media_xrefs, tidyged.internals::gedcom_value, gedcom = gedcom, tag = "FORM", level = 2)
+  
+  comb <- tibble::tibble(xref = media_xrefs,
+                         file_ref = file_ref,
+                         format = format) %>% 
+    dplyr::filter(file_ref != "", format != "")
+  
+  while(nrow(comb) > 0) {
+    this_row <- comb[1,]
+    dupes <- dplyr::left_join(this_row, comb, by = c("file_ref", "format")) %>% 
+      dplyr::pull(xref.y)
+    
+    if (length(dupes) > 1) {
+      # give user option of merging them
+      xrefs_to_merge <- utils::select.list(title = "Which of these multimedia would you like to merge?",
+                                           choices = tidyged::describe_records(gedcom, dupes),
+                                           multiple = TRUE)
+      
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      
+    }
+    
+    comb <- dplyr::filter(comb, !xref %in% dupes)
+  }
+  
+  gedcom
   
 }
 
-potential_duplicates_note <- function(gedcom) {
-  
-  
-}
 
 #' Combine multiple records into a single record
 #' 
