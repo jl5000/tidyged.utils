@@ -1,5 +1,7 @@
 ---
-output:  github_document
+output:  
+  github_document:
+    df_print: kable
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -31,6 +33,9 @@ The package is part of the `gedcompendium` ecosystem of packages. This ecosystem
 knitr::include_graphics("man/figures/allhex.png")
 ```
 
+For an introduction to GEDCOM files, head to the [website](https://jl5000.github.io/tidyged/articles/intro_to_gedcom.html).
+
+
 ## Installation
 
 You can install the development version from [GitHub](https://github.com/) with:
@@ -39,3 +44,90 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("jl5000/tidyged.utils")
 ```
+
+## Features
+
+GEDCOM files can get very large and unwieldy, resulting in inefficiencies and file bloat. The `tidyged.utils` package offers functions to automate the cleaning and handling of GEDCOM files. It includes:
+
+* Removal of 'change date' structures
+* Consolidating duplicate notes
+* Finding unreferenced records
+* Splitting files
+* Merging files
+
+## Change dates
+
+All top level records in a GEDCOM file can record the date and time they were last modified. The `tidyged` package (the main package for creating and summarising GEDCOM files) includes change dates (today's date) by default every time a record is created or modified. Since the time is very unlikely to be useful in such a context, the package ignores this by default. We illustrate by loading the `tidyged` and `tidyged.utils` packages, and creating an example object.
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+gedcom(subm("Me"))
+```
+
+See row `r which(gedcom(subm("Me"))$tag == "CHAN")` and the row after for the change date for the submitter record.
+
+For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the `remove_change_dates()` function:
+
+```{r}
+gedcom(subm("Me")) %>% 
+  remove_change_dates()
+```
+
+
+## Duplicate notes
+
+With all records and many subrecords, it's possible to include custom notes to augment the information provided. These can either be the notes themselves, or a pointer to a top level Note record:
+
+```{r}
+notes <- gedcom(subm("Me")) %>%
+  add_note("This is a generic note.") %>% 
+  add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
+  add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
+
+notes
+```
+
+In the above example, there is a generic note recorded in a top level Note record. This same note message has been used for the individual and repository defined, but they have been repeated rather than pointing to the Note record. There is also a repeated bespoke note given in the Individual and Repository records.
+
+The `consolidate_notes()` function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:
+
+```{r}
+consolidate_notes(notes)
+```
+
+
+## Unreferenced records
+
+If there are any records that are not referenced anywhere else, they can be found with the `identify_unused_records()` function. In the example below we create 6 family group records, half with members, half without, and also an unreferenced Repository record:
+
+```{r}
+some_unref <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Tom Smith") %>% 
+  add_indi(qn = "Tammy Smith") %>% 
+  add_indi(qn = "Alice White") %>% 
+  add_indi(qn = "Phil Brown") %>% 
+  add_famg(husband = "Tom", wife = "Tammy") %>% 
+  add_famg() %>% 
+  add_famg(husband = "Phil") %>% 
+  add_famg() %>% 
+  add_famg(children = "Alice") %>% 
+  add_famg() %>% 
+  add_repo("Test repo") 
+  
+identify_unused_records(some_unref)
+```
+
+We can find out more about these xrefs by using the `describe_records()` function from the `tidyged` package:
+
+```{r}
+identify_unused_records(some_unref) %>% 
+  describe_records(gedcom = some_unref)
+```
+
+
+
+
+
+
