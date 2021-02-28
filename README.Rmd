@@ -1,7 +1,5 @@
 ---
-output:  
-  github_document:
-    df_print: kable
+output: github_document
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -63,7 +61,8 @@ All top level records in a GEDCOM file can record the date and time they were la
 library(tidyged)
 library(tidyged.utils)
 
-gedcom(subm("Me"))
+gedcom(subm("Me")) %>% 
+  knitr::kable()
 ```
 
 See row `r which(gedcom(subm("Me"))$tag == "CHAN")` and the row after for the change date for the submitter record.
@@ -72,7 +71,8 @@ For GEDCOM files with thousands of records, including change dates can add consi
 
 ```{r}
 gedcom(subm("Me")) %>% 
-  remove_change_dates()
+  remove_change_dates() %>% 
+  knitr::kable()
 ```
 
 
@@ -86,7 +86,7 @@ notes <- gedcom(subm("Me")) %>%
   add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
   add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
 
-notes
+knitr::kable(notes)
 ```
 
 In the above example, there is a generic note recorded in a top level Note record. This same note message has been used for the individual and repository defined, but they have been repeated rather than pointing to the Note record. There is also a repeated bespoke note given in the Individual and Repository records.
@@ -94,7 +94,8 @@ In the above example, there is a generic note recorded in a top level Note recor
 The `consolidate_notes()` function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:
 
 ```{r}
-consolidate_notes(notes)
+consolidate_notes(notes) %>% 
+  knitr::kable()
 ```
 
 

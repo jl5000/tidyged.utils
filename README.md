@@ -60,10 +60,9 @@ packages, and creating an example object.
 library(tidyged)
 library(tidyged.utils)
 
-gedcom(subm("Me"))
+gedcom(subm("Me")) %>% 
+  knitr::kable()
 ```
-
-<div class="kable-table">
 
 | level | record | tag   | value                                    |
 | ----: | :----- | :---- | :--------------------------------------- |
@@ -81,16 +80,14 @@ gedcom(subm("Me"))
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 27 FEB 2021                              |
+|     1 | HD     | DATE  | 28 FEB 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 27 FEB 2021                              |
+|     2 | @U1@   | DATE  | 28 FEB 2021                              |
 |     0 | TR     | TRLR  |                                          |
-
-</div>
 
 See row 20 and the row after for the change date for the submitter
 record.
@@ -101,10 +98,9 @@ change date structures with the `remove_change_dates()` function:
 
 ``` r
 gedcom(subm("Me")) %>% 
-  remove_change_dates()
+  remove_change_dates() %>% 
+  knitr::kable()
 ```
-
-<div class="kable-table">
 
 | level | record | tag   | value                                    |
 | ----: | :----- | :---- | :--------------------------------------- |
@@ -122,14 +118,12 @@ gedcom(subm("Me")) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 27 FEB 2021                              |
+|     1 | HD     | DATE  | 28 FEB 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     0 | TR     | TRLR  |                                          |
-
-</div>
 
 ## Duplicate notes
 
@@ -143,10 +137,8 @@ notes <- gedcom(subm("Me")) %>%
   add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
   add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
 
-notes
+knitr::kable(notes)
 ```
-
-<div class="kable-table">
 
 | level | record | tag   | value                                    |
 | ----: | :----- | :---- | :--------------------------------------- |
@@ -164,20 +156,20 @@ notes
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 27 FEB 2021                              |
+|     1 | HD     | DATE  | 28 FEB 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 27 FEB 2021                              |
+|     2 | @U1@   | DATE  | 28 FEB 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 27 FEB 2021                              |
+|     2 | @N1@   | DATE  | 28 FEB 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 27 FEB 2021                              |
+|     2 | @I1@   | DATE  | 28 FEB 2021                              |
 |     1 | @I1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @I1@   | NOTE  | This is a generic note.                  |
 |     0 | @R1@   | REPO  |                                          |
@@ -185,10 +177,8 @@ notes
 |     1 | @R1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @R1@   | NOTE  | This is a generic note.                  |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 27 FEB 2021                              |
+|     2 | @R1@   | DATE  | 28 FEB 2021                              |
 |     0 | TR     | TRLR  |                                          |
-
-</div>
 
 In the above example, there is a generic note recorded in a top level
 Note record. This same note message has been used for the individual and
@@ -201,10 +191,9 @@ note values with pointers to top level Note records (creating them if
 necessary) if they are repeated:
 
 ``` r
-consolidate_notes(notes)
+consolidate_notes(notes) %>% 
+  knitr::kable()
 ```
-
-<div class="kable-table">
 
 | level | record | tag   | value                                    |
 | ----: | :----- | :---- | :--------------------------------------- |
@@ -222,20 +211,20 @@ consolidate_notes(notes)
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 27 FEB 2021                              |
+|     1 | HD     | DATE  | 28 FEB 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 27 FEB 2021                              |
+|     2 | @U1@   | DATE  | 28 FEB 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 27 FEB 2021                              |
+|     2 | @N1@   | DATE  | 28 FEB 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 27 FEB 2021                              |
+|     2 | @I1@   | DATE  | 28 FEB 2021                              |
 |     1 | @I1@   | NOTE  | @N2@                                     |
 |     1 | @I1@   | NOTE  | @N1@                                     |
 |     0 | @R1@   | REPO  |                                          |
@@ -243,13 +232,11 @@ consolidate_notes(notes)
 |     1 | @R1@   | NOTE  | @N2@                                     |
 |     1 | @R1@   | NOTE  | @N1@                                     |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 27 FEB 2021                              |
+|     2 | @R1@   | DATE  | 28 FEB 2021                              |
 |     0 | @N2@   | NOTE  | This is a bespoke note.                  |
 |     1 | @N2@   | CHAN  |                                          |
-|     2 | @N2@   | DATE  | 27 FEB 2021                              |
+|     2 | @N2@   | DATE  | 28 FEB 2021                              |
 |     0 | TR     | TRLR  |                                          |
-
-</div>
 
 ## Unreferenced records
 
