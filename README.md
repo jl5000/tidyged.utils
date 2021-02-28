@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tidyged.utils <img src='man/figures/logo.png' align="right" height="136" />
+# tidyged.utils <img src='man/figures/logo.png' align="right" height="138" />
 
 <!-- badges: start -->
 
