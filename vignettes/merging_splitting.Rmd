@@ -44,13 +44,8 @@ With this new file we can see it has the exact same header and submitter informa
 describe_records(new, new$record, short_desc = TRUE)
 ```
 
-By default, this function will remove references to records that do not exist in the file. If we decide not to remove these references, we will get a message about it:
+By default, this function will remove references to records that do not exist in the file. The function will tell us which records these are in case you want to go back and include them.
 
-```{r}
-new2 <- split_gedcom(sample555, c("@F2@", "@I1@", "@I3@"), remove_dead_refs = FALSE)
-```
-
-Strictly speaking, this is not a valid file, however it is useful to see the dead links just in case you want to go back and include them.
 
 ## Merging files
 
