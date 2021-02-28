@@ -123,8 +123,8 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/">tidyged</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="kable-table">
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -221,7 +221,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -257,7 +257,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -267,13 +267,12 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p>See row 20 and the row after for the change date for the submitter record.</p>
 <p>For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the <code><a href="reference/remove_change_dates.html">remove_change_dates()</a></code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="reference/remove_change_dates.html">remove_change_dates</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<div class="kable-table">
+  <span class="fu"><a href="reference/remove_change_dates.html">remove_change_dates</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -370,7 +369,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -404,7 +403,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 </div>
 <div id="duplicate-notes" class="section level2">
 <h2 class="hasAnchor">
@@ -416,8 +414,7 @@
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>indi_notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"This is a bespoke note."</span>, <span class="st">"This is a generic note."</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_repo.html">add_repo</a></span><span class="op">(</span><span class="st">"My repository"</span>, repo_notes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"This is a bespoke note."</span>, <span class="st">"This is a generic note."</span><span class="op">)</span><span class="op">)</span>
 
-<span class="va">notes</span></code></pre></div>
-<div class="kable-table">
+<span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">notes</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -514,7 +511,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -550,7 +547,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -568,7 +565,7 @@
 <td align="right">2</td>
 <td align="left">@N1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -592,7 +589,7 @@
 <td align="right">2</td>
 <td align="left">@I1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -640,7 +637,7 @@
 <td align="right">2</td>
 <td align="left">@R1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -650,12 +647,11 @@
 </tr>
 </tbody>
 </table>
-</div>
 <p>In the above example, there is a generic note recorded in a top level Note record. This same note message has been used for the individual and repository defined, but they have been repeated rather than pointing to the Note record. There is also a repeated bespoke note given in the Individual and Repository records.</p>
 <p>The <code><a href="reference/consolidate_notes.html">consolidate_notes()</a></code> function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="reference/consolidate_notes.html">consolidate_notes</a></span><span class="op">(</span><span class="va">notes</span><span class="op">)</span></code></pre></div>
-<div class="kable-table">
+<code class="sourceCode R"><span class="fu"><a href="reference/consolidate_notes.html">consolidate_notes</a></span><span class="op">(</span><span class="va">notes</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -752,7 +748,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -788,7 +784,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -806,7 +802,7 @@
 <td align="right">2</td>
 <td align="left">@N1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -830,7 +826,7 @@
 <td align="right">2</td>
 <td align="left">@I1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -878,7 +874,7 @@
 <td align="right">2</td>
 <td align="left">@R1@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -896,7 +892,7 @@
 <td align="right">2</td>
 <td align="left">@N2@</td>
 <td align="left">DATE</td>
-<td align="left">27 FEB 2021</td>
+<td align="left">28 FEB 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -906,7 +902,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 </div>
 <div id="unreferenced-records" class="section level2">
 <h2 class="hasAnchor">
