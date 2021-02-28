@@ -12,8 +12,7 @@ test_that("Function remove_change_dates() @ L74", {
 })
 
 
-test_that("Function split_gedcom() @ L142", {
+test_that("Function split_gedcom() @ L140", {
   expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@")), "json2")
-  expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@"), FALSE), "json2")
 })
 

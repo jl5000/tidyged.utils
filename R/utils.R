@@ -131,17 +131,14 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 #'
 #' @param gedcom A tidyged object to split.
 #' @param xrefs A vector of xrefs to put into the new tidyged object.
-#' @param remove_dead_refs Whether to remove references to records not in the new tidyged object.
 #'
 #' @return A new tidyged object containing the xrefs specified. It will also have the same
 #' header and submitter information as the input tidyged object.
 #' @export
 #' @tests
 #' expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@")), "json2")
-#' expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@"), FALSE), "json2")
 split_gedcom <- function(gedcom,
-                         xrefs,
-                         remove_dead_refs = TRUE) {
+                         xrefs) {
   
   xrefs <- c(xrefs, tidyged::xrefs_subm(gedcom))
   
@@ -156,15 +153,15 @@ split_gedcom <- function(gedcom,
   absent <- dplyr::setdiff(c(xrefs, links), xrefs)
   
   if(length(absent) > 0) {
-    if(remove_dead_refs) {
+
       absent_rows <- dplyr::filter(new, value %in% absent)
       
       for (i in seq_len(nrow(absent_rows))) {
         new <- tidyged.internals::remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
       }
-    } else {
-      message("Some record references are dead: ", paste(absent, collapse = ", "))
-    }
+
+      message("Some dead record references have been removed: ", paste(absent, collapse = ", "))
+
   }  
   
   new

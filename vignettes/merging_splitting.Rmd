@@ -1,0 +1,68 @@
+---
+title: "Splitting and Merging GEDCOM files"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Splitting and Merging GEDCOM files}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+One of the most difficult tasks to carry out is the splitting of GEDCOM files into two, and the merging of two GEDCOM files into one. Maybe you want to take a specific branch of your tree to give to someone else. Maybe you would like to combine two files describing your maternal ancestors and paternal ancestors. One of the reasons why it is so difficult is because of the cross references that occur within a GEDCOM file, and determining if two records should be merged into one.
+
+We illustrate with the following sample file:
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+summary(sample555)
+describe_records(sample555, sample555$record, short_desc = TRUE)
+```
+
+## Splitting files
+
+Splitting a file is much easier than merging two files. In order to split a file we use the `split_gedcom()` function and provide the xrefs of the records we would like to be contained in the new file. In this example, we're going to take the family @F2@ and the two individuals within it:
+
+```{r}
+new <- split_gedcom(sample555, c("@F2@", "@I1@", "@I3@"))
+
+summary(new)
+```
+
+With this new file we can see it has the exact same header and submitter information. Let's take a look to see what records it contains:
+
+```{r}
+describe_records(new, new$record, short_desc = TRUE)
+```
+
+By default, this function will remove references to records that do not exist in the file. If we decide not to remove these references, we will get a message about it:
+
+```{r}
+new2 <- split_gedcom(sample555, c("@F2@", "@I1@", "@I3@"), remove_dead_refs = FALSE)
+```
+
+Strictly speaking, this is not a valid file, however it is useful to see the dead links just in case you want to go back and include them.
+
+## Merging files
+
+Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged.
+
+We illustrate using the same examples above.
+
+
+```{r, eval = FALSE}
+merged <- merge_gedcoms(sample555, new)
+```
+
+
+
+
