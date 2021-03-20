@@ -8,7 +8,7 @@
 [![R-CMD-check](https://github.com/jl5000/tidyged.utils/workflows/R-CMD-check/badge.svg)](https://github.com/jl5000/tidyged.utils/actions)
 [![](https://codecov.io/gh/jl5000/tidyged.utils/branch/main/graph/badge.svg)](https://codecov.io/gh/jl5000/tidyged.utils)
 [![CodeFactor](https://www.codefactor.io/repository/github/jl5000/tidyged.utils/badge)](https://www.codefactor.io/repository/github/jl5000/tidyged.utils)
-[![](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 <!-- badges: end -->
 
 Various utilities to maintain and clean family tree GEDCOM files.
@@ -19,9 +19,8 @@ representations of GEDCOM files), and the main package of this ecosystem
 is [`tidyged`](https://jl5000.github.io/tidyged/).
 
 <img src="man/figures/allhex.png" width="65%" style="display: block; margin: auto;" />
-
-For an introduction to GEDCOM files, head to the
-[website](https://jl5000.github.io/tidyged/articles/intro_to_gedcom.html).
+<br> For an introduction to GEDCOM files, head to the
+<a href="https://jl5000.github.io/tidyged/articles/intro_to_gedcom.html">website</a>.
 
 ## Installation
 
@@ -80,13 +79,13 @@ gedcom(subm("Me")) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 28 FEB 2021                              |
+|     1 | HD     | DATE  | 20 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 28 FEB 2021                              |
+|     2 | @U1@   | DATE  | 20 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 See row 20 and the row after for the change date for the submitter
@@ -118,7 +117,7 @@ gedcom(subm("Me")) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 28 FEB 2021                              |
+|     1 | HD     | DATE  | 20 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
@@ -156,20 +155,20 @@ knitr::kable(notes)
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 28 FEB 2021                              |
+|     1 | HD     | DATE  | 20 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 28 FEB 2021                              |
+|     2 | @U1@   | DATE  | 20 MAR 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 28 FEB 2021                              |
+|     2 | @N1@   | DATE  | 20 MAR 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 28 FEB 2021                              |
+|     2 | @I1@   | DATE  | 20 MAR 2021                              |
 |     1 | @I1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @I1@   | NOTE  | This is a generic note.                  |
 |     0 | @R1@   | REPO  |                                          |
@@ -177,7 +176,7 @@ knitr::kable(notes)
 |     1 | @R1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @R1@   | NOTE  | This is a generic note.                  |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 28 FEB 2021                              |
+|     2 | @R1@   | DATE  | 20 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 In the above example, there is a generic note recorded in a top level
@@ -211,20 +210,20 @@ consolidate_notes(notes) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 28 FEB 2021                              |
+|     1 | HD     | DATE  | 20 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 28 FEB 2021                              |
+|     2 | @U1@   | DATE  | 20 MAR 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 28 FEB 2021                              |
+|     2 | @N1@   | DATE  | 20 MAR 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 28 FEB 2021                              |
+|     2 | @I1@   | DATE  | 20 MAR 2021                              |
 |     1 | @I1@   | NOTE  | @N2@                                     |
 |     1 | @I1@   | NOTE  | @N1@                                     |
 |     0 | @R1@   | REPO  |                                          |
@@ -232,10 +231,10 @@ consolidate_notes(notes) %>%
 |     1 | @R1@   | NOTE  | @N2@                                     |
 |     1 | @R1@   | NOTE  | @N1@                                     |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 28 FEB 2021                              |
+|     2 | @R1@   | DATE  | 20 MAR 2021                              |
 |     0 | @N2@   | NOTE  | This is a bespoke note.                  |
 |     1 | @N2@   | CHAN  |                                          |
-|     2 | @N2@   | DATE  | 28 FEB 2021                              |
+|     2 | @N2@   | DATE  | 20 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 ## Unreferenced records
