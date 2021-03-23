@@ -73,8 +73,7 @@ identify_unused_records <- function(gedcom) {
 #' expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
 remove_change_dates <- function(gedcom) {
   
-  gedcom %>% 
-    tidyged.internals::remove_section(1, "CHAN", "")
+  tidyged.internals::remove_section(gedcom, 1, "CHAN", "")
   
 }
 
@@ -165,4 +164,11 @@ split_gedcom <- function(gedcom,
   }  
   
   new
+}
+
+
+
+arrange_records <- function(gedcom) {
+  
+  
 }

@@ -150,7 +150,7 @@ potential_duplicates_indi <- function(gedcom,
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_records(gedcom, xrefs_to_merge)
       
     }
     
@@ -186,7 +186,7 @@ potential_duplicates_famg <- function(gedcom) {
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_records(gedcom, xrefs_to_merge)
       
     }
     
@@ -220,7 +220,7 @@ potential_duplicates_sour <- function(gedcom) {
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_records(gedcom, xrefs_to_merge)
       
     }
     
@@ -254,7 +254,7 @@ potential_duplicates_repo <- function(gedcom) {
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_records(gedcom, xrefs_to_merge)
       
     }
     
@@ -290,7 +290,7 @@ potential_duplicates_media <- function(gedcom) {
       
       xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
       
-      if(length(xrefs_to_merge) > 1) gedcom <- merge_subrecords(gedcom, xrefs_to_merge)
+      if(length(xrefs_to_merge) > 1) gedcom <- merge_records(gedcom, xrefs_to_merge)
       
     }
     
@@ -312,12 +312,15 @@ potential_duplicates_media <- function(gedcom) {
 #'
 #' @return A new tidyged object where all specified records have been merged.
 #' @export
-merge_subrecords <- function(gedcom, xrefs) {
+merge_records <- function(gedcom, xrefs) {
   
   merged <- dplyr::bind_rows(
     dplyr::filter(gedcom, record == xrefs[1], level == 0),
     dplyr::filter(gedcom, record %in% xrefs, level != 0)
-  )
+  ) %>% 
+    remove_change_dates() %>% 
+    dplyr::bind_rows(tidyged.internals::CHANGE_DATE() %>% tidyged.internals::add_levels(1)) %>% 
+    tidyged.internals::finalise()
   
   gedcom %>% 
     dplyr::filter(!record %in% xrefs) %>% 
@@ -331,7 +334,7 @@ merge_subrecords <- function(gedcom, xrefs) {
 
 #' Remove duplicate subrecords from a tidyged record
 #' 
-#' This function removes duplicate structures within a single record.
+#' This function removes duplicate level 1 subrecords within a single record.
 #'
 #' @param gedcom A tidyged object.
 #' @param xref The xref of the record to act on.
@@ -341,19 +344,25 @@ merge_subrecords <- function(gedcom, xrefs) {
 remove_duplicate_subrecords <- function(gedcom, xref) {
   
   record <- dplyr::filter(gedcom, record == xref)
-  
+    
   new_record <- record %>% 
     dplyr::mutate(new_sub = level == 1,
                   subrecord_no = cumsum(new_sub)) %>% 
     dplyr::select(-new_sub) %>% 
     dplyr::group_nest(subrecord_no) %>% 
-    dplyr::select(-subrecord_no) %>% 
-    dplyr::distinct() %>% 
+    dplyr::select(-subrecord_no) %>%
+    dplyr::mutate(tmp = data) %>% 
+    dplyr::distinct(
+      tmp = purrr::map(data, dplyr::arrange, tag, value),
+      .keep_all = TRUE
+    ) %>%
+    dplyr::select(-tmp) %>% 
     tidyr::unnest(data)
   
   dplyr::filter(gedcom, record != xref) %>% 
     tibble::add_row(new_record, .before = nrow(.))
   
 }
+
 
 

@@ -48,7 +48,7 @@
       ]
     }
 
-# Function split_gedcom() @ L140
+# Function split_gedcom() @ L139
 
     {
       "type": "list",

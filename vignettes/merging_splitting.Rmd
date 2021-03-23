@@ -49,15 +49,47 @@ By default, this function will remove references to records that do not exist in
 
 ## Merging files
 
-Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged.
+Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged. This is all done automatically using the `merge_gedcoms()` function.
 
-We illustrate using the same examples above.
+Unfortunately it cannot be demonstrated here since it seeks user input when potentially duplicate records are identified.
 
+The process of merging files contains many steps, and some of these steps are useful in their own right and are exposed to the user. These are:
 
-```{r, eval = FALSE}
-merged <- merge_gedcoms(sample555, new)
+* Identifying if records in a file are potentially duplicates (seeks user input)
+* Merging selected records into a single record
+* Removing duplicate subrecords
+
+Multiple records can be merged into one using the `merge_records()` function. To illustrate, we take the sample file and add another duplicate record for one of the individuals:
+
+```{r}
+with_dupes <- sample555 %>% 
+  add_indi(sex = "M") %>% 
+  add_indi_names(given = "Joe", surname = "Williams")
+
+describe_records(with_dupes, with_dupes$record, short_desc = TRUE)
 ```
 
+We now merge the two records:
 
+```{r}
+merged <- merge_records(with_dupes, c("@I3@","@I4@"))
 
+describe_records(merged, merged$record, short_desc = TRUE)
+```
 
+We can take a closer look at this merged record to see what has happened:
+
+```{r}
+dplyr::filter(merged, record == "@I3@") %>% 
+  knitr::kable()
+```
+
+We can see that we now have a duplicate sex subrecord and a duplicate name subrecord. We can remove these with the `remove_duplicate_subrecords()` function:
+
+```{r}
+remove_duplicate_subrecords(merged, "@I3@") %>% 
+  dplyr::filter(record == "@I3@") %>%
+  knitr::kable()
+```
+
+Both duplicate subrecords have been removed.

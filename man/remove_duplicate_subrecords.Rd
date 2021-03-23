@@ -15,5 +15,5 @@ remove_duplicate_subrecords(gedcom, xref)
 The same tidyged object with duplicate subrecords removed from the specified record.
 }
 \description{
-This function removes duplicate structures within a single record.
+This function removes duplicate level 1 subrecords within a single record.
 }
