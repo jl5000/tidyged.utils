@@ -163,10 +163,315 @@
 <div id="merging-files" class="section level2">
 <h2 class="hasAnchor">
 <a href="#merging-files" class="anchor"></a>Merging files</h2>
-<p>Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged.</p>
-<p>We illustrate using the same examples above.</p>
+<p>Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged. This is all done automatically using the <code><a href="../reference/merge_gedcoms.html">merge_gedcoms()</a></code> function.</p>
+<p>Unfortunately it cannot be demonstrated here since it seeks user input when potentially duplicate records are identified.</p>
+<p>The process of merging files contains many steps, and some of these steps are useful in their own right and are exposed to the user. These are:</p>
+<ul>
+<li>Identifying if records in a file are potentially duplicates (seeks user input)</li>
+<li>Merging selected records into a single record</li>
+<li>Removing duplicate subrecords</li>
+</ul>
+<p>Multiple records can be merged into one using the <code><a href="../reference/merge_records.html">merge_records()</a></code> function. To illustrate, we take the sample file and add another duplicate record for one of the individuals:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_gedcoms.html">merge_gedcoms</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="va">new</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">with_dupes</span> <span class="op">&lt;-</span> <span class="va">sample555</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_names.html">add_indi_names</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">"Joe"</span>, surname <span class="op">=</span> <span class="st">"Williams"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="va">with_dupes</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
+<span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"                              </span>
+<span class="co">#&gt; [3] "Individual @I2@, Mary Ann Wilson"                                     </span>
+<span class="co">#&gt; [4] "Individual @I3@, Joe Williams"                                        </span>
+<span class="co">#&gt; [5] "Family @F1@, headed by Robert Eugene Williams and Mary Ann Wilson"    </span>
+<span class="co">#&gt; [6] "Family @F2@, headed by Robert Eugene Williams"                        </span>
+<span class="co">#&gt; [7] "Source @S1@, titled Madison County Birth, Death, and Marriage Records"</span>
+<span class="co">#&gt; [8] "Repository @R1@, Family History Library"                              </span>
+<span class="co">#&gt; [9] "Individual @I4@, Joe Williams"</span></code></pre></div>
+<p>We now merge the two records:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_records.html">merge_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"@I3@"</span>,<span class="st">"@I4@"</span><span class="op">)</span><span class="op">)</span>
+
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">merged</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
+<span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"                              </span>
+<span class="co">#&gt; [3] "Individual @I2@, Mary Ann Wilson"                                     </span>
+<span class="co">#&gt; [4] "Family @F1@, headed by Robert Eugene Williams and Mary Ann Wilson"    </span>
+<span class="co">#&gt; [5] "Family @F2@, headed by Robert Eugene Williams"                        </span>
+<span class="co">#&gt; [6] "Source @S1@, titled Madison County Birth, Death, and Marriage Records"</span>
+<span class="co">#&gt; [7] "Repository @R1@, Family History Library"                              </span>
+<span class="co">#&gt; [8] "Individual @I3@, Joe Williams"</span></code></pre></div>
+<p>We can take a closer look at this merged record to see what has happened:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">level</th>
+<th align="left">record</th>
+<th align="left">tag</th>
+<th align="left">value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">INDI</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">NAME</td>
+<td align="left">Joe /Williams/</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SURN</td>
+<td align="left">Williams</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">GIVN</td>
+<td align="left">Joe</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SEX</td>
+<td align="left">M</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">BIRT</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">11 Jun 1861</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">PLAC</td>
+<td align="left">Idaho Falls, Bonneville, Idaho, United States of America</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">FAMC</td>
+<td align="left">
+<span class="citation">@F1</span>@</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">FAMC</td>
+<td align="left">
+<span class="citation">@F2</span>@</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">PEDI</td>
+<td align="left">adopted</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">ADOP</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">16 Mar 1864</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SEX</td>
+<td align="left">M</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">NAME</td>
+<td align="left">Joe /Williams/</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">GIVN</td>
+<td align="left">Joe</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SURN</td>
+<td align="left">Williams</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">CHAN</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">23 MAR 2021</td>
+</tr>
+</tbody>
+</table>
+<p>We can see that we now have a duplicate sex subrecord and a duplicate name subrecord. We can remove these with the <code><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords()</a></code> function:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords</a></span><span class="op">(</span><span class="va">merged</span>, <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<table class="table">
+<thead><tr class="header">
+<th align="right">level</th>
+<th align="left">record</th>
+<th align="left">tag</th>
+<th align="left">value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="right">0</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">INDI</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">NAME</td>
+<td align="left">Joe /Williams/</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SURN</td>
+<td align="left">Williams</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">GIVN</td>
+<td align="left">Joe</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">SEX</td>
+<td align="left">M</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">BIRT</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">11 Jun 1861</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">PLAC</td>
+<td align="left">Idaho Falls, Bonneville, Idaho, United States of America</td>
+</tr>
+<tr class="odd">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">FAMC</td>
+<td align="left">
+<span class="citation">@F1</span>@</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">FAMC</td>
+<td align="left">
+<span class="citation">@F2</span>@</td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">PEDI</td>
+<td align="left">adopted</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">ADOP</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">16 Mar 1864</td>
+</tr>
+<tr class="even">
+<td align="right">1</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">CHAN</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="right">2</td>
+<td align="left">
+<span class="citation">@I3</span>@</td>
+<td align="left">DATE</td>
+<td align="left">23 MAR 2021</td>
+</tr>
+</tbody>
+</table>
+<p>Both duplicate subrecords have been removed.</p>
 </div>
   </div>
 
