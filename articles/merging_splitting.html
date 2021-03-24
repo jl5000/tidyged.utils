@@ -171,6 +171,9 @@
 <li>Merging selected records into a single record</li>
 <li>Removing duplicate subrecords</li>
 </ul>
+<div id="merging-records" class="section level3">
+<h3 class="hasAnchor">
+<a href="#merging-records" class="anchor"></a>Merging records</h3>
 <p>Multiple records can be merged into one using the <code><a href="../reference/merge_records.html">merge_records()</a></code> function. To illustrate, we take the sample file and add another duplicate record for one of the individuals:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">with_dupes</span> <span class="op">&lt;-</span> <span class="va">sample555</span> <span class="op">%&gt;%</span> 
@@ -345,10 +348,14 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">23 MAR 2021</td>
+<td align="left">24 MAR 2021</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="removing-duplicate-subrecords" class="section level3">
+<h3 class="hasAnchor">
+<a href="#removing-duplicate-subrecords" class="anchor"></a>Removing duplicate subrecords</h3>
 <p>We can see that we now have a duplicate sex subrecord and a duplicate name subrecord. We can remove these with the <code><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords</a></span><span class="op">(</span><span class="va">merged</span>, <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
@@ -467,11 +474,12 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">23 MAR 2021</td>
+<td align="left">24 MAR 2021</td>
 </tr>
 </tbody>
 </table>
 <p>Both duplicate subrecords have been removed.</p>
+</div>
 </div>
   </div>
 
