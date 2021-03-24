@@ -312,7 +312,15 @@ potential_duplicates_media <- function(gedcom) {
 #'
 #' @return A new tidyged object where all specified records have been merged.
 #' @export
+#' @tests
+#' expect_error(merge_records(tidyged::sample555, c("@I1@","@F1@")))
 merge_records <- function(gedcom, xrefs) {
+  
+  if(length(xrefs) == 1) return(gedcom)
+    
+  rec_types <- unique(dplyr::filter(gedcom, level == 0, record %in% xrefs)$tag)
+  
+  if(length(rec_types) != 1) stop("Records of different types cannot be merged")
   
   merged <- dplyr::bind_rows(
     dplyr::filter(gedcom, record == xrefs[1], level == 0),

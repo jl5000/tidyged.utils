@@ -168,7 +168,32 @@ split_gedcom <- function(gedcom,
 
 
 
-arrange_records <- function(gedcom) {
+#' Arrange all records in a tidyged object
+#'
+#' @param gedcom A tidyged object.
+#' @param order A character string indicating the desired order of records. The letters
+#' indicate (I)ndividual, (F)amily Group, (M)ultimedia, (S)ource, (R)epository, (N)ote.
+#'
+#' @return An arranged tidyged object.
+#' @export
+arrange_records <- function(gedcom, order = "IFMSRN") {
   
+  if(nchar(order) != 6) stop("The order character should have 6 characters")
+  
+  order <- stringr::str_replace(order, "M", "O")
+  order <- strsplit(order, character())[[1]]
+  subm_xref <- tidyged::xrefs_subm(gedcom)
+  
+  record_order <- dplyr::filter(gedcom, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) %>% 
+    dplyr::mutate(tag = stringr::str_sub(tag, 1, 1),
+                  tag = factor(tag, levels = order, ordered = TRUE)) %>% 
+    dplyr::arrange(tag) %>% 
+    dplyr::pull(record) %>% 
+    c("HD", subm_xref, ., "TR")
+  
+  gedcom %>% 
+    dplyr::mutate(record = factor(record, levels = record_order, ordered = TRUE)) %>% 
+    dplyr::arrange(record) %>%
+    dplyr::mutate(record = as.character(record))
   
 }

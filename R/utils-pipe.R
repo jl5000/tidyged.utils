@@ -11,5 +11,3 @@
 NULL
 
 
-get_valid_xref <- utils::getFromNamespace("get_valid_xref", "tidyged")
-
