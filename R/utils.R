@@ -178,7 +178,7 @@ split_gedcom <- function(gedcom,
 #' @export
 arrange_records <- function(gedcom, order = "IFMSRN") {
   
-  if(nchar(order) != 6) stop("The order character should have 6 characters")
+  if(nchar(order) != 6) stop("The order argument should have 6 characters")
   
   order <- stringr::str_replace(order, "M", "O")
   order <- strsplit(order, character())[[1]]
@@ -196,4 +196,64 @@ arrange_records <- function(gedcom, order = "IFMSRN") {
     dplyr::arrange(record) %>%
     dplyr::mutate(record = as.character(record))
   
+}
+
+
+#' Determine whether a person is still alive from their date of birth
+#'
+#' @param date_of_birth A date string from the tidyged object.
+#' @param max_age The maximum age to assume for a living person.
+#'
+#' @return A logical value indicating whether the person is still alive.
+is_alive <- function(date_of_birth,
+                     max_age) {
+  
+  if(date_of_birth == "" | stringr::str_detect(date_of_birth, "AFT")) return(TRUE)
+  if(!stringr::str_detect(date_of_birth, "\\d{3,4}")) return(TRUE)
+  
+  this_year <- as.integer(format(Sys.Date(), "%Y"))
+  
+  max_year <- stringr::str_extract_all(date_of_birth, "\\d{3,4}") %>% 
+    unlist() %>% 
+    as.integer() %>% 
+    max()
+  
+  ifelse((this_year - max_year) > max_age, FALSE, TRUE)
+}
+
+
+#' Insert explicit death subrecords
+#' 
+#' This function inserts explicit death subrecords for individuals who have a date of birth that
+#' makes them older than a maximum age.
+#'
+#' @param gedcom A tidyged object.
+#' @param max_age The maximum age to assume for a living person.
+#'
+#' @return An updated tidyged object with additional death subrecords.
+#' @export
+insert_explicit_death_subrecords <- function(gedcom, max_age = 120) {
+  
+  indi_xrefs <- tidyged::xrefs_indi(gedcom)
+  
+  indi_with_birth <- unique(dplyr::filter(gedcom, record %in% indi_xrefs, level == 1, tag == "BIRT")$record)
+  
+  indi_with_death <- unique(dplyr::filter(gedcom, record %in% indi_with_birth, level == 1, tag == "DEAT")$record)
+  
+  indi_no_death <- dplyr::setdiff(indi_with_birth, indi_with_death)
+    
+  for(xref in indi_no_death) {
+    
+    dob <- tidyged.internals::gedcom_value(gedcom, xref, "DATE", 2, "BIRT")
+    
+    if(!is_alive(dob, max_age)) {
+      next_row <- tidyged.internals::find_insertion_point(gedcom, xref, 0, "INDI")
+      gedcom <- tibble::add_row(gedcom,
+                                tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
+                                .before = next_row)
+    }
+    
+  }
+  
+  gedcom
 }
