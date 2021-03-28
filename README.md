@@ -28,8 +28,8 @@ You can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("jl5000/tidyged.utils")
+# install.packages("remotes")
+remotes::install_github("jl5000/tidyged.utils")
 ```
 
 ## Features
@@ -42,6 +42,9 @@ includes:
   - Removal of ‘change date’ structures
   - Consolidating duplicate notes
   - Finding unreferenced records
+  - Arranging records by type
+  - Inserting explicit death subrecords
+  - Arranging children by date of birth
   - Splitting files
   - Merging files
 
@@ -79,13 +82,13 @@ gedcom(subm("Me")) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 20 MAR 2021                              |
+|     1 | HD     | DATE  | 28 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 20 MAR 2021                              |
+|     2 | @U1@   | DATE  | 28 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 See row 20 and the row after for the change date for the submitter
@@ -117,7 +120,7 @@ gedcom(subm("Me")) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 20 MAR 2021                              |
+|     1 | HD     | DATE  | 28 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
@@ -155,20 +158,20 @@ knitr::kable(notes)
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 20 MAR 2021                              |
+|     1 | HD     | DATE  | 28 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 20 MAR 2021                              |
+|     2 | @U1@   | DATE  | 28 MAR 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 20 MAR 2021                              |
+|     2 | @N1@   | DATE  | 28 MAR 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 20 MAR 2021                              |
+|     2 | @I1@   | DATE  | 28 MAR 2021                              |
 |     1 | @I1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @I1@   | NOTE  | This is a generic note.                  |
 |     0 | @R1@   | REPO  |                                          |
@@ -176,7 +179,7 @@ knitr::kable(notes)
 |     1 | @R1@   | NOTE  | This is a bespoke note.                  |
 |     1 | @R1@   | NOTE  | This is a generic note.                  |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 20 MAR 2021                              |
+|     2 | @R1@   | DATE  | 28 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 In the above example, there is a generic note recorded in a top level
@@ -210,20 +213,20 @@ consolidate_notes(notes) %>%
 |     3 | HD     | ADDR  |                                          |
 |     3 | HD     | EMAIL | <jalendrum@gmail.com>                    |
 |     3 | HD     | WWW   | <https://jl5000.github.io/tidyged/>      |
-|     1 | HD     | DATE  | 20 MAR 2021                              |
+|     1 | HD     | DATE  | 28 MAR 2021                              |
 |     1 | HD     | LANG  | English                                  |
 |     1 | HD     | SUBM  | @U1@                                     |
 |     0 | @U1@   | SUBM  |                                          |
 |     1 | @U1@   | NAME  | Me                                       |
 |     1 | @U1@   | CHAN  |                                          |
-|     2 | @U1@   | DATE  | 20 MAR 2021                              |
+|     2 | @U1@   | DATE  | 28 MAR 2021                              |
 |     0 | @N1@   | NOTE  | This is a generic note.                  |
 |     1 | @N1@   | CHAN  |                                          |
-|     2 | @N1@   | DATE  | 20 MAR 2021                              |
+|     2 | @N1@   | DATE  | 28 MAR 2021                              |
 |     0 | @I1@   | INDI  |                                          |
 |     1 | @I1@   | SEX   | U                                        |
 |     1 | @I1@   | CHAN  |                                          |
-|     2 | @I1@   | DATE  | 20 MAR 2021                              |
+|     2 | @I1@   | DATE  | 28 MAR 2021                              |
 |     1 | @I1@   | NOTE  | @N2@                                     |
 |     1 | @I1@   | NOTE  | @N1@                                     |
 |     0 | @R1@   | REPO  |                                          |
@@ -231,10 +234,10 @@ consolidate_notes(notes) %>%
 |     1 | @R1@   | NOTE  | @N2@                                     |
 |     1 | @R1@   | NOTE  | @N1@                                     |
 |     1 | @R1@   | CHAN  |                                          |
-|     2 | @R1@   | DATE  | 20 MAR 2021                              |
+|     2 | @R1@   | DATE  | 28 MAR 2021                              |
 |     0 | @N2@   | NOTE  | This is a bespoke note.                  |
 |     1 | @N2@   | CHAN  |                                          |
-|     2 | @N2@   | DATE  | 20 MAR 2021                              |
+|     2 | @N2@   | DATE  | 28 MAR 2021                              |
 |     0 | TR     | TRLR  |                                          |
 
 ## Unreferenced records
@@ -273,3 +276,83 @@ identify_unused_records(some_unref) %>%
 #> [3] "Family @F6@, headed by no individuals, and no children"
 #> [4] "Repository @R1@, Test repo"
 ```
+
+## Arranging records
+
+The ability to order records by type in a GEDCOM file is a task purely
+done for aesthetics - it has no functional value, other than perhaps
+making records easier to find. We use the example above, where we can
+initially see the records are given in the order they were defined:
+
+``` r
+unique(some_unref$record)
+#>  [1] "HD"   "@U1@" "@I1@" "@I2@" "@I3@" "@I4@" "@F1@" "@F2@" "@F3@" "@F4@"
+#> [11] "@F5@" "@F6@" "@R1@" "TR"
+```
+
+We now use the `arrange_recrds()` function to arrange them in a specific
+order, given by a character string giving the first initial of each
+record type (header, trailer, and submitter records do not move):
+
+``` r
+ordered <- arrange_records(some_unref, "RIFSNM")
+
+unique(ordered$record)
+#>  [1] "HD"   "@U1@" "@R1@" "@I1@" "@I2@" "@I3@" "@I4@" "@F1@" "@F2@" "@F3@"
+#> [11] "@F4@" "@F5@" "@F6@" "TR"
+```
+
+## Inserting explicit death subrecords
+
+Sometimes individuals are defined with a date of birth but no death
+subrecord because there is no information about the death to warrant
+creating one. However, including an empty death subrecord is valuable in
+its own right to indicate the individual is dead. The
+`insert_explicit_death_subrecords()` function allows you to
+automatically insert these subrecords for individuals who would be too
+old to still be alive.
+
+We illustrate with the following example of five individuals with
+various dates of birth (including a missing birth subrecord for person
+5):
+
+``` r
+people <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Person 1") %>% 
+  add_indi_fact("birth", date = date_calendar(1900, 4, 4)) %>% 
+  add_indi(qn = "Person 2") %>% 
+  add_indi_fact("birth", date = date_calendar(1888)) %>%
+  add_indi(qn = "Person 3") %>% 
+  add_indi_fact("birth", date = date_calendar(1885, 6)) %>%
+  add_indi(qn = "Person 4") %>% 
+  add_indi_fact("birth", date = date_calendar(1905)) %>%
+  add_indi(qn = "Person 5")
+
+dplyr::filter(people, tag == "DEAT")
+#> # A tibble: 0 x 4
+#> # … with 4 variables: level <dbl>, record <chr>, tag <chr>, value <chr>
+```
+
+If we were to assume a maximum age of 120 years (the default for the
+function) we would want a death subrecord for the first three
+individuals.
+
+``` r
+people_wds <- insert_explicit_death_subrecords(people, max_age = 120)
+
+dplyr::filter(people_wds, tag == "DEAT")
+#> # A tibble: 3 x 4
+#>   level record tag   value
+#>   <dbl> <chr>  <chr> <chr>
+#> 1     1 @I1@   DEAT  Y    
+#> 2     1 @I2@   DEAT  Y    
+#> 3     1 @I3@   DEAT  Y
+```
+
+If an individual has no date of birth defined, then no judgement can be
+made and the record is left as-is.
+
+## Arranging children by date of birth
+
+The `order_famg_children_all()` function ensures all children are
+represented in Family Group records in order of date of birth.

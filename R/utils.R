@@ -257,3 +257,20 @@ insert_explicit_death_subrecords <- function(gedcom, max_age = 120) {
   
   gedcom
 }
+
+
+#' Order children in all Family Group records by birth date
+#'
+#' @param gedcom A tidyged object.
+#'
+#' @return The same tidyged object with rearranged children rows in the Family Group records.
+#' @export
+order_famg_children_all <- function(gedcom) {
+  
+  fam_xrefs <- tidyged::xrefs_famg(gedcom)
+  
+  for(xref in fam_xrefs) {
+    gedcom <- tidyged::order_famg_children(gedcom, xref)
+  }
+  gedcom
+}
