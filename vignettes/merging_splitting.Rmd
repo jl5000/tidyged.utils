@@ -66,7 +66,7 @@ Multiple records can be merged into one using the `merge_records()` function. To
 ```{r}
 with_dupes <- sample555 %>% 
   add_indi(sex = "M") %>% 
-  add_indi_names(given = "Joe", surname = "Williams")
+  add_indi_names(name_pieces(given = "Joe", surname = "Williams"))
 
 describe_records(with_dupes, with_dupes$record, short_desc = TRUE)
 ```
