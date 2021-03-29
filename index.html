@@ -99,8 +99,8 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>You can install the development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"jl5000/tidyged.utils"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="co"># install.packages("remotes")</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"jl5000/tidyged.utils"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="features" class="section level2">
 <h2 class="hasAnchor">
@@ -110,6 +110,9 @@
 <li>Removal of ‘change date’ structures</li>
 <li>Consolidating duplicate notes</li>
 <li>Finding unreferenced records</li>
+<li>Arranging records by type</li>
+<li>Inserting explicit death subrecords</li>
+<li>Arranging children by date of birth</li>
 <li>Splitting files</li>
 <li>Merging files</li>
 </ul>
@@ -220,7 +223,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -256,7 +259,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -368,7 +371,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -510,7 +513,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -546,7 +549,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -564,7 +567,7 @@
 <td align="right">2</td>
 <td align="left">@N1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -588,7 +591,7 @@
 <td align="right">2</td>
 <td align="left">@I1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -636,7 +639,7 @@
 <td align="right">2</td>
 <td align="left">@R1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -747,7 +750,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">1</td>
@@ -783,7 +786,7 @@
 <td align="right">2</td>
 <td align="left">@U1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -801,7 +804,7 @@
 <td align="right">2</td>
 <td align="left">@N1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -825,7 +828,7 @@
 <td align="right">2</td>
 <td align="left">@I1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -873,7 +876,7 @@
 <td align="right">2</td>
 <td align="left">@R1@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -891,7 +894,7 @@
 <td align="right">2</td>
 <td align="left">@N2@</td>
 <td align="left">DATE</td>
-<td align="left">20 MAR 2021</td>
+<td align="left">28 MAR 2021</td>
 </tr>
 <tr class="even">
 <td align="right">0</td>
@@ -930,6 +933,60 @@
 <span class="co">#&gt; [2] "Family @F4@, headed by no individuals, and no children"</span>
 <span class="co">#&gt; [3] "Family @F6@, headed by no individuals, and no children"</span>
 <span class="co">#&gt; [4] "Repository @R1@, Test repo"</span></code></pre></div>
+</div>
+<div id="arranging-records" class="section level2">
+<h2 class="hasAnchor">
+<a href="#arranging-records" class="anchor"></a>Arranging records</h2>
+<p>The ability to order records by type in a GEDCOM file is a task purely done for aesthetics - it has no functional value, other than perhaps making records easier to find. We use the example above, where we can initially see the records are given in the order they were defined:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">some_unref</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "HD"   "@U1@" "@I1@" "@I2@" "@I3@" "@I4@" "@F1@" "@F2@" "@F3@" "@F4@"</span>
+<span class="co">#&gt; [11] "@F5@" "@F6@" "@R1@" "TR"</span></code></pre></div>
+<p>We now use the <code>arrange_recrds()</code> function to arrange them in a specific order, given by a character string giving the first initial of each record type (header, trailer, and submitter records do not move):</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ordered</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/arrange_records.html">arrange_records</a></span><span class="op">(</span><span class="va">some_unref</span>, <span class="st">"RIFSNM"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">ordered</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "HD"   "@U1@" "@R1@" "@I1@" "@I2@" "@I3@" "@I4@" "@F1@" "@F2@" "@F3@"</span>
+<span class="co">#&gt; [11] "@F4@" "@F5@" "@F6@" "TR"</span></code></pre></div>
+</div>
+<div id="inserting-explicit-death-subrecords" class="section level2">
+<h2 class="hasAnchor">
+<a href="#inserting-explicit-death-subrecords" class="anchor"></a>Inserting explicit death subrecords</h2>
+<p>Sometimes individuals are defined with a date of birth but no death subrecord because there is no information about the death to warrant creating one. However, including an empty death subrecord is valuable in its own right to indicate the individual is dead. The <code><a href="reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords()</a></code> function allows you to automatically insert these subrecords for individuals who would be too old to still be alive.</p>
+<p>We illustrate with the following example of five individuals with various dates of birth (including a missing birth subrecord for person 5):</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 1"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 2"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1888</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 3"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1885</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 4"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1905</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 0 x 4</span>
+<span class="co">#&gt; # … with 4 variables: level &lt;dbl&gt;, record &lt;chr&gt;, tag &lt;chr&gt;, value &lt;chr&gt;</span></code></pre></div>
+<p>If we were to assume a maximum age of 120 years (the default for the function) we would want a death subrecord for the first three individuals.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">people_wds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
+
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">people_wds</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 3 x 4</span>
+<span class="co">#&gt;   level record tag   value</span>
+<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;</span>
+<span class="co">#&gt; 1     1 @I1@   DEAT  Y    </span>
+<span class="co">#&gt; 2     1 @I2@   DEAT  Y    </span>
+<span class="co">#&gt; 3     1 @I3@   DEAT  Y</span></code></pre></div>
+<p>If an individual has no date of birth defined, then no judgement can be made and the record is left as-is.</p>
+</div>
+<div id="arranging-children-by-date-of-birth" class="section level2">
+<h2 class="hasAnchor">
+<a href="#arranging-children-by-date-of-birth" class="anchor"></a>Arranging children by date of birth</h2>
+<p>The <code><a href="reference/order_famg_children_all.html">order_famg_children_all()</a></code> function ensures all children are represented in Family Group records in order of date of birth.</p>
 </div>
 </div>
   </div>

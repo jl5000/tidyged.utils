@@ -178,7 +178,7 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">with_dupes</span> <span class="op">&lt;-</span> <span class="va">sample555</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_names.html">add_indi_names</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">"Joe"</span>, surname <span class="op">=</span> <span class="st">"Williams"</span><span class="op">)</span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_names.html">add_indi_names</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/name_pieces.html">name_pieces</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">"Joe"</span>, surname <span class="op">=</span> <span class="st">"Williams"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="va">with_dupes</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
@@ -348,7 +348,7 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">26 MAR 2021</td>
+<td align="left">29 MAR 2021</td>
 </tr>
 </tbody>
 </table>
@@ -474,7 +474,7 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">26 MAR 2021</td>
+<td align="left">29 MAR 2021</td>
 </tr>
 </tbody>
 </table>
