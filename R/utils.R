@@ -169,6 +169,9 @@ split_gedcom <- function(gedcom,
 
 
 #' Arrange all records in a tidyged object
+#' 
+#' This function groups together all records of a particular type and puts them in a specific order.
+#' This rearrangement makes no functional difference to the file, it just makes it more organised.
 #'
 #' @param gedcom A tidyged object.
 #' @param order A character string indicating the desired order of records. The letters
@@ -199,27 +202,7 @@ arrange_records <- function(gedcom, order = "IFMSRN") {
 }
 
 
-#' Determine whether a person is still alive from their date of birth
-#'
-#' @param date_of_birth A date string from the tidyged object.
-#' @param max_age The maximum age to assume for a living person.
-#'
-#' @return A logical value indicating whether the person is still alive.
-is_alive <- function(date_of_birth,
-                     max_age) {
-  
-  if(date_of_birth == "" | stringr::str_detect(date_of_birth, "AFT")) return(TRUE)
-  if(!stringr::str_detect(date_of_birth, "\\d{3,4}")) return(TRUE)
-  
-  this_year <- as.integer(format(Sys.Date(), "%Y"))
-  
-  max_year <- stringr::str_extract_all(date_of_birth, "\\d{3,4}") %>% 
-    unlist() %>% 
-    as.integer() %>% 
-    max()
-  
-  ifelse((this_year - max_year) > max_age, FALSE, TRUE)
-}
+
 
 
 #' Insert explicit death subrecords
@@ -229,28 +212,39 @@ is_alive <- function(date_of_birth,
 #'
 #' @param gedcom A tidyged object.
 #' @param max_age The maximum age to assume for a living person.
+#' @param guess If a date of birth cannot be found, whether to guess it from other information.
 #'
 #' @return An updated tidyged object with additional death subrecords.
 #' @export
-insert_explicit_death_subrecords <- function(gedcom, max_age = 120) {
+insert_explicit_death_subrecords <- function(gedcom, 
+                                             max_age = 120,
+                                             guess = FALSE) {
   
   indi_xrefs <- tidyged::xrefs_indi(gedcom)
   
-  indi_with_birth <- unique(dplyr::filter(gedcom, record %in% indi_xrefs, level == 1, tag == "BIRT")$record)
-  
-  indi_with_death <- unique(dplyr::filter(gedcom, record %in% indi_with_birth, level == 1, tag == "DEAT")$record)
-  
-  indi_no_death <- dplyr::setdiff(indi_with_birth, indi_with_death)
+  for(xref in indi_xrefs) {
+    death_events <- dplyr::filter(gedcom, record == xref, tag == "DEAT")
     
-  for(xref in indi_no_death) {
-    
-    dob <- tidyged.internals::gedcom_value(gedcom, xref, "DATE", 2, "BIRT")
-    
-    if(!is_alive(dob, max_age)) {
-      next_row <- tidyged.internals::find_insertion_point(gedcom, xref, 0, "INDI")
-      gedcom <- tibble::add_row(gedcom,
-                                tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
-                                .before = next_row)
+    if(nrow(death_events) == 0) {
+      
+      dob <- tidyged.internals::gedcom_value(gedcom, xref, "DATE", 2, "BIRT")
+      
+      if(dob == "") {
+        if(!guess) next
+        age <- guess_age(gedcom, xref)
+      } else {
+        age <- date_diff(dob, minimise = TRUE)
+      }
+      
+      if(age < 0) next
+      if(age > max_age) {
+        next_row <- tidyged.internals::find_insertion_point(gedcom, xref, 0, "INDI")
+        gedcom <- tibble::add_row(gedcom,
+                                  tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
+                                  .before = next_row)
+      }
+      
+      
     }
     
   }
@@ -274,3 +268,6 @@ order_famg_children_all <- function(gedcom) {
   }
   gedcom
 }
+
+
+
