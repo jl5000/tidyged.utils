@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Identify potentially duplicate records — potential_duplicates • tidyged.utils</title>
+<title>Determine the number of years between two dates — date_diff • tidyged.utils</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Identify potentially duplicate records — potential_duplicates" />
-<meta property="og:description" content="Identify potentially duplicate records" />
+<meta property="og:title" content="Determine the number of years between two dates — date_diff" />
+<meta property="og:description" content="Determine the number of years between two dates" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -128,29 +128,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Identify potentially duplicate records</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/merge_gedcoms.R'><code>R/merge_gedcoms.R</code></a></small>
-    <div class="hidden name"><code>potential_duplicates.Rd</code></div>
+    <h1>Determine the number of years between two dates</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/sense_checks.R'><code>R/sense_checks.R</code></a></small>
+    <div class="hidden name"><code>date_diff.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Identify potentially duplicate records</p>
+    <p>Determine the number of years between two dates</p>
     </div>
 
-    <pre class="usage"><span class='fu'>potential_duplicates</span><span class='op'>(</span><span class='va'>tg</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>date_diff</span><span class='op'>(</span><span class='va'>date1</span>, date2 <span class='op'>=</span> <span class='fu'>tidyged</span><span class='fu'>::</span><span class='fu'><a href='https://jl5000.github.io/tidyged/reference/date_current.html'>date_current</a></span><span class='op'>(</span><span class='op'>)</span>, minimise <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>tg</th>
-      <td><p>A tidyged object.</p></td>
+      <th>date1</th>
+      <td><p>A date string from the tidyged object.</p></td>
+    </tr>
+    <tr>
+      <th>date2</th>
+      <td><p>A date string from the tidyged object. If no date is given, today's date is used.</p></td>
+    </tr>
+    <tr>
+      <th>minimise</th>
+      <td><p>If date ranges or periods are used in the dates, whether to choose the bounds which
+assume the minimum date difference. If this is FALSE, the maximum date difference is assumed.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>The same tidyged object, potentially with some records merged.</p>
+    <p>A numeric value giving the number of years. A numeric value less than zero means no
+determination could be made.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Doesn't yet handle dual years or BCE dates.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

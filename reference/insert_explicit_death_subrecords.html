@@ -139,18 +139,22 @@ makes them older than a maximum age." />
 makes them older than a maximum age.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>insert_explicit_death_subrecords</span><span class='op'>(</span><span class='va'>gedcom</span>, max_age <span class='op'>=</span> <span class='fl'>120</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>insert_explicit_death_subrecords</span><span class='op'>(</span><span class='va'>tg</span>, max_age <span class='op'>=</span> <span class='fl'>120</span>, guess <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>gedcom</th>
+      <th>tg</th>
       <td><p>A tidyged object.</p></td>
     </tr>
     <tr>
       <th>max_age</th>
       <td><p>The maximum age to assume for a living person.</p></td>
+    </tr>
+    <tr>
+      <th>guess</th>
+      <td><p>If a date of birth cannot be found, whether to guess it from other information.</p></td>
     </tr>
     </table>
 
