@@ -4,10 +4,10 @@
 \alias{split_gedcom}
 \title{Split a tidyged object into two}
 \usage{
-split_gedcom(gedcom, xrefs)
+split_gedcom(tg, xrefs)
 }
 \arguments{
-\item{gedcom}{A tidyged object to split.}
+\item{tg}{A tidyged object to split.}
 
 \item{xrefs}{A vector of xrefs to put into the new tidyged object.}
 }

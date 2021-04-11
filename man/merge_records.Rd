@@ -4,10 +4,10 @@
 \alias{merge_records}
 \title{Combine multiple records into a single record}
 \usage{
-merge_records(gedcom, xrefs)
+merge_records(tg, xrefs)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 
 \item{xrefs}{The xrefs of the records to merge.}
 }

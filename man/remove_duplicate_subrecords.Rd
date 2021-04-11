@@ -4,10 +4,10 @@
 \alias{remove_duplicate_subrecords}
 \title{Remove duplicate subrecords from a tidyged record}
 \usage{
-remove_duplicate_subrecords(gedcom, xref)
+remove_duplicate_subrecords(tg, xref)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 
 \item{xref}{The xref of the record to act on.}
 }

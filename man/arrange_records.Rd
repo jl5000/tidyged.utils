@@ -4,10 +4,10 @@
 \alias{arrange_records}
 \title{Arrange all records in a tidyged object}
 \usage{
-arrange_records(gedcom, order = "IFMSRN")
+arrange_records(tg, order = "IFMSRN")
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 
 \item{order}{A character string indicating the desired order of records. The letters
 indicate (I)ndividual, (F)amily Group, (M)ultimedia, (S)ource, (R)epository, (N)ote.}
@@ -16,5 +16,6 @@ indicate (I)ndividual, (F)amily Group, (M)ultimedia, (S)ource, (R)epository, (N)
 An arranged tidyged object.
 }
 \description{
-Arrange all records in a tidyged object
+This function groups together all records of a particular type and puts them in a specific order.
+This rearrangement makes no functional difference to the file, it just makes it more organised.
 }

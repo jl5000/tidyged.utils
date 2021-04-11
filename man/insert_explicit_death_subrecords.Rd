@@ -4,12 +4,14 @@
 \alias{insert_explicit_death_subrecords}
 \title{Insert explicit death subrecords}
 \usage{
-insert_explicit_death_subrecords(gedcom, max_age = 120)
+insert_explicit_death_subrecords(tg, max_age = 120, guess = FALSE)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 
 \item{max_age}{The maximum age to assume for a living person.}
+
+\item{guess}{If a date of birth cannot be found, whether to guess it from other information.}
 }
 \value{
 An updated tidyged object with additional death subrecords.

@@ -11,51 +11,51 @@
 #' You can use the output of this function with tidyged::remove_records() to remove them, or 
 #' tidyged::describe_records() to find out more about them.
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #'
 #' @return A vector of xrefs that are not referenced anywhere else in the tidyged object.
 #' @export
 #' @tests
 #' expect_equal(tidyged::gedcom() %>% tidyged::add_indi() %>% tidyged::add_famg() %>% identify_unused_records(),
 #'              c("@I1@","@F1@"))
-identify_unused_records <- function(gedcom) {
+identify_unused_records <- function(tg) {
   
-  xrefs_indi <- tidyged::xrefs_indi(gedcom)
-  xrefs_fam <- tidyged::xrefs_famg(gedcom)
-  xrefs_media <- tidyged::xrefs_media(gedcom)
-  xrefs_sour <- tidyged::xrefs_sour(gedcom)
-  xrefs_repo <- tidyged::xrefs_repo(gedcom)
-  xrefs_note <- tidyged::xrefs_note(gedcom)
+  xrefs_indi <- tidyged::xrefs_indi(tg)
+  xrefs_fam <- tidyged::xrefs_famg(tg)
+  xrefs_media <- tidyged::xrefs_media(tg)
+  xrefs_sour <- tidyged::xrefs_sour(tg)
+  xrefs_repo <- tidyged::xrefs_repo(tg)
+  xrefs_note <- tidyged::xrefs_note(tg)
   
   # get unattached individuals
-  attached <- unique(dplyr::filter(gedcom, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$value)
+  attached <- unique(dplyr::filter(tg, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$value)
   unattached <- dplyr::setdiff(xrefs_indi, attached)
   
   #also look at family links perspective to check consistency
-  attached2 <- unique(dplyr::filter(gedcom, record %in% xrefs_indi, tag %in% c("FAMC","FAMS"))$record)
+  attached2 <- unique(dplyr::filter(tg, record %in% xrefs_indi, tag %in% c("FAMC","FAMS"))$record)
   unattached2 <- dplyr::setdiff(xrefs_indi, attached2)
   
   if (!identical(sort(attached), sort(attached2)))
     warning("Family group membership and individual family links are inconsistent")
   
   # get empty families
-  nonempty <- unique(dplyr::filter(gedcom, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$record)
+  nonempty <- unique(dplyr::filter(tg, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$record)
   empty <- dplyr::setdiff(xrefs_fam, nonempty) 
   
   #get unused media
-  used_media <- unique(dplyr::filter(gedcom, !record %in% xrefs_repo, tag == "OBJE")$value)
+  used_media <- unique(dplyr::filter(tg, !record %in% xrefs_repo, tag == "OBJE")$value)
   unused_media <- dplyr::setdiff(xrefs_media, used_media) 
   
   #get unused sources
-  used_sour <- unique(dplyr::filter(gedcom, !record %in% xrefs_sour, tag == "SOUR")$value)
+  used_sour <- unique(dplyr::filter(tg, !record %in% xrefs_sour, tag == "SOUR")$value)
   unused_sour <- dplyr::setdiff(xrefs_sour, used_sour)
   
   #get unused repos
-  used_repo <- unique(dplyr::filter(gedcom, !record %in% xrefs_repo, tag == "REPO")$value)
+  used_repo <- unique(dplyr::filter(tg, !record %in% xrefs_repo, tag == "REPO")$value)
   unused_repo <- dplyr::setdiff(xrefs_repo, used_repo)
   
   #get unused notes
-  used_notes <- unique(dplyr::filter(gedcom, !record %in% xrefs_note, tag == "NOTE")$value)
+  used_notes <- unique(dplyr::filter(tg, !record %in% xrefs_note, tag == "NOTE")$value)
   unused_notes <- dplyr::setdiff(xrefs_note, used_notes)
   
   c(unattached, empty, unused_media, unused_sour, unused_repo, unused_notes)
@@ -65,15 +65,15 @@ identify_unused_records <- function(gedcom) {
 
 #' Remove all CHANge dates from a tidyged object
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #'
 #' @return A tidyged object with all CHAN structures removed.
 #' @export
 #' @tests
 #' expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
-remove_change_dates <- function(gedcom) {
+remove_change_dates <- function(tg) {
   
-  tidyged.internals::remove_section(gedcom, 1, "CHAN", "")
+  tidyged.internals::remove_section(tg, 1, "CHAN", "")
   
 }
 
@@ -81,14 +81,14 @@ remove_change_dates <- function(gedcom) {
 
 #' Consolidate duplicated notes
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #' @param min_occurences How many duplicates to prompt creating a new Note record.
 #'
 #' @return A tidyged object with all notes consolidated.
 #' @export
-consolidate_notes <- function(gedcom, min_occurences = 2) {
+consolidate_notes <- function(tg, min_occurences = 2) {
   
-  note_dupes <- gedcom %>% 
+  note_dupes <- tg %>% 
     #get all note structures
     dplyr::filter(level > 0, tag == "NOTE") %>% 
     dplyr::group_by(value) %>% 
@@ -99,28 +99,28 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
   
   for(note in note_dupes) {
     
-    existing_notes <- tidyged::xrefs_note(gedcom)
+    existing_notes <- tidyged::xrefs_note(tg)
     
     # get xrefs of existing note record
-    xref <- dplyr::filter(gedcom, level == 0, tag == "NOTE", value == note)$record
+    xref <- dplyr::filter(tg, level == 0, tag == "NOTE", value == note)$record
     
     # if it doesn't exist create it
     if(length(xref) == 0) {
-      gedcom <- tidyged::add_note(gedcom, note)
+      tg <- tidyged::add_note(tg, note)
       
-      new_notes <- tidyged::xrefs_note(gedcom)
+      new_notes <- tidyged::xrefs_note(tg)
       
       xref <- dplyr::setdiff(new_notes, existing_notes)
     } 
     
     # change notes to references
-    gedcom <- gedcom %>% 
+    tg <- tg %>% 
       dplyr::mutate(value = dplyr::if_else(level > 0 & tag == "NOTE" & value == note,
                                            xref,
                                            value))
   }
   
-  gedcom
+  tg
 }
 
 
@@ -128,7 +128,7 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 
 #' Split a tidyged object into two
 #'
-#' @param gedcom A tidyged object to split.
+#' @param tg A tidyged object to split.
 #' @param xrefs A vector of xrefs to put into the new tidyged object.
 #'
 #' @return A new tidyged object containing the xrefs specified. It will also have the same
@@ -136,12 +136,12 @@ consolidate_notes <- function(gedcom, min_occurences = 2) {
 #' @export
 #' @tests
 #' expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@")), "json2")
-split_gedcom <- function(gedcom,
+split_gedcom <- function(tg,
                          xrefs) {
   
-  xrefs <- c(xrefs, tidyged::xrefs_subm(gedcom))
+  xrefs <- c(xrefs, tidyged::xrefs_subm(tg))
   
-  new <- gedcom %>% 
+  new <- tg %>% 
     dplyr::filter(record %in% c("HD", "TR", xrefs))
   
   links <- dplyr::filter(new, grepl(tidyged.internals::reg_xref(), value)) %>% 
@@ -152,15 +152,15 @@ split_gedcom <- function(gedcom,
   absent <- dplyr::setdiff(c(xrefs, links), xrefs)
   
   if(length(absent) > 0) {
-
-      absent_rows <- dplyr::filter(new, value %in% absent)
-      
-      for (i in seq_len(nrow(absent_rows))) {
-        new <- tidyged.internals::remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
-      }
-
-      message("Some dead record references have been removed: ", paste(absent, collapse = ", "))
-
+    
+    absent_rows <- dplyr::filter(new, value %in% absent)
+    
+    for (i in seq_len(nrow(absent_rows))) {
+      new <- tidyged.internals::remove_section(new, absent_rows$level[i], absent_rows$tag[i], absent_rows$value[i])
+    }
+    
+    message("Some dead record references have been removed: ", paste(absent, collapse = ", "))
+    
   }  
   
   new
@@ -173,28 +173,28 @@ split_gedcom <- function(gedcom,
 #' This function groups together all records of a particular type and puts them in a specific order.
 #' This rearrangement makes no functional difference to the file, it just makes it more organised.
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #' @param order A character string indicating the desired order of records. The letters
 #' indicate (I)ndividual, (F)amily Group, (M)ultimedia, (S)ource, (R)epository, (N)ote.
 #'
 #' @return An arranged tidyged object.
 #' @export
-arrange_records <- function(gedcom, order = "IFMSRN") {
+arrange_records <- function(tg, order = "IFMSRN") {
   
   if(nchar(order) != 6) stop("The order argument should have 6 characters")
   
   order <- stringr::str_replace(order, "M", "O")
   order <- strsplit(order, character())[[1]]
-  subm_xref <- tidyged::xrefs_subm(gedcom)
+  subm_xref <- tidyged::xrefs_subm(tg)
   
-  record_order <- dplyr::filter(gedcom, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) %>% 
+  record_order <- dplyr::filter(tg, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) %>% 
     dplyr::mutate(tag = stringr::str_sub(tag, 1, 1),
                   tag = factor(tag, levels = order, ordered = TRUE)) %>% 
     dplyr::arrange(tag) %>% 
     dplyr::pull(record) %>% 
     c("HD", subm_xref, ., "TR")
   
-  gedcom %>% 
+  tg %>% 
     dplyr::mutate(record = factor(record, levels = record_order, ordered = TRUE)) %>% 
     dplyr::arrange(record) %>%
     dplyr::mutate(record = as.character(record))
@@ -210,38 +210,38 @@ arrange_records <- function(gedcom, order = "IFMSRN") {
 #' This function inserts explicit death subrecords for individuals who have a date of birth that
 #' makes them older than a maximum age.
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #' @param max_age The maximum age to assume for a living person.
 #' @param guess If a date of birth cannot be found, whether to guess it from other information.
 #'
 #' @return An updated tidyged object with additional death subrecords.
 #' @export
-insert_explicit_death_subrecords <- function(gedcom, 
+insert_explicit_death_subrecords <- function(tg, 
                                              max_age = 120,
                                              guess = FALSE) {
   
-  indi_xrefs <- tidyged::xrefs_indi(gedcom)
+  indi_xrefs <- tidyged::xrefs_indi(tg)
   
   for(xref in indi_xrefs) {
-    death_events <- dplyr::filter(gedcom, record == xref, tag == "DEAT")
+    death_events <- dplyr::filter(tg, record == xref, tag == "DEAT")
     
     if(nrow(death_events) == 0) {
       
-      dob <- tidyged.internals::gedcom_value(gedcom, xref, "DATE", 2, "BIRT")
+      dob <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "BIRT")
       
       if(dob == "") {
         if(!guess) next
-        age <- guess_age(gedcom, xref)
+        age <- guess_age(tg, xref)
       } else {
         age <- date_diff(dob, minimise = TRUE)
       }
       
       if(age < 0) next
       if(age > max_age) {
-        next_row <- tidyged.internals::find_insertion_point(gedcom, xref, 0, "INDI")
-        gedcom <- tibble::add_row(gedcom,
-                                  tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
-                                  .before = next_row)
+        next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
+        tg <- tibble::add_row(tg,
+                              tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
+                              .before = next_row)
       }
       
       
@@ -249,25 +249,91 @@ insert_explicit_death_subrecords <- function(gedcom,
     
   }
   
-  gedcom
+  tg
 }
 
 
 #' Order children in all Family Group records by birth date
 #'
-#' @param gedcom A tidyged object.
+#' @param tg A tidyged object.
 #'
 #' @return The same tidyged object with rearranged children rows in the Family Group records.
 #' @export
-order_famg_children_all <- function(gedcom) {
+order_famg_children_all <- function(tg) {
   
-  fam_xrefs <- tidyged::xrefs_famg(gedcom)
+  fam_xrefs <- tidyged::xrefs_famg(tg)
   
   for(xref in fam_xrefs) {
-    gedcom <- tidyged::order_famg_children(gedcom, xref)
+    tg <- tidyged::order_famg_children(tg, xref)
   }
-  gedcom
+  tg
 }
 
 
-
+#' Remove living individuals from a tidyged object
+#'
+#' @param tg A tidyged object.
+#' @param max_age The maximum age to assume for a living person.
+#' @param guess Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).
+#' @param remove_record Whether to remove the Individual records, or retain them as placeholders.
+#' @param add_note If the Individual record is kept, whether to include a note in the record (given by the note_text parameter).
+#' @param note_text If add_note = TRUE, the text of the note.
+#' @param remove_supp_records Whether to also remove supporting records (sources, notes, multimedia). These may contain names and dates so it is probably best to remove them.
+#' @param update_date_changed Whether to add/update the change date for the record.
+#'
+#' @return A tidyged object cleansed of information on living individuals.
+#' @export
+remove_living <- function(tg,
+                          max_age = 120,
+                          guess = FALSE,
+                          remove_record = FALSE,
+                          add_note = FALSE,
+                          note_text = "Information on this individual has been removed",
+                          remove_supp_records = TRUE,
+                          update_date_changed = TRUE) {
+  
+  indi_xrefs <- tidyged::xrefs_indi(tg)
+  
+  for(xref in indi_xrefs) {
+    death_events <- dplyr::filter(tg, record == xref, tag == "DEAT")
+    
+    # death events exist - go to next individual
+    if(nrow(death_events) > 0) next
+    
+    dob <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "BIRT")
+    
+    # dob exists and age is bigger than max age - go to next individual
+    if(dob != "" && date_diff(dob, minimise = TRUE) > max_age) next
+    
+    # dob doesn't exist, but guessed age is bigger than max age - go to next individual
+    if(dob == "" && guess && guess_age(tg, xref) > max_age) next
+      
+    if(remove_supp_records) {
+      supp_recs <- tidyged::get_supporting_records(tg, xref, include_repo = FALSE)
+      tg <- tidyged::remove_records(tg, supp_recs)
+    }
+    
+    if(remove_record) {
+      tg <- tidyged::remove_records(tg, xref)
+    } else {
+      message(tidyged::describe_records(tg, xref, short_desc = TRUE), " cleansed")
+      # this needs to leave some more stuff untouched like links, change date
+      tg <- dplyr::filter(tg, record != xref | (record == xref & level == 0))
+      
+      if(add_note) {
+        next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
+        tg <- tibble::add_row(tg,
+                              tibble::tibble(record = xref, level = 1, tag = "NOTE", value = note_text),
+                              .before = next_row)
+        
+      }
+      
+      if(update_date_changed) {
+        
+      }
+    }
+    
+  }
+  
+  tg
+}

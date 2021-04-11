@@ -4,10 +4,10 @@
 \alias{order_famg_children_all}
 \title{Order children in all Family Group records by birth date}
 \usage{
-order_famg_children_all(gedcom)
+order_famg_children_all(tg)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 }
 \value{
 The same tidyged object with rearranged children rows in the Family Group records.

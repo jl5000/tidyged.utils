@@ -4,12 +4,12 @@
 \alias{migrate_records}
 \title{Copy all records from one tidyged object to another}
 \usage{
-migrate_records(gedcom1, gedcom2)
+migrate_records(tg1, tg2)
 }
 \arguments{
-\item{gedcom1}{The first tidyged object and the one you want to use for header and submitter information.}
+\item{tg1}{The first tidyged object and the one you want to use for header and submitter information.}
 
-\item{gedcom2}{The second tidyged object.}
+\item{tg2}{The second tidyged object.}
 }
 \value{
 A tidyged object which contains the same header and submitter information as the first object

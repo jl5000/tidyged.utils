@@ -4,10 +4,10 @@
 \alias{consolidate_notes}
 \title{Consolidate duplicated notes}
 \usage{
-consolidate_notes(gedcom, min_occurences = 2)
+consolidate_notes(tg, min_occurences = 2)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 
 \item{min_occurences}{How many duplicates to prompt creating a new Note record.}
 }

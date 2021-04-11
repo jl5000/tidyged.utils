@@ -4,10 +4,10 @@
 \alias{remove_change_dates}
 \title{Remove all CHANge dates from a tidyged object}
 \usage{
-remove_change_dates(gedcom)
+remove_change_dates(tg)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 }
 \value{
 A tidyged object with all CHAN structures removed.

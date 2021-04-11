@@ -4,12 +4,12 @@
 \alias{make_xrefs_unique}
 \title{Update xrefs in a tidyged object to make them unique from another tidyged object}
 \usage{
-make_xrefs_unique(gedcom1, gedcom2)
+make_xrefs_unique(tg1, tg2)
 }
 \arguments{
-\item{gedcom1}{The first tidyged object.}
+\item{tg1}{The first tidyged object.}
 
-\item{gedcom2}{The second tidyged object. This will be the one that will be updated.}
+\item{tg2}{The second tidyged object. This will be the one that will be updated.}
 }
 \value{
 The second tidyged object, where all xrefs have been made unique from the first object.

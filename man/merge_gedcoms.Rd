@@ -4,12 +4,12 @@
 \alias{merge_gedcoms}
 \title{Merge two tidyged objects}
 \usage{
-merge_gedcoms(gedcom1, gedcom2)
+merge_gedcoms(tg1, tg2)
 }
 \arguments{
-\item{gedcom1}{The first tidyged object to merge.}
+\item{tg1}{The first tidyged object to merge.}
 
-\item{gedcom2}{The second tidyged object to merge.}
+\item{tg2}{The second tidyged object to merge.}
 }
 \value{
 A new tidyged object containing the records of both input objects.

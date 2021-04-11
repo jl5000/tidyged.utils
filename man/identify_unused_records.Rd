@@ -4,10 +4,10 @@
 \alias{identify_unused_records}
 \title{Identify unreferenced records}
 \usage{
-identify_unused_records(gedcom)
+identify_unused_records(tg)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 }
 \value{
 A vector of xrefs that are not referenced anywhere else in the tidyged object.

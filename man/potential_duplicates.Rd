@@ -4,10 +4,10 @@
 \alias{potential_duplicates}
 \title{Identify potentially duplicate records}
 \usage{
-potential_duplicates(gedcom)
+potential_duplicates(tg)
 }
 \arguments{
-\item{gedcom}{A tidyged object.}
+\item{tg}{A tidyged object.}
 }
 \value{
 The same tidyged object, potentially with some records merged.

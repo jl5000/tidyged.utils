@@ -1,10 +1,10 @@
 
-sense_checks <- function(gedcom,
+sense_checks <- function(tg,
                          max_age = 120,
                          min_marriage_age = 18,
                          min_age_parent = 16) {
   
-  xrefs <- tidyged::xrefs_indi(gedcom)
+  xrefs <- tidyged::xrefs_indi(tg)
   
   for(xref in xrefs) {
     # separation between birth and death
@@ -19,12 +19,50 @@ sense_checks <- function(gedcom,
 }
 
 
-guess_age <- function(gedcom, xref) {
+guess_age <- function(tg, xref) {
   # no dob available
   
-  # check age at indi events
+  age <- guess_age_from_indi_events(tg, xref)
+  if(age >= 0) return(age)
   
-  # check age at famg events
+  age <- guess_age_from_famg_events(tg, xref)
+  if(age >= 0) return(age)
+  
+  # guess age from relatives
+  
+}
+
+
+guess_age_from_indi_events <- function(tg, xref) {
+  
+  indi_rec <- dplyr::filter(tg, record == xref)
+  
+  # for every fact with an age and date, take the average age
+  indi_rec_flags <- indi_rec %>% 
+    dplyr::mutate(new_sr = level == 1,
+                  sr_no = cumsum(new_sr))
+  
+  no_sr <- max(indi_rec_flags$sr_no)
+  
+  for(sr in seq_len(no_sr)){
+    sr <- dplyr::filter(indi_rec, sr_no == sr)
+    tags <- sr$tag
+    if("AGE" %in% tags & "DATE" %in% tags){
+      age <- dplyr::filter(sr, tag == "AGE")$value
+      age <- stringr::str_extract(age, "")
+      #take mean age
+      event_date <- dplyr::filter(sr, tag == "DATE")$value
+      event_year <- stringr::str_extract(event_date, "")
+      
+      age <- date_diff(event_year)
+    }
+    
+  }
+  
+}
+
+guess_age_from_famg_events <- function(tg, xref) {
+  
   
 }
 
@@ -65,7 +103,7 @@ date_diff <- function(date1,
     }
     
   } else if(any(stringr::str_detect(dates, regex_ic("BEF|AFT")))) {
-    # bomb out if difference in indeterminate
+    # bomb out if difference is indeterminate
     if(minimise) {
       if(stringr::str_detect(dates[1], regex_ic("AFT")) |
          stringr::str_detect(dates[2], regex_ic("BEF")))
