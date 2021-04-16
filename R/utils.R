@@ -273,13 +273,12 @@ order_famg_children_all <- function(tg) {
 #' Remove living individuals from a tidyged object
 #'
 #' @param tg A tidyged object.
-#' @param max_age The maximum age to assume for a living person.
+#' @param max_age The maximum age to assume for a living person (if a date of birth is given).
 #' @param guess Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).
 #' @param remove_record Whether to remove the Individual records, or retain them as placeholders.
 #' @param add_note If the Individual record is kept, whether to include a note in the record (given by the note_text parameter).
 #' @param note_text If add_note = TRUE, the text of the note.
-#' @param remove_supp_records Whether to also remove supporting records (sources, notes, multimedia). These may contain names and dates so it is probably best to remove them.
-#' @param update_date_changed Whether to add/update the change date for the record.
+#' @param remove_supp_records Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.
 #'
 #' @return A tidyged object cleansed of information on living individuals.
 #' @export
@@ -289,8 +288,7 @@ remove_living <- function(tg,
                           remove_record = FALSE,
                           add_note = FALSE,
                           note_text = "Information on this individual has been removed",
-                          remove_supp_records = TRUE,
-                          update_date_changed = TRUE) {
+                          remove_supp_records = TRUE) {
   
   indi_xrefs <- tidyged::xrefs_indi(tg)
   
@@ -317,8 +315,10 @@ remove_living <- function(tg,
       tg <- tidyged::remove_records(tg, xref)
     } else {
       message(tidyged::describe_records(tg, xref, short_desc = TRUE), " cleansed")
-      # this needs to leave some more stuff untouched like links, change date
-      tg <- dplyr::filter(tg, record != xref | (record == xref & level == 0))
+      # only keep family links in individual record (but no pedigree linkage or notes)
+      tg <- dplyr::filter(tg, record != xref | 
+                            (record == xref & level == 0) |
+                            (record == xref & level == 1 & tag %in% c("FAMS","FAMC")))
       
       if(add_note) {
         next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
@@ -328,9 +328,7 @@ remove_living <- function(tg,
         
       }
       
-      if(update_date_changed) {
-        
-      }
+      tg <- tidyged::update_change_date(tg, xref)
     }
     
   }

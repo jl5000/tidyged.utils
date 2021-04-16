@@ -18,6 +18,7 @@ Imports:
     tibble,
     purrr,
     tidyr,
+    lubridate,
     stringr,
     tidyged,
     tidyged.internals,

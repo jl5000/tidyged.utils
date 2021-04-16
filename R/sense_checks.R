@@ -37,28 +37,34 @@ guess_age_from_indi_events <- function(tg, xref) {
   
   indi_rec <- dplyr::filter(tg, record == xref)
   
-  # for every fact with an age and date, take the average age
+  # give each subrecord an identifier
   indi_rec_flags <- indi_rec %>% 
     dplyr::mutate(new_sr = level == 1,
                   sr_no = cumsum(new_sr))
   
   no_sr <- max(indi_rec_flags$sr_no)
   
-  for(sr in seq_len(no_sr)){
-    sr <- dplyr::filter(indi_rec, sr_no == sr)
+  # take average age
+  ages <- NULL
+  for(sr in seq_len(no_sr)) {
+    sr <- dplyr::filter(indi_rec_flags, sr_no == sr)
     tags <- sr$tag
+    
     if("AGE" %in% tags & "DATE" %in% tags){
       age <- dplyr::filter(sr, tag == "AGE")$value
-      age <- stringr::str_extract(age, "")
-      #take mean age
       event_date <- dplyr::filter(sr, tag == "DATE")$value
-      event_year <- stringr::str_extract(event_date, "")
+      #take mean age
       
-      age <- date_diff(event_year)
+      age <- age_now(event_date, age)
+      if(age < 0) next
+      
+      ages <- c(ages, age)
     }
     
   }
   
+  if (length(ages) == 0) return(-1)
+  mean(ages)
 }
 
 guess_age_from_famg_events <- function(tg, xref) {
@@ -116,7 +122,30 @@ date_diff <- function(date1,
     
   }
   
-  years <- as.numeric(stringr::str_extract(dates, "\\d{3,4}"))
+  dates1 <- tidyged.internals::parse_gedcom_date(dates[1], minimise)
+  dates2 <- tidyged.internals::parse_gedcom_date(dates[2], minimise)
   
-  years[2] - years[1]
+  lubridate::interval(dates1, dates2) %>% 
+    lubridate::time_length("years")
+}
+
+#' Determine the age of an individual now given their age on a previous date
+#' 
+#' @param date_of_fact A date string from the tidyged object.
+#' @param age_at_fact An age at event string from the tidyged object.
+#' @param minimise If date ranges or periods are used in the date, whether to choose the bounds which
+#' assume the minimum age. If this is FALSE, the maximum age is assumed.
+#'
+#' @return A numeric value giving the current age in years. A numeric value less than zero means no
+#' determination could be made.
+age_now <- function(date_of_fact,
+                    age_at_fact,
+                    minimise = TRUE) {
+  
+  age_of_fact <- date_diff(date_of_fact, minimise = minimise)
+  if(age_of_fact < 0) return(-1)
+  
+  age <- tidyged.internals::parse_gedcom_age(age_at_fact)
+  
+  age_of_fact + age
 }
