@@ -11,14 +11,13 @@ remove_living(
   remove_record = FALSE,
   add_note = FALSE,
   note_text = "Information on this individual has been removed",
-  remove_supp_records = TRUE,
-  update_date_changed = TRUE
+  remove_supp_records = TRUE
 )
 }
 \arguments{
 \item{tg}{A tidyged object.}
 
-\item{max_age}{The maximum age to assume for a living person.}
+\item{max_age}{The maximum age to assume for a living person (if a date of birth is given).}
 
 \item{guess}{Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).}
 
@@ -28,9 +27,7 @@ remove_living(
 
 \item{note_text}{If add_note = TRUE, the text of the note.}
 
-\item{remove_supp_records}{Whether to also remove supporting records (sources, notes, multimedia). These may contain names and dates so it is probably best to remove them.}
-
-\item{update_date_changed}{Whether to add/update the change date for the record.}
+\item{remove_supp_records}{Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.}
 }
 \value{
 A tidyged object cleansed of information on living individuals.

@@ -26,13 +26,22 @@ guess_age <- function(tg, xref) {
   if(age >= 0) return(age)
   
   age <- guess_age_from_famg_events(tg, xref)
-  if(age >= 0) return(age)
   
   # guess age from relatives
-  
+  age
 }
 
 
+#' Guess an individual's age from their facts
+#' 
+#' This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age.
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an individual.
+#'
+#' @return A numeric value giving the estimated age. A numeric value less than zero means no
+#' determination could be made.
+#' @export
 guess_age_from_indi_events <- function(tg, xref) {
   
   indi_rec <- dplyr::filter(tg, record == xref)
@@ -47,12 +56,13 @@ guess_age_from_indi_events <- function(tg, xref) {
   # take average age
   ages <- NULL
   for(sr in seq_len(no_sr)) {
-    sr <- dplyr::filter(indi_rec_flags, sr_no == sr)
-    tags <- sr$tag
+    
+    sub_rec <- dplyr::filter(indi_rec_flags, sr_no == sr)
+    tags <- sub_rec$tag
     
     if("AGE" %in% tags & "DATE" %in% tags){
-      age <- dplyr::filter(sr, tag == "AGE")$value
-      event_date <- dplyr::filter(sr, tag == "DATE")$value
+      age <- dplyr::filter(sub_rec, tag == "AGE")$value
+      event_date <- dplyr::filter(sub_rec, tag == "DATE")$value
       #take mean age
       
       age <- age_now(event_date, age)
@@ -67,8 +77,61 @@ guess_age_from_indi_events <- function(tg, xref) {
   mean(ages)
 }
 
+
+#' Guess an individual's age from their family group events
+#' 
+#' This function takes an individual's family group events and calculates an estimated age based on the date of the event and their age when the event occurred. It returns the average calculated age.
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an individual.
+#'
+#' @return A numeric value giving the estimated age. A numeric value less than zero means no
+#' determination could be made.
+#' @export
 guess_age_from_famg_events <- function(tg, xref) {
   
+  fams <- tidyged::get_families_as_spouse(tg, xref)
+  
+  # take average age
+  ages <- NULL
+  
+  # Loop through every family as a spouse
+  for (fam in fams) {
+    
+    fam_rec <- dplyr::filter(tg, record == fam)
+    
+    husb_or_wife <- dplyr::filter(fam_rec, value == xref)$tag
+      
+    # give each subrecord an identifier
+    fam_rec_flags <- fam_rec %>% 
+      dplyr::mutate(new_sr = level == 1,
+                    sr_no = cumsum(new_sr))
+    
+    no_sr <- max(fam_rec_flags$sr_no)
+    
+    for(sr in seq_len(no_sr)) {
+      
+      #get rid of other age if it exists
+      sub_rec <- dplyr::filter(fam_rec_flags, sr_no == sr, 
+                          dplyr::lag(tag) != ifelse(husb_or_wife == "HUSB", "WIFE", "HUSB"))
+      
+      tags <- sub_rec$tag
+      
+      if("AGE" %in% tags & "DATE" %in% tags){
+        age <- dplyr::filter(sub_rec, tag == "AGE")$value
+        event_date <- dplyr::filter(sub_rec, tag == "DATE")$value
+        
+        age <- age_now(event_date, age)
+        if(age < 0) next
+        
+        ages <- c(ages, age)
+      }
+      
+    }
+  }
+  
+  if (length(ages) == 0) return(-1)
+  mean(ages)
   
 }
 
