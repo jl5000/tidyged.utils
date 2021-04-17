@@ -2,6 +2,10 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  automation: automation.html
   merging_splitting: merging_splitting.html
-last_built: 2021-04-17T11:09Z
+  organising: organising.html
+  redaction: redaction.html
+  reducing_bloat: reducing_bloat.html
+last_built: 2021-04-17T21:47Z
 

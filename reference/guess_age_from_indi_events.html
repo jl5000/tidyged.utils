@@ -47,7 +47,7 @@
 
 
 <meta property="og:title" content="Guess an individual's age from their facts — guess_age_from_indi_events" />
-<meta property="og:description" content="This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age." />
+<meta property="og:description" content="This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -103,7 +103,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/automation.html">Automating data entry</a>
+    </li>
+    <li>
       <a href="../articles/merging_splitting.html">Splitting and Merging GEDCOM files</a>
+    </li>
+    <li>
+      <a href="../articles/organising.html">Organisation functions</a>
+    </li>
+    <li>
+      <a href="../articles/redaction.html">Redaction of sensitive data</a>
+    </li>
+    <li>
+      <a href="../articles/reducing_bloat.html">Reducing file bloat</a>
     </li>
   </ul>
 </li>
@@ -129,15 +141,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Guess an individual's age from their facts</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/sense_checks.R'><code>R/sense_checks.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/guess_age.R'><code>R/guess_age.R</code></a></small>
     <div class="hidden name"><code>guess_age_from_indi_events.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age.</p>
+    <p>This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>guess_age_from_indi_events</span><span class='op'>(</span><span class='va'>tg</span>, <span class='va'>xref</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>guess_age_from_indi_events</span><span class='op'>(</span><span class='va'>tg</span>, <span class='va'>xref</span>, agg_fn <span class='op'>=</span> <span class='va'>mean</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,6 +161,10 @@
     <tr>
       <th>xref</th>
       <td><p>The xref of an individual.</p></td>
+    </tr>
+    <tr>
+      <th>agg_fn</th>
+      <td><p>If multiple ages are calculated, the function to use to aggregate them.</p></td>
     </tr>
     </table>
 
