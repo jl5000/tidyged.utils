@@ -1,0 +1,58 @@
+---
+title: "Automating data entry"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Automating data entry}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Inserting explicit death subrecords
+
+Sometimes individuals are defined with a date of birth but no death subrecord because there is no information about the death to warrant creating one. However, including an empty death subrecord is valuable in its own right to indicate the individual is dead. The `insert_explicit_death_subrecords()` function allows you to automatically insert these subrecords for individuals who would be too old to still be alive.
+
+We illustrate with the following example of five individuals with various dates of birth (including a missing birth subrecord for person 5):
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+people <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Person 1") %>% 
+  add_indi_fact("birth", date = date_calendar(1900, 4, 4)) %>% 
+  add_indi(qn = "Person 2") %>% 
+  add_indi_fact("birth", date = date_calendar(1888)) %>%
+  add_indi(qn = "Person 3") %>% 
+  add_indi_fact("birth", date = date_calendar(1885, 6)) %>%
+  add_indi(qn = "Person 4") %>% 
+  add_indi_fact("birth", date = date_calendar(1910)) %>%
+  add_indi(qn = "Person 5") %>% 
+  add_indi_fact("census", date = date_calendar(1911), age = "42y")
+
+dplyr::filter(people, tag == "DEAT")
+```
+
+If we were to assume a maximum age of 120 years (the default for the function) we would want a death subrecord for the first three individuals.  
+
+```{r}
+people_wds <- insert_explicit_death_subrecords(people, max_age = 120)
+
+dplyr::filter(people_wds, tag == "DEAT")
+```
+
+If an individual has no date of birth defined, then the default action is to leave the record as is. However, setting the `guess` parameter to TRUE will cause the function to guess an age from associated facts if a date of birth does not exist.
+
+```{r}
+people_wds <- insert_explicit_death_subrecords(people, max_age = 120, guess = TRUE)
+
+dplyr::filter(people_wds, tag == "DEAT")
+```
+
+We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.

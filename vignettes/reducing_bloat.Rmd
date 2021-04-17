@@ -1,0 +1,68 @@
+---
+title: "Reducing file bloat"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Reducing file bloat}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Change dates
+
+All top level records in a GEDCOM file can record the date and time they were last modified. The `tidyged` package (the main package for creating and summarising GEDCOM files) includes change dates (today's date) by default every time a record is created or modified. Since the time is very unlikely to be useful in such a context, the package ignores this by default. We illustrate by loading the `tidyged` and `tidyged.utils` packages, and creating an example object.
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+gedcom(subm("Me")) %>% 
+  knitr::kable()
+```
+
+See row `r which(gedcom(subm("Me"))$tag == "CHAN")` and the row after for the change date for the submitter record.
+
+For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the `remove_change_dates()` function:
+
+```{r}
+gedcom(subm("Me")) %>% 
+  remove_change_dates() %>% 
+  knitr::kable()
+```
+
+
+## Unreferenced records
+
+If there are any records that are not referenced anywhere else, they can be found with the `identify_unused_records()` function. In the example below we create 6 family group records, half with members, half without, and also an unreferenced Repository record:
+
+```{r}
+some_unref <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Tom Smith") %>% 
+  add_indi(qn = "Tammy Smith") %>% 
+  add_indi(qn = "Alice White") %>% 
+  add_indi(qn = "Phil Brown") %>% 
+  add_famg(husband = "Tom", wife = "Tammy") %>% 
+  add_famg() %>% 
+  add_famg(husband = "Phil") %>% 
+  add_famg() %>% 
+  add_famg(children = "Alice") %>% 
+  add_famg() %>% 
+  add_repo("Test repo") 
+  
+identify_unused_records(some_unref)
+```
+
+We can find out more about these xrefs by using the `describe_records()` function from the `tidyged` package:
+
+```{r}
+identify_unused_records(some_unref) %>% 
+  describe_records(gedcom = some_unref)
+```
+
+

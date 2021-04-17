@@ -47,139 +47,29 @@ remotes::install_github("jl5000/tidyged.utils")
 
 GEDCOM files can get very large and unwieldy, resulting in inefficiencies and file bloat. The `tidyged.utils` package offers functions to automate the cleaning and handling of GEDCOM files. It includes:
 
+* Splitting files
+* Merging files
 * Removal of 'change date' structures
 * Consolidating duplicate notes
 * Finding unreferenced records
 * Arranging records by type
 * Inserting explicit death subrecords
 * Arranging children by date of birth
-* Splitting files
-* Merging files
+* Redaction of living individuals
+* Functionality to guess the current age of individuals without dates of birth
 
-## Change dates
-
-All top level records in a GEDCOM file can record the date and time they were last modified. The `tidyged` package (the main package for creating and summarising GEDCOM files) includes change dates (today's date) by default every time a record is created or modified. Since the time is very unlikely to be useful in such a context, the package ignores this by default. We illustrate by loading the `tidyged` and `tidyged.utils` packages, and creating an example object.
-
-```{r}
-library(tidyged)
-library(tidyged.utils)
-
-gedcom(subm("Me")) %>% 
-  knitr::kable()
-```
-
-See row `r which(gedcom(subm("Me"))$tag == "CHAN")` and the row after for the change date for the submitter record.
-
-For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the `remove_change_dates()` function:
-
-```{r}
-gedcom(subm("Me")) %>% 
-  remove_change_dates() %>% 
-  knitr::kable()
-```
+Examples are given at the [website](https://jl5000.github.io/tidyged.utils/).
 
 
-## Duplicate notes
-
-With all records and many subrecords, it's possible to include custom notes to augment the information provided. These can either be the notes themselves, or a pointer to a top level Note record:
-
-```{r}
-notes <- gedcom(subm("Me")) %>%
-  add_note("This is a generic note.") %>% 
-  add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
-  add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
-
-knitr::kable(notes)
-```
-
-In the above example, there is a generic note recorded in a top level Note record. This same note message has been used for the individual and repository defined, but they have been repeated rather than pointing to the Note record. There is also a repeated bespoke note given in the Individual and Repository records.
-
-The `consolidate_notes()` function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:
-
-```{r}
-consolidate_notes(notes) %>% 
-  knitr::kable()
-```
 
 
-## Unreferenced records
 
-If there are any records that are not referenced anywhere else, they can be found with the `identify_unused_records()` function. In the example below we create 6 family group records, half with members, half without, and also an unreferenced Repository record:
 
-```{r}
-some_unref <- gedcom(subm("Me")) %>% 
-  add_indi(qn = "Tom Smith") %>% 
-  add_indi(qn = "Tammy Smith") %>% 
-  add_indi(qn = "Alice White") %>% 
-  add_indi(qn = "Phil Brown") %>% 
-  add_famg(husband = "Tom", wife = "Tammy") %>% 
-  add_famg() %>% 
-  add_famg(husband = "Phil") %>% 
-  add_famg() %>% 
-  add_famg(children = "Alice") %>% 
-  add_famg() %>% 
-  add_repo("Test repo") 
-  
-identify_unused_records(some_unref)
-```
 
-We can find out more about these xrefs by using the `describe_records()` function from the `tidyged` package:
 
-```{r}
-identify_unused_records(some_unref) %>% 
-  describe_records(gedcom = some_unref)
-```
 
-## Arranging records
 
-The ability to order records by type in a GEDCOM file is a task purely done for aesthetics - it has no functional value, other than perhaps making records easier to find. We use the example above, where we can initially see the records are given in the order they were defined:
 
-```{r}
-unique(some_unref$record)
-```
-
-We now use the `arrange_recrds()` function to arrange them in a specific order, given by a character string giving the first initial of each record type (header, trailer, and submitter records do not move):
-
-```{r}
-ordered <- arrange_records(some_unref, "RIFSNM")
-
-unique(ordered$record)
-```
-
-## Inserting explicit death subrecords
-
-Sometimes individuals are defined with a date of birth but no death subrecord because there is no information about the death to warrant creating one. However, including an empty death subrecord is valuable in its own right to indicate the individual is dead. The `insert_explicit_death_subrecords()` function allows you to automatically insert these subrecords for individuals who would be too old to still be alive.
-
-We illustrate with the following example of five individuals with various dates of birth (including a missing birth subrecord for person 5):
-
-```{r}
-people <- gedcom(subm("Me")) %>% 
-  add_indi(qn = "Person 1") %>% 
-  add_indi_fact("birth", date = date_calendar(1900, 4, 4)) %>% 
-  add_indi(qn = "Person 2") %>% 
-  add_indi_fact("birth", date = date_calendar(1888)) %>%
-  add_indi(qn = "Person 3") %>% 
-  add_indi_fact("birth", date = date_calendar(1885, 6)) %>%
-  add_indi(qn = "Person 4") %>% 
-  add_indi_fact("birth", date = date_calendar(1905)) %>%
-  add_indi(qn = "Person 5")
-
-dplyr::filter(people, tag == "DEAT")
-```
-
-If we were to assume a maximum age of 120 years (the default for the function) we would want a death subrecord for the first three individuals.  
-
-```{r}
-people_wds <- insert_explicit_death_subrecords(people, max_age = 120)
-
-dplyr::filter(people_wds, tag == "DEAT")
-```
-
-If an individual has no date of birth defined, then no judgement can be made and the record is left as-is.
-
-## Arranging children by date of birth
-
-The `order_famg_children_all()` function ensures all children are represented in Family Group records in order of date of birth.
 
 
 

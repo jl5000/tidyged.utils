@@ -1,0 +1,99 @@
+---
+title: "Redaction of sensitive data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Redaction of sensitive data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+GEDCOM files are often shared between people, but a file can contain detailed information for individuals, which is an issue, especially if they are still alive.
+
+The `tidyged.utils` package contains functionality to detect these individuals and either remove them or remove their details.
+
+## Basic usage
+
+The function to remove living individuals is `remove_living()`. To illustrate, we create a tidyged object containing a number of different individuals, alive, dead, and some ambiguous:
+
+* A person born in 1996
+* A person with a death event
+* A person born in 1796
+* A person who was a driver in 1930 when they were 50 years old
+* A person who got married in 1856 when they were 20 years old
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+people <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Living person") %>% 
+  add_indi_fact("birth", date = date_calendar(1996)) %>%
+  add_indi(qn = "Confirmed dead person") %>% 
+  add_indi_fact("death") %>% 
+  add_indi(qn = "Reeeaally old person") %>% 
+  add_indi_fact("birth", date = date_calendar(1796)) %>% 
+  add_indi(qn = "Implicit dead person 1") %>% 
+  add_indi_fact("occupation", descriptor = "Driver", date = date_calendar(1930), age = "50y") %>% 
+  add_indi(qn = "Implicit dead person 2") %>% 
+  add_famg(husband = "Implicit dead person 2") %>% 
+  add_famg_event("relationship", date = date_calendar(1856), husband_age = "20y")
+
+describe_records(people, people$record)
+```
+
+The default behaviour of the function is to remove data for living individuals, but also those that are ambiguous. Confirmed dead person has a death event, and Reeeaally old person was born in 1796. The function assumes a maximum age of 120.
+
+```{r}
+remove_living(people) %>% 
+  describe_records(people$record)
+```
+
+For illustration purposes, we can increase the maximum age threshold, which will make the function treat the old person as still living:
+
+```{r}
+remove_living(people, max_age = 300) %>% 
+  describe_records(people$record)
+```
+## Guessing individuals ages
+
+The `guess` parameter will cause the function to invoke additional functionality to try to guess the age of individuals where a date of birth is not given:
+
+```{r}
+remove_living(people, guess = TRUE) %>% 
+  describe_records(people$record)
+```
+
+This causes the function to determine that all individuals apart from the first is dead. This looks in both individual facts and family group events.
+
+## Redaction options
+
+The remaining parameters determine the action to take when living individuals are found. By default, the records are preserved, but all detail is removed, leaving only a change date:
+
+```{r}
+remove_living(people, guess = TRUE) %>%
+  dplyr::filter(record  == "@I1@")
+```
+
+The user has the option of leaving a note explaining that the record has been cleansed:
+
+```{r}
+remove_living(people, guess = TRUE, add_note = TRUE, note_text = "Record cleansed") %>%
+  dplyr::filter(record  == "@I1@")
+```
+
+Alternatively, the record can be removed completely:
+
+```{r}
+living_removed <- remove_living(people, guess = TRUE, remove_record = TRUE)
+```
+
+Since supporting records could also hold sensitive information, the `remove_supp_records` parameter allows you to also remove these (which it does by default).

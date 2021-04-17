@@ -1,0 +1,75 @@
+---
+title: "Organisation functions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Organisation functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+## Arranging records
+
+The ability to order records by type in a GEDCOM file is a task purely done for aesthetics - it has no functional value, other than perhaps making records easier to find. We use the example above, where we can initially see the records are given in the order they were defined:
+
+```{r}
+library(tidyged)
+library(tidyged.utils)
+
+some_unref <- gedcom(subm("Me")) %>% 
+  add_indi(qn = "Tom Smith") %>% 
+  add_indi(qn = "Tammy Smith") %>% 
+  add_indi(qn = "Alice White") %>% 
+  add_indi(qn = "Phil Brown") %>% 
+  add_famg(husband = "Tom", wife = "Tammy") %>% 
+  add_famg() %>% 
+  add_famg(husband = "Phil") %>% 
+  add_famg() %>% 
+  add_famg(children = "Alice") %>% 
+  add_famg() %>% 
+  add_repo("Test repo") 
+
+unique(some_unref$record)
+```
+
+We now use the `arrange_records()` function to arrange them in a specific order, given by a character string giving the first initial of each record type (header, trailer, and submitter records do not move):
+
+```{r}
+ordered <- arrange_records(some_unref, "RIFSNM")
+
+unique(ordered$record)
+```
+
+
+## Arranging children by date of birth
+
+The `order_famg_children_all()` function ensures all children are represented in Family Group records in order of date of birth. This is an extension of the `order_famg_children()` function found in the `tidyged` package but applies to all Family Group records.
+
+## Duplicate notes
+
+With all records and many subrecords, it's possible to include custom notes to augment the information provided. These can either be the notes themselves, or a pointer to a top level Note record:
+
+```{r}
+notes <- gedcom(subm("Me")) %>%
+  add_note("This is a generic note.") %>% 
+  add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
+  add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
+
+knitr::kable(notes)
+```
+
+In the above example, there is a generic note recorded in a top level Note record. This same note message has been used for the individual and repository defined, but they have been repeated rather than pointing to the Note record. There is also a repeated bespoke note given in the Individual and Repository records.
+
+The `consolidate_notes()` function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:
+
+```{r}
+consolidate_notes(notes) %>% 
+  knitr::kable()
+```
