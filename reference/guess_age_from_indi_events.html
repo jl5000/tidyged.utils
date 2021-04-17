@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remove living individuals from a tidyged object — remove_living • tidyged.utils</title>
+<title>Guess an individual's age from their facts — guess_age_from_indi_events • tidyged.utils</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Remove living individuals from a tidyged object — remove_living" />
-<meta property="og:description" content="Remove living individuals from a tidyged object" />
+<meta property="og:title" content="Guess an individual's age from their facts — guess_age_from_indi_events" />
+<meta property="og:description" content="This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -128,24 +128,16 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Remove living individuals from a tidyged object</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
-    <div class="hidden name"><code>remove_living.Rd</code></div>
+    <h1>Guess an individual's age from their facts</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jl5000/tidyged.utils/blob/master/R/sense_checks.R'><code>R/sense_checks.R</code></a></small>
+    <div class="hidden name"><code>guess_age_from_indi_events.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Remove living individuals from a tidyged object</p>
+    <p>This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>remove_living</span><span class='op'>(</span>
-  <span class='va'>tg</span>,
-  max_age <span class='op'>=</span> <span class='fl'>120</span>,
-  guess <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  remove_record <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  add_note <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  note_text <span class='op'>=</span> <span class='st'>"Information on this individual has been removed"</span>,
-  remove_supp_records <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>guess_age_from_indi_events</span><span class='op'>(</span><span class='va'>tg</span>, <span class='va'>xref</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,34 +147,15 @@
       <td><p>A tidyged object.</p></td>
     </tr>
     <tr>
-      <th>max_age</th>
-      <td><p>The maximum age to assume for a living person (if a date of birth is given).</p></td>
-    </tr>
-    <tr>
-      <th>guess</th>
-      <td><p>Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).</p></td>
-    </tr>
-    <tr>
-      <th>remove_record</th>
-      <td><p>Whether to remove the Individual records, or retain them as placeholders.</p></td>
-    </tr>
-    <tr>
-      <th>add_note</th>
-      <td><p>If the Individual record is kept, whether to include a note in the record (given by the note_text parameter).</p></td>
-    </tr>
-    <tr>
-      <th>note_text</th>
-      <td><p>If add_note = TRUE, the text of the note.</p></td>
-    </tr>
-    <tr>
-      <th>remove_supp_records</th>
-      <td><p>Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.</p></td>
+      <th>xref</th>
+      <td><p>The xref of an individual.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A tidyged object cleansed of information on living individuals.</p>
+    <p>A numeric value giving the estimated age. A numeric value less than zero means no
+determination could be made.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
