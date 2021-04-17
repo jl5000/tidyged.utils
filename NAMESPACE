@@ -3,6 +3,7 @@
 export("%>%")
 export(arrange_records)
 export(consolidate_notes)
+export(guess_age)
 export(guess_age_from_famg_events)
 export(guess_age_from_indi_events)
 export(identify_unused_records)

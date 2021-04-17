@@ -19,30 +19,41 @@ sense_checks <- function(tg,
 }
 
 
-guess_age <- function(tg, xref) {
-  # no dob available
+#' Guess an individual's age
+#' 
+#' This function calculates an age for an individual based on their individual or family facts. It calculates age based on the date of the fact and their age when the fact applied.
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an individual.
+#' @param agg_fn If multiple ages are calculated, the function to use to aggregate them.
+#'
+#' @return A numeric value giving the estimated age. A numeric value less than zero means no
+#' determination could be made.
+#' @export
+guess_age <- function(tg, xref, agg_fn = mean) {
   
   age <- guess_age_from_indi_events(tg, xref)
   if(age >= 0) return(age)
   
   age <- guess_age_from_famg_events(tg, xref)
   
-  # guess age from relatives
+  # guess age from relatives?
   age
 }
 
 
 #' Guess an individual's age from their facts
 #' 
-#' This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied. It returns the average calculated age.
+#' This function takes an individual's attributes and events and calculates an estimated age based on the date of the fact and their age when the fact applied.
 #'
 #' @param tg A tidyged object.
 #' @param xref The xref of an individual.
+#' @param agg_fn If multiple ages are calculated, the function to use to aggregate them.
 #'
 #' @return A numeric value giving the estimated age. A numeric value less than zero means no
 #' determination could be made.
 #' @export
-guess_age_from_indi_events <- function(tg, xref) {
+guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
   
   indi_rec <- dplyr::filter(tg, record == xref)
   
@@ -74,25 +85,29 @@ guess_age_from_indi_events <- function(tg, xref) {
   }
   
   if (length(ages) == 0) return(-1)
-  mean(ages)
+  if (max(ages) - min(ages) > 10)
+    warning("The range of possible ages for the following individual exceeds 10 years - you may want to check dates/ages:\n", tidyged::describe_indi(tg, xref))
+  
+  agg_fn(ages)
 }
 
 
 #' Guess an individual's age from their family group events
 #' 
-#' This function takes an individual's family group events and calculates an estimated age based on the date of the event and their age when the event occurred. It returns the average calculated age.
+#' This function takes an individual's family group events and calculates an estimated age based on the date of the event and their age when the event occurred.
 #'
 #' @param tg A tidyged object.
 #' @param xref The xref of an individual.
+#' @param agg_fn If multiple ages are calculated, the function to use to aggregate them.
 #'
 #' @return A numeric value giving the estimated age. A numeric value less than zero means no
 #' determination could be made.
 #' @export
-guess_age_from_famg_events <- function(tg, xref) {
+guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
   
   fams <- tidyged::get_families_as_spouse(tg, xref)
   
-  # take average age
+  # take aggregated age
   ages <- NULL
   
   # Loop through every family as a spouse
@@ -131,7 +146,10 @@ guess_age_from_famg_events <- function(tg, xref) {
   }
   
   if (length(ages) == 0) return(-1)
-  mean(ages)
+  if (max(ages) - min(ages) > 10)
+    warning("The range of possible ages for the following individual exceeds 10 years - you may want to check dates/ages:\n", tidyged::describe_indi(tg, xref))
+  
+  agg_fn(ages)
   
 }
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{remove_living}
 \alias{remove_living}
-\title{Remove living individuals from a tidyged object}
+\title{Remove data for living individuals in a tidyged object}
 \usage{
 remove_living(
   tg,
@@ -33,5 +33,5 @@ remove_living(
 A tidyged object cleansed of information on living individuals.
 }
 \description{
-Remove living individuals from a tidyged object
+Remove data for living individuals in a tidyged object
 }

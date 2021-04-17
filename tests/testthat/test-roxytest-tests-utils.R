@@ -7,12 +7,12 @@ test_that("Function identify_unused_records() @ L21", {
 })
 
 
-test_that("Function remove_change_dates() @ L74", {
+test_that("Function remove_change_dates() @ L76", {
   expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
 })
 
 
-test_that("Function split_gedcom() @ L139", {
+test_that("Function split_gedcom() @ L141", {
   expect_snapshot_value(split_gedcom(tidyged::sample555, c("@I1@","@S1@")), "json2")
 })
 

@@ -28,7 +28,8 @@ identify_unused_records <- function(tg) {
   xrefs_note <- tidyged::xrefs_note(tg)
   
   # get unattached individuals
-  attached <- unique(dplyr::filter(tg, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$value)
+  attached <- unique(dplyr::filter(tg, record %in% xrefs_fam, level == 1, 
+                                   tag %in% c("HUSB","WIFE","CHIL"))$value)
   unattached <- dplyr::setdiff(xrefs_indi, attached)
   
   #also look at family links perspective to check consistency
@@ -39,7 +40,8 @@ identify_unused_records <- function(tg) {
     warning("Family group membership and individual family links are inconsistent")
   
   # get empty families
-  nonempty <- unique(dplyr::filter(tg, record %in% xrefs_fam, tag %in% c("HUSB","WIFE","CHIL"))$record)
+  nonempty <- unique(dplyr::filter(tg, record %in% xrefs_fam, level == 1,
+                                   tag %in% c("HUSB","WIFE","CHIL"))$record)
   empty <- dplyr::setdiff(xrefs_fam, nonempty) 
   
   #get unused media
@@ -270,7 +272,7 @@ order_famg_children_all <- function(tg) {
 }
 
 
-#' Remove living individuals from a tidyged object
+#' Remove data for living individuals in a tidyged object
 #'
 #' @param tg A tidyged object.
 #' @param max_age The maximum age to assume for a living person (if a date of birth is given).
