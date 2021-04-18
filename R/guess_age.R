@@ -29,7 +29,6 @@ sense_checks <- function(tg,
 #'
 #' @return A numeric value giving the estimated age. A numeric value less than zero means no
 #' determination could be made.
-#' @export
 guess_age <- function(tg, xref, agg_fn = mean) {
   
   age <- guess_age_from_indi_events(tg, xref)
@@ -52,7 +51,6 @@ guess_age <- function(tg, xref, agg_fn = mean) {
 #'
 #' @return A numeric value giving the estimated age. A numeric value less than zero means no
 #' determination could be made.
-#' @export
 guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
   
   indi_rec <- dplyr::filter(tg, record == xref)
@@ -102,7 +100,6 @@ guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
 #'
 #' @return A numeric value giving the estimated age. A numeric value less than zero means no
 #' determination could be made.
-#' @export
 guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
   
   fams <- tidyged::get_families_as_spouse(tg, xref)
