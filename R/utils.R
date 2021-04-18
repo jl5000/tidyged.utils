@@ -215,12 +215,14 @@ arrange_records <- function(tg, order = "IFMSRN") {
 #' @param tg A tidyged object.
 #' @param max_age The maximum age to assume for a living person.
 #' @param guess If a date of birth cannot be found, whether to guess it from other information.
+#' @param explan_note Text to include in an explanatory note for any added death subrecords. An empty string will not add a note.
 #'
 #' @return An updated tidyged object with additional death subrecords.
 #' @export
 insert_explicit_death_subrecords <- function(tg, 
                                              max_age = 120,
-                                             guess = FALSE) {
+                                             guess = FALSE,
+                                             explan_note = "This death event has been inferred automatically from other facts") {
   
   indi_xrefs <- tidyged::xrefs_indi(tg)
   
@@ -244,6 +246,13 @@ insert_explicit_death_subrecords <- function(tg,
         tg <- tibble::add_row(tg,
                               tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
                               .before = next_row)
+        
+        if(nchar(explan_note) > 0)
+          tg <- tibble::add_row(tg,
+                                tibble::tibble(record = xref, level = 2, tag = "NOTE", value = explan_note),
+                                .before = next_row + 1)
+        
+        tg <- tidyged::update_change_date(tg, xref)
       }
       
       
