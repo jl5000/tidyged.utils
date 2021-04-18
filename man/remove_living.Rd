@@ -24,7 +24,7 @@ remove_living(
 
 \item{explan_note}{Text to include in an explanatory note for any redacted records. An empty string will not add a note.}
 
-\item{remove_supp_records}{Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.}
+\item{remove_supp_records}{Whether to also remove supporting records (sources, repositories, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.}
 }
 \value{
 A tidyged object cleansed of information on living individuals.

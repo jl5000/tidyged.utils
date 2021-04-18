@@ -288,7 +288,7 @@ order_famg_children_all <- function(tg) {
 #' @param guess Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).
 #' @param remove_record Whether to remove the Individual records, or retain them as placeholders.
 #' @param explan_note Text to include in an explanatory note for any redacted records. An empty string will not add a note.
-#' @param remove_supp_records Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.
+#' @param remove_supp_records Whether to also remove supporting records (sources, repositories, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.
 #'
 #' @return A tidyged object cleansed of information on living individuals.
 #' @export
@@ -316,7 +316,7 @@ remove_living <- function(tg,
     if(dob == "" && guess && guess_age(tg, xref) > max_age) next
       
     if(remove_supp_records) {
-      supp_recs <- tidyged::get_supporting_records(tg, xref, include_repo = FALSE)
+      supp_recs <- tidyged::get_supporting_records(tg, xref)
       tg <- tidyged::remove_records(tg, supp_recs)
     }
     
