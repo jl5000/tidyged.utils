@@ -151,7 +151,12 @@ makes them older than a maximum age." />
 makes them older than a maximum age.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>insert_explicit_death_subrecords</span><span class='op'>(</span><span class='va'>tg</span>, max_age <span class='op'>=</span> <span class='fl'>120</span>, guess <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>insert_explicit_death_subrecords</span><span class='op'>(</span>
+  <span class='va'>tg</span>,
+  max_age <span class='op'>=</span> <span class='fl'>120</span>,
+  guess <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  explan_note <span class='op'>=</span> <span class='st'>"This death event has been inferred automatically from other facts"</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +172,10 @@ makes them older than a maximum age.</p>
     <tr>
       <th>guess</th>
       <td><p>If a date of birth cannot be found, whether to guess it from other information.</p></td>
+    </tr>
+    <tr>
+      <th>explan_note</th>
+      <td><p>Text to include in an explanatory note for any added death subrecords. An empty string will not add a note.</p></td>
     </tr>
     </table>
 
