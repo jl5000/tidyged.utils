@@ -287,8 +287,7 @@ order_famg_children_all <- function(tg) {
 #' @param max_age The maximum age to assume for a living person (if a date of birth is given).
 #' @param guess Whether to guess the age of individuals if no death event or date of birth is given and possibly retain them, or be cautious and remove them anyway (the default).
 #' @param remove_record Whether to remove the Individual records, or retain them as placeholders.
-#' @param add_note If the Individual record is kept, whether to include a note in the record (given by the note_text parameter).
-#' @param note_text If add_note = TRUE, the text of the note.
+#' @param explan_note Text to include in an explanatory note for any redacted records. An empty string will not add a note.
 #' @param remove_supp_records Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.
 #'
 #' @return A tidyged object cleansed of information on living individuals.
@@ -297,8 +296,7 @@ remove_living <- function(tg,
                           max_age = 120,
                           guess = FALSE,
                           remove_record = FALSE,
-                          add_note = FALSE,
-                          note_text = "Information on this individual has been removed",
+                          explan_note = "Information on this individual has been redacted",
                           remove_supp_records = TRUE) {
   
   indi_xrefs <- tidyged::xrefs_indi(tg)
@@ -331,10 +329,10 @@ remove_living <- function(tg,
                             (record == xref & level == 0) |
                             (record == xref & level == 1 & tag %in% c("FAMS","FAMC")))
       
-      if(add_note) {
+      if(nchar(explan_note) > 0) {
         next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
         tg <- tibble::add_row(tg,
-                              tibble::tibble(record = xref, level = 1, tag = "NOTE", value = note_text),
+                              tibble::tibble(record = xref, level = 1, tag = "NOTE", value = explan_note),
                               .before = next_row)
         
       }

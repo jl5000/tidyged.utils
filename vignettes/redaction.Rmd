@@ -76,17 +76,17 @@ This causes the function to determine that all individuals apart from the first 
 
 ## Redaction options
 
-The remaining parameters determine the action to take when living individuals are found. By default, the records are preserved, but all detail is removed, leaving only a change date:
+The remaining parameters determine the action to take when living individuals are found. By default, the records are preserved, but all detail is removed, leaving only a change date and an explanatory note:
 
 ```{r}
 remove_living(people, guess = TRUE) %>%
   dplyr::filter(record  == "@I1@")
 ```
 
-The user has the option of leaving a note explaining that the record has been cleansed:
+The user has the option of changing the text of this note using the `explan_note` parameter. Alternatively it can be set to an empty string to remove it completely:
 
 ```{r}
-remove_living(people, guess = TRUE, add_note = TRUE, note_text = "Record cleansed") %>%
+remove_living(people, guess = TRUE, explan_note = "") %>%
   dplyr::filter(record  == "@I1@")
 ```
 

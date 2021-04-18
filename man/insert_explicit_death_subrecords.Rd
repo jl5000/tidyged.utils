@@ -4,7 +4,12 @@
 \alias{insert_explicit_death_subrecords}
 \title{Insert explicit death subrecords}
 \usage{
-insert_explicit_death_subrecords(tg, max_age = 120, guess = FALSE)
+insert_explicit_death_subrecords(
+  tg,
+  max_age = 120,
+  guess = FALSE,
+  explan_note = "This death event has been inferred automatically from other facts"
+)
 }
 \arguments{
 \item{tg}{A tidyged object.}
@@ -12,6 +17,8 @@ insert_explicit_death_subrecords(tg, max_age = 120, guess = FALSE)
 \item{max_age}{The maximum age to assume for a living person.}
 
 \item{guess}{If a date of birth cannot be found, whether to guess it from other information.}
+
+\item{explan_note}{Text to include in an explanatory note for any added death subrecords. An empty string will not add a note.}
 }
 \value{
 An updated tidyged object with additional death subrecords.

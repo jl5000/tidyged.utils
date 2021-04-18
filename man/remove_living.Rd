@@ -9,8 +9,7 @@ remove_living(
   max_age = 120,
   guess = FALSE,
   remove_record = FALSE,
-  add_note = FALSE,
-  note_text = "Information on this individual has been removed",
+  explan_note = "Information on this individual has been redacted",
   remove_supp_records = TRUE
 )
 }
@@ -23,9 +22,7 @@ remove_living(
 
 \item{remove_record}{Whether to remove the Individual records, or retain them as placeholders.}
 
-\item{add_note}{If the Individual record is kept, whether to include a note in the record (given by the note_text parameter).}
-
-\item{note_text}{If add_note = TRUE, the text of the note.}
+\item{explan_note}{Text to include in an explanatory note for any redacted records. An empty string will not add a note.}
 
 \item{remove_supp_records}{Whether to also remove supporting records (sources, notes, multimedia) associated with the living individuals. These may contain names and dates so it is probably best to remove them.}
 }
