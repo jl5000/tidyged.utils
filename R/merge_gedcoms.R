@@ -148,7 +148,7 @@ potential_duplicates_indi <- function(tg,
                                            choices = tidyged::describe_records(tg, dupes),
                                            multiple = TRUE)
       
-      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, tidyged.internals::reg_xref(FALSE)) 
       
       if(length(xrefs_to_merge) > 1) tg <- merge_records(tg, xrefs_to_merge)
       
@@ -184,7 +184,7 @@ potential_duplicates_famg <- function(tg) {
                                            choices = tidyged::describe_records(tg, dupes),
                                            multiple = TRUE)
       
-      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, tidyged.internals::reg_xref(FALSE)) 
       
       if(length(xrefs_to_merge) > 1) tg <- merge_records(tg, xrefs_to_merge)
       
@@ -218,7 +218,7 @@ potential_duplicates_sour <- function(tg) {
                                            choices = tidyged::describe_records(tg, dupes),
                                            multiple = TRUE)
       
-      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, tidyged.internals::reg_xref(FALSE)) 
       
       if(length(xrefs_to_merge) > 1) tg <- merge_records(tg, xrefs_to_merge)
       
@@ -252,7 +252,7 @@ potential_duplicates_repo <- function(tg) {
                                            choices = tidyged::describe_records(tg, dupes),
                                            multiple = TRUE)
       
-      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, tidyged.internals::reg_xref(FALSE)) 
       
       if(length(xrefs_to_merge) > 1) tg <- merge_records(tg, xrefs_to_merge)
       
@@ -288,7 +288,7 @@ potential_duplicates_media <- function(tg) {
                                            choices = tidyged::describe_records(tg, dupes),
                                            multiple = TRUE)
       
-      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, "@[a-zA-Z0-9]{1,20}@") 
+      xrefs_to_merge <- stringr::str_extract(xrefs_to_merge, tidyged.internals::reg_xref(FALSE)) 
       
       if(length(xrefs_to_merge) > 1) tg <- merge_records(tg, xrefs_to_merge)
       

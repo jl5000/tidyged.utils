@@ -1,4 +1,4 @@
-# Function remove_change_dates() @ L74
+# Function remove_change_dates() @ L76
 
     {
       "type": "list",
@@ -48,7 +48,7 @@
       ]
     }
 
-# Function split_gedcom() @ L139
+# Function split_gedcom() @ L141
 
     {
       "type": "list",

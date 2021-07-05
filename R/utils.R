@@ -143,10 +143,9 @@ split_gedcom <- function(tg,
   
   xrefs <- c(xrefs, tidyged::xrefs_subm(tg))
   
-  new <- tg %>% 
-    dplyr::filter(record %in% c("HD", "TR", xrefs))
+  new <- dplyr::filter(tg, record %in% c("HD", "TR", xrefs))
   
-  links <- dplyr::filter(new, grepl(tidyged.internals::reg_xref(), value)) %>% 
+  links <- dplyr::filter(new, grepl(tidyged.internals::reg_xref(TRUE), value)) %>% 
     dplyr::pull(value) %>% 
     unique()
   
