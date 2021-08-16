@@ -47,11 +47,12 @@ some_unref <- gedcom(subm("Me")) %>%
   add_indi(qn = "Tammy Smith") %>% 
   add_indi(qn = "Alice White") %>% 
   add_indi(qn = "Phil Brown") %>% 
-  add_famg(husband = "Tom", wife = "Tammy") %>% 
+  add_famg(husband = find_indi_name(., "Tom"), 
+           wife = find_indi_name(., "Tammy")) %>% 
   add_famg() %>% 
-  add_famg(husband = "Phil") %>% 
+  add_famg(husband = find_indi_name(., "Phil")) %>% 
   add_famg() %>% 
-  add_famg(children = "Alice") %>% 
+  add_famg(children = find_indi_name(., "Alice")) %>% 
   add_famg() %>% 
   add_repo("Test repo") 
   

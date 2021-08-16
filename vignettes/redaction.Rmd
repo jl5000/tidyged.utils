@@ -44,7 +44,7 @@ people <- gedcom(subm("Me")) %>%
   add_indi(qn = "Implicit dead person 1") %>% 
   add_indi_fact("occupation", descriptor = "Driver", date = date_calendar(1930), age = "50y") %>% 
   add_indi(qn = "Implicit dead person 2") %>% 
-  add_famg(husband = "Implicit dead person 2") %>% 
+  add_famg(husband = find_indi_name(., "Implicit dead person 2")) %>% 
   add_famg_event("relationship", date = date_calendar(1856), husband_age = "20y")
 
 describe_records(people, people$record)
