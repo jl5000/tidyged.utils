@@ -140,9 +140,9 @@
 <span class="co">#&gt; # A tibble: 3 × 4</span>
 <span class="co">#&gt;   level record tag   value</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1     1 @I1@   DEAT  Y    </span>
-<span class="co">#&gt; 2     1 @I2@   DEAT  Y    </span>
-<span class="co">#&gt; 3     1 @I3@   DEAT  Y</span></code></pre></div>
+<span class="co">#&gt; 1     1 @I1@   DEAT  ""   </span>
+<span class="co">#&gt; 2     1 @I2@   DEAT  ""   </span>
+<span class="co">#&gt; 3     1 @I3@   DEAT  ""</span></code></pre></div>
 <p>If an individual has no date of birth defined, then the default action is to leave the record as is. However, setting the <code>guess</code> parameter to TRUE will cause the function to guess an age from associated facts if a date of birth does not exist.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">people_wds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">120</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -151,10 +151,10 @@
 <span class="co">#&gt; # A tibble: 4 × 4</span>
 <span class="co">#&gt;   level record tag   value</span>
 <span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1     1 @I1@   DEAT  Y    </span>
-<span class="co">#&gt; 2     1 @I2@   DEAT  Y    </span>
-<span class="co">#&gt; 3     1 @I3@   DEAT  Y    </span>
-<span class="co">#&gt; 4     1 @I5@   DEAT  Y</span></code></pre></div>
+<span class="co">#&gt; 1     1 @I1@   DEAT  ""   </span>
+<span class="co">#&gt; 2     1 @I2@   DEAT  ""   </span>
+<span class="co">#&gt; 3     1 @I3@   DEAT  ""   </span>
+<span class="co">#&gt; 4     1 @I5@   DEAT  ""</span></code></pre></div>
 <p>We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.</p>
 </div>
   </div>
