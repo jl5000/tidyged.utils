@@ -125,7 +125,7 @@ guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
       
       #get rid of other age if it exists
       sub_rec <- dplyr::filter(fam_rec_flags, sr_no == sr, 
-                          dplyr::lag(tag) != ifelse(husb_or_wife == "HUSB", "WIFE", "HUSB"))
+                          dplyr::lag(tag) != dplyr::if_else(husb_or_wife == "HUSB", "WIFE", "HUSB"))
       
       tags <- sub_rec$tag
       

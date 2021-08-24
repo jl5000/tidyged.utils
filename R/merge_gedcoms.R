@@ -73,8 +73,8 @@ make_xrefs_unique <- function(tg1, tg2) {
     new_xrefs <- assign_xref_fn(tg1, quantity = length(old_xrefs))
     for (i in seq_along(old_xrefs)) {
       tg2 <- dplyr::mutate(tg2,
-                           record = ifelse(record == old_xrefs[i], new_xrefs[i], record),
-                           value = ifelse(value == old_xrefs[i], new_xrefs[i], value))
+                           record = dplyr::if_else(record == old_xrefs[i], new_xrefs[i], record),
+                           value = dplyr::if_else(value == old_xrefs[i], new_xrefs[i], value))
     }
     
   }
@@ -333,8 +333,8 @@ merge_records <- function(tg, xrefs) {
   tg %>% 
     dplyr::filter(!record %in% xrefs) %>% 
     tibble::add_row(merged, .before = nrow(.)) %>% 
-    dplyr::mutate(value = ifelse(value %in% xrefs, xrefs[1], value),
-                  record = ifelse(record %in% xrefs, xrefs[1], record))
+    dplyr::mutate(value = dplyr::if_else(value %in% xrefs, xrefs[1], value),
+                  record = dplyr::if_else(record %in% xrefs, xrefs[1], record))
   
   
 }

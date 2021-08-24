@@ -243,7 +243,7 @@ insert_explicit_death_subrecords <- function(tg,
       if(age > max_age) {
         next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
         tg <- tibble::add_row(tg,
-                              tibble::tibble(record = xref, level = 1, tag = "DEAT", value = "Y"),
+                              tibble::tibble(record = xref, level = 1, tag = "DEAT", value = ""),
                               .before = next_row)
         
         if(nchar(explan_note) > 0)
