@@ -279,6 +279,28 @@ order_famg_children_all <- function(tg) {
   tg
 }
 
+#' Insert explicit marriage subrecords
+#' 
+#' This function inserts explicit marriage subrecords for Family Group records that do not have one.
+#' 
+#' @details The GEDCOM specification recommends that all marriage events have an explicit TYPE subrecord
+#' subordinate to the MARR relationship event. If one is not given, marriage is assumed.
+#'
+#' @param tg A tidyged object.
+#'
+#' @return An updated tidyged object with additional marriage subrecords.
+#' @export
+insert_explicit_marr_types_all <- function(tg){
+  
+  fam_xrefs <- tidyged::xrefs_famg(tg)
+  
+  for(xref in fam_xrefs) {
+    tg <- tidyged::insert_explicit_marr_types(tg, xref)
+  }
+  tg
+  
+}
+
 
 #' Remove data for living individuals in a tidyged object
 #'
