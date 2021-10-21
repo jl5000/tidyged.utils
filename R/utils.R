@@ -20,12 +20,12 @@
 #'              c("@I1@","@F1@"))
 identify_unused_records <- function(tg) {
   
-  xrefs_indi <- tidyged::xrefs_indi(tg)
-  xrefs_fam <- tidyged::xrefs_famg(tg)
-  xrefs_media <- tidyged::xrefs_media(tg)
-  xrefs_sour <- tidyged::xrefs_sour(tg)
-  xrefs_repo <- tidyged::xrefs_repo(tg)
-  xrefs_note <- tidyged::xrefs_note(tg)
+  xrefs_indi <- queryged::xrefs_indi(tg)
+  xrefs_fam <- queryged::xrefs_famg(tg)
+  xrefs_media <- queryged::xrefs_media(tg)
+  xrefs_sour <- queryged::xrefs_sour(tg)
+  xrefs_repo <- queryged::xrefs_repo(tg)
+  xrefs_note <- queryged::xrefs_note(tg)
   
   # get unattached individuals
   attached <- unique(dplyr::filter(tg, record %in% xrefs_fam, level == 1, 
@@ -101,7 +101,7 @@ consolidate_notes <- function(tg, min_occurences = 2) {
   
   for(note in note_dupes) {
     
-    existing_notes <- tidyged::xrefs_note(tg)
+    existing_notes <- queryged::xrefs_note(tg)
     
     # get xrefs of existing note record
     xref <- dplyr::filter(tg, level == 0, tag == "NOTE", value == note)$record
@@ -110,7 +110,7 @@ consolidate_notes <- function(tg, min_occurences = 2) {
     if(length(xref) == 0) {
       tg <- tidyged::add_note(tg, note)
       
-      new_notes <- tidyged::xrefs_note(tg)
+      new_notes <- queryged::xrefs_note(tg)
       
       xref <- dplyr::setdiff(new_notes, existing_notes)
     } 
@@ -141,7 +141,7 @@ consolidate_notes <- function(tg, min_occurences = 2) {
 split_gedcom <- function(tg,
                          xrefs) {
   
-  xrefs <- c(xrefs, tidyged::xrefs_subm(tg))
+  xrefs <- c(xrefs, queryged::xrefs_subm(tg))
   
   new <- dplyr::filter(tg, record %in% c("HD", "TR", xrefs))
   
@@ -186,7 +186,7 @@ arrange_records <- function(tg, order = "IFMSRN") {
   
   order <- stringr::str_replace(order, "M", "O")
   order <- strsplit(order, character())[[1]]
-  subm_xref <- tidyged::xrefs_subm(tg)
+  subm_xref <- queryged::xrefs_subm(tg)
   
   record_order <- dplyr::filter(tg, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) %>% 
     dplyr::mutate(tag = stringr::str_sub(tag, 1, 1),
@@ -223,7 +223,7 @@ insert_explicit_death_subrecords <- function(tg,
                                              guess = FALSE,
                                              explan_note = "This death event has been inferred automatically from other facts") {
   
-  indi_xrefs <- tidyged::xrefs_indi(tg)
+  indi_xrefs <- queryged::xrefs_indi(tg)
   
   for(xref in indi_xrefs) {
     death_events <- dplyr::filter(tg, record == xref, tag == "DEAT")
@@ -271,7 +271,7 @@ insert_explicit_death_subrecords <- function(tg,
 #' @export
 order_famg_children_all <- function(tg) {
   
-  fam_xrefs <- tidyged::xrefs_famg(tg)
+  fam_xrefs <- queryged::xrefs_famg(tg)
   
   for(xref in fam_xrefs) {
     tg <- tidyged::order_famg_children(tg, xref)
@@ -292,7 +292,7 @@ order_famg_children_all <- function(tg) {
 #' @export
 insert_explicit_marr_types_all <- function(tg){
   
-  fam_xrefs <- tidyged::xrefs_famg(tg)
+  fam_xrefs <- queryged::xrefs_famg(tg)
   
   for(xref in fam_xrefs) {
     tg <- tidyged::insert_explicit_marr_types(tg, xref)
@@ -320,7 +320,7 @@ remove_living <- function(tg,
                           explan_note = "Information on this individual has been redacted",
                           remove_supp_records = TRUE) {
   
-  indi_xrefs <- tidyged::xrefs_indi(tg)
+  indi_xrefs <- queryged::xrefs_indi(tg)
   
   for(xref in indi_xrefs) {
     death_events <- dplyr::filter(tg, record == xref, tag == "DEAT")

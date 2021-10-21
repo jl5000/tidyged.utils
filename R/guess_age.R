@@ -4,7 +4,7 @@ sense_checks <- function(tg,
                          min_marriage_age = 18,
                          min_age_parent = 16) {
   
-  xrefs <- tidyged::xrefs_indi(tg)
+  xrefs <- queryged::xrefs_indi(tg)
   
   for(xref in xrefs) {
     # separation between birth and death

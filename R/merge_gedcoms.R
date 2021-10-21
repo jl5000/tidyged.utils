@@ -31,9 +31,9 @@ migrate_records <- function(tg1, tg2) {
   # update xrefs in tg2
   tg2 <- make_xrefs_unique(tg1, tg2)
   
-  new_xrefs <- c(tidyged::xrefs_indi(tg2), tidyged::xrefs_famg(tg2),
-                 tidyged::xrefs_sour(tg2), tidyged::xrefs_repo(tg2),
-                 tidyged::xrefs_media(tg2), tidyged::xrefs_note(tg2))
+  new_xrefs <- c(queryged::xrefs_indi(tg2), queryged::xrefs_famg(tg2),
+                 queryged::xrefs_sour(tg2), queryged::xrefs_repo(tg2),
+                 queryged::xrefs_media(tg2), queryged::xrefs_note(tg2))
   
   # move xrefs to tg1
   records_to_move <- dplyr::filter(tg2, record %in% new_xrefs)
@@ -54,12 +54,12 @@ make_xrefs_unique <- function(tg1, tg2) {
   
   for(i in letters[1:6]) {
     
-    all_xrefs_fn <- switch(i, a = tidyged::xrefs_indi,
-                           b = tidyged::xrefs_famg,
-                           c = tidyged::xrefs_sour,
-                           d = tidyged::xrefs_repo,
-                           e = tidyged::xrefs_media,
-                           f = tidyged::xrefs_note)
+    all_xrefs_fn <- switch(i, a = queryged::xrefs_indi,
+                           b = queryged::xrefs_famg,
+                           c = queryged::xrefs_sour,
+                           d = queryged::xrefs_repo,
+                           e = queryged::xrefs_media,
+                           f = queryged::xrefs_note)
     assign_xref_fn <- switch(i, a = tidyged.internals::assign_xref_indi,
                              b = tidyged.internals::assign_xref_famg,
                              c = tidyged.internals::assign_xref_sour,
@@ -99,11 +99,11 @@ potential_duplicates <- function(tg) {
     potential_duplicates_repo() %>%
     potential_duplicates_media()
   
-  records <- c(tidyged::xrefs_indi(tg),
-               tidyged::xrefs_famg(tg),
-               tidyged::xrefs_sour(tg),
-               tidyged::xrefs_repo(tg),
-               tidyged::xrefs_media(tg))
+  records <- c(queryged::xrefs_indi(tg),
+               queryged::xrefs_famg(tg),
+               queryged::xrefs_sour(tg),
+               queryged::xrefs_repo(tg),
+               queryged::xrefs_media(tg))
   
   for (record in records) {
     tg <- remove_duplicate_subrecords(tg, record)
@@ -117,7 +117,7 @@ potential_duplicates <- function(tg) {
 potential_duplicates_indi <- function(tg,
                                       year_margin = 2) {
   
-  ind_xrefs <- tidyged::xrefs_indi(tg)
+  ind_xrefs <- queryged::xrefs_indi(tg)
   
   given <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "GIVN", level = 2)
   surname <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "SURN", level = 2)
@@ -163,7 +163,7 @@ potential_duplicates_indi <- function(tg,
 
 potential_duplicates_famg <- function(tg) {
   
-  famg_xrefs <- tidyged::xrefs_famg(tg)
+  famg_xrefs <- queryged::xrefs_famg(tg)
   
   husb <- purrr::map_chr(famg_xrefs, queryged::gedcom_value, gedcom = tg, tag = "HUSB", level = 1)
   wife <- purrr::map_chr(famg_xrefs, queryged::gedcom_value, gedcom = tg, tag = "WIFE", level = 1)
@@ -199,7 +199,7 @@ potential_duplicates_famg <- function(tg) {
 
 potential_duplicates_sour <- function(tg) {
   
-  sour_xrefs <- tidyged::xrefs_sour(tg)
+  sour_xrefs <- queryged::xrefs_sour(tg)
   
   title <- purrr::map_chr(sour_xrefs, queryged::gedcom_value, gedcom = tg, tag = "TITL", level = 1)
   
@@ -233,7 +233,7 @@ potential_duplicates_sour <- function(tg) {
 
 potential_duplicates_repo <- function(tg) {
   
-  repo_xrefs <- tidyged::xrefs_repo(tg)
+  repo_xrefs <- queryged::xrefs_repo(tg)
   
   name <- purrr::map_chr(repo_xrefs, queryged::gedcom_value, gedcom = tg, tag = "NAME", level = 1)
   
@@ -267,7 +267,7 @@ potential_duplicates_repo <- function(tg) {
 
 potential_duplicates_media <- function(tg) {
   
-  media_xrefs <- tidyged::xrefs_media(tg)
+  media_xrefs <- queryged::xrefs_media(tg)
   
   file_ref <- purrr::map_chr(media_xrefs, queryged::gedcom_value, gedcom = tg, tag = "FILE", level = 1)
   format <- purrr::map_chr(media_xrefs, queryged::gedcom_value, gedcom = tg, tag = "FORM", level = 2)
