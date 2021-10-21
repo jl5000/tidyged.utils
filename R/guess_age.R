@@ -4,7 +4,7 @@ sense_checks <- function(tg,
                          min_marriage_age = 18,
                          min_age_parent = 16) {
   
-  xrefs <- queryged::xrefs_indi(tg)
+  xrefs <- tidyged::xrefs_indi(tg)
   
   for(xref in xrefs) {
     # separation between birth and death
@@ -102,7 +102,7 @@ guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
 #' determination could be made.
 guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
   
-  fams <- queryged::get_families_as_spouse(tg, xref)
+  fams <- tidyged::get_families_as_spouse(tg, xref)
   
   # take aggregated age
   ages <- NULL
