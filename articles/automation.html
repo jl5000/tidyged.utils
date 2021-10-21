@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1.9000</span>
       </span>
     </div>
 
@@ -156,6 +156,12 @@
 <span class="co">#&gt; 3     1 @I3@   DEAT  ""   </span>
 <span class="co">#&gt; 4     1 @I5@   DEAT  ""</span></code></pre></div>
 <p>We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.</p>
+</div>
+<div id="inserting-explicit-marriage-subrecords" class="section level2">
+<h2 class="hasAnchor">
+<a href="#inserting-explicit-marriage-subrecords" class="anchor"></a>Inserting explicit marriage subrecords</h2>
+<p>In previous GEDCOM specification, the primary family event of interest has been the marriage (MARR) event. In GEDCOM 5.5.5, the MARR event has been generalised to signify any romantic relationship between two people. The subordinate TYPE subrecord is used to indicate the nature of the relationship, and if none is specified, a marriage is assumed. Whilst <code>tidyged</code> inserts this TYPE subrecord as a marriage if none is specified, your file may not have this, and you may wish to do so.</p>
+<p>The <code><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all()</a></code> function does this for all Family Group records found.</p>
 </div>
   </div>
 
