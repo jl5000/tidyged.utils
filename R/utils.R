@@ -230,7 +230,7 @@ insert_explicit_death_subrecords <- function(tg,
     
     if(nrow(death_events) == 0) {
       
-      dob <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "BIRT")
+      dob <- queryged::gedcom_value(tg, xref, "DATE", 2, "BIRT")
       
       if(dob == "") {
         if(!guess) next
@@ -241,7 +241,7 @@ insert_explicit_death_subrecords <- function(tg,
       
       if(age < 0) next
       if(age > max_age) {
-        next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
+        next_row <- queryged::find_insertion_point(tg, xref, 0, "INDI")
         tg <- tibble::add_row(tg,
                               tibble::tibble(record = xref, level = 1, tag = "DEAT", value = ""),
                               .before = next_row)
@@ -328,7 +328,7 @@ remove_living <- function(tg,
     # death events exist - go to next individual
     if(nrow(death_events) > 0) next
     
-    dob <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "BIRT")
+    dob <- queryged::gedcom_value(tg, xref, "DATE", 2, "BIRT")
     
     # dob exists and age is bigger than max age - go to next individual
     if(dob != "" && date_diff(dob, minimise = TRUE) > max_age) next
@@ -337,7 +337,7 @@ remove_living <- function(tg,
     if(dob == "" && guess && guess_age(tg, xref) > max_age) next
       
     if(remove_supp_records) {
-      supp_recs <- tidyged::get_supporting_records(tg, xref)
+      supp_recs <- queryged::get_supporting_records(tg, xref)
       tg <- tidyged::remove_records(tg, supp_recs)
     }
     
@@ -351,7 +351,7 @@ remove_living <- function(tg,
                             (record == xref & level == 1 & tag %in% c("FAMS","FAMC")))
       
       if(nchar(explan_note) > 0) {
-        next_row <- tidyged.internals::find_insertion_point(tg, xref, 0, "INDI")
+        next_row <- queryged::find_insertion_point(tg, xref, 0, "INDI")
         tg <- tibble::add_row(tg,
                               tibble::tibble(record = xref, level = 1, tag = "NOTE", value = explan_note),
                               .before = next_row)

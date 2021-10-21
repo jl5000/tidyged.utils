@@ -56,3 +56,9 @@ dplyr::filter(people_wds, tag == "DEAT")
 ```
 
 We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.
+
+## Inserting explicit marriage subrecords
+
+In previous GEDCOM specification, the primary family event of interest has been the marriage (MARR) event. In GEDCOM 5.5.5, the MARR event has been generalised to signify any romantic relationship between two people. The subordinate TYPE subrecord is used to indicate the nature of the relationship, and if none is specified, a marriage is assumed. Whilst `tidyged` inserts this TYPE subrecord as a marriage if none is specified, your file may not have this, and you may wish to do so.
+
+The `insert_explicit_marr_types_all()` function does this for all Family Group records found.

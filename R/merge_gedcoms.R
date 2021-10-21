@@ -119,10 +119,10 @@ potential_duplicates_indi <- function(tg,
   
   ind_xrefs <- tidyged::xrefs_indi(tg)
   
-  given <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "GIVN", level = 2)
-  surname <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "SURN", level = 2)
-  dob <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "DATE", level = 2, after_tag = "BIRT")
-  dod <- purrr::map_chr(ind_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "DATE", level = 2, after_tag = "DEAT")
+  given <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "GIVN", level = 2)
+  surname <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "SURN", level = 2)
+  dob <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "DATE", level = 2, after_tag = "BIRT")
+  dod <- purrr::map_chr(ind_xrefs, queryged::gedcom_value, gedcom = tg, tag = "DATE", level = 2, after_tag = "DEAT")
   
   yob <- as.numeric(stringr::str_extract(dob, "\\d{3,4}"))
   yod <- as.numeric(stringr::str_extract(dod, "\\d{3,4}"))
@@ -165,8 +165,8 @@ potential_duplicates_famg <- function(tg) {
   
   famg_xrefs <- tidyged::xrefs_famg(tg)
   
-  husb <- purrr::map_chr(famg_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "HUSB", level = 1)
-  wife <- purrr::map_chr(famg_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "WIFE", level = 1)
+  husb <- purrr::map_chr(famg_xrefs, queryged::gedcom_value, gedcom = tg, tag = "HUSB", level = 1)
+  wife <- purrr::map_chr(famg_xrefs, queryged::gedcom_value, gedcom = tg, tag = "WIFE", level = 1)
   
   comb <- tibble::tibble(xref = famg_xrefs,
                          husb = husb,
@@ -201,7 +201,7 @@ potential_duplicates_sour <- function(tg) {
   
   sour_xrefs <- tidyged::xrefs_sour(tg)
   
-  title <- purrr::map_chr(sour_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "TITL", level = 1)
+  title <- purrr::map_chr(sour_xrefs, queryged::gedcom_value, gedcom = tg, tag = "TITL", level = 1)
   
   comb <- tibble::tibble(xref = sour_xrefs,
                          title = title) %>% 
@@ -235,7 +235,7 @@ potential_duplicates_repo <- function(tg) {
   
   repo_xrefs <- tidyged::xrefs_repo(tg)
   
-  name <- purrr::map_chr(repo_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "NAME", level = 1)
+  name <- purrr::map_chr(repo_xrefs, queryged::gedcom_value, gedcom = tg, tag = "NAME", level = 1)
   
   comb <- tibble::tibble(xref = repo_xrefs,
                          name = name) %>% 
@@ -269,8 +269,8 @@ potential_duplicates_media <- function(tg) {
   
   media_xrefs <- tidyged::xrefs_media(tg)
   
-  file_ref <- purrr::map_chr(media_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "FILE", level = 1)
-  format <- purrr::map_chr(media_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "FORM", level = 2)
+  file_ref <- purrr::map_chr(media_xrefs, queryged::gedcom_value, gedcom = tg, tag = "FILE", level = 1)
+  format <- purrr::map_chr(media_xrefs, queryged::gedcom_value, gedcom = tg, tag = "FORM", level = 2)
   
   comb <- tibble::tibble(xref = media_xrefs,
                          file_ref = file_ref,

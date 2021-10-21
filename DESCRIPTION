@@ -1,6 +1,6 @@
 Package: tidyged.utils
 Title: Utilities to Manage GEDCOM Files Using Tidyverse Principles
-Version: 0.3.0.9000
+Version: 0.3.1.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",
@@ -22,6 +22,7 @@ Imports:
     stringr,
     tidyged,
     tidyged.internals,
+    queryged,
     magrittr
 Suggests: 
     testthat (>= 3.0.0),
@@ -30,6 +31,7 @@ Suggests:
     knitr
 Remotes: 
     jl5000/tidyged,
-    jl5000/tidyged.internals
+    jl5000/tidyged.internals,
+    jl5000/queryged
 Config/testthat/edition: 3
 VignetteBuilder: knitr

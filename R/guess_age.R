@@ -102,7 +102,7 @@ guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
 #' determination could be made.
 guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
   
-  fams <- tidyged::get_families_as_spouse(tg, xref)
+  fams <- queryged::get_families_as_spouse(tg, xref)
   
   # take aggregated age
   ages <- NULL
