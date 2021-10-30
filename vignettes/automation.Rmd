@@ -56,3 +56,15 @@ dplyr::filter(people_wds, tag == "DEAT")
 ```
 
 We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.
+
+## Inserting explicit marriage types
+
+The GEDCOM specification recommends that all relationship events have an explicit TYPE subrecord. If one is not given, marriage is assumed. The `insert_explicit_marr_types_all()` function inserts an explicit marriage TYPE if one is not given:
+
+```{r}
+dplyr::filter(sample555, record == "@F1@")
+
+insert_explicit_marr_types_all(sample555) %>% 
+  dplyr::filter(record == "@F1@")
+```
+
