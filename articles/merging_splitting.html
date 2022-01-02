@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -80,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jl5000/tidyged.utils/">
+  <a href="https://github.com/jl5000/tidyged.utils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,23 +97,23 @@
       <h1 data-toc-skip>Splitting and Merging GEDCOM files</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/jl5000/tidyged.utils/blob/master/vignettes/merging_splitting.Rmd"><code>vignettes/merging_splitting.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jl5000/tidyged.utils/blob/HEAD/vignettes/merging_splitting.Rmd" class="external-link"><code>vignettes/merging_splitting.Rmd</code></a></small>
       <div class="hidden name"><code>merging_splitting.Rmd</code></div>
 
     </div>
 
     
     
-<div id="introduction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#introduction" class="anchor"></a>Introduction</h2>
+<div class="section level2">
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
+</h2>
 <p>One of the most difficult tasks to carry out is the splitting of GEDCOM files into two, and the merging of two GEDCOM files into one. Maybe you want to take a specific branch of your tree to give to someone else. Maybe you would like to combine two files describing your maternal ancestors and paternal ancestors. One of the reasons why it is so difficult is because of the cross references that occur within a GEDCOM file, and determining if two records should be merged into one.</p>
 <p>We illustrate with the following sample file:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/">tidyged</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils">tidyged.utils</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/" class="external-link">tidyged</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils" class="external-link">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span>
 <span class="co">#&gt; GEDCOM file summary: </span>
 <span class="co">#&gt;  </span>
 <span class="co">#&gt;  Submitter:               Reldon Poulson </span>
@@ -131,7 +127,7 @@
 <span class="co">#&gt;  Source system version:   5.5.5 </span>
 <span class="co">#&gt;  Product name:            GEDCOM Specification </span>
 <span class="co">#&gt;  Product source:          gedcom.org</span>
-<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="va">sample555</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="va">sample555</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
 <span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"                              </span>
 <span class="co">#&gt; [3] "Individual @I2@, Mary Ann Wilson"                                     </span>
@@ -141,15 +137,15 @@
 <span class="co">#&gt; [7] "Source @S1@, titled Madison County Birth, Death, and Marriage Records"</span>
 <span class="co">#&gt; [8] "Repository @R1@, Family History Library"</span></code></pre></div>
 </div>
-<div id="splitting-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#splitting-files" class="anchor"></a>Splitting files</h2>
+<div class="section level2">
+<h2 id="splitting-files">Splitting files<a class="anchor" aria-label="anchor" href="#splitting-files"></a>
+</h2>
 <p>Splitting a file is much easier than merging two files. In order to split a file we use the <code><a href="../reference/split_gedcom.html">split_gedcom()</a></code> function and provide the xrefs of the records we would like to be contained in the new file. In this example, we’re going to take the family <span class="citation">@F2</span>@ and the two individuals within it:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/split_gedcom.html">split_gedcom</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"@F2@"</span>, <span class="st">"@I1@"</span>, <span class="st">"@I3@"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">new</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/split_gedcom.html">split_gedcom</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"@F2@"</span>, <span class="st">"@I1@"</span>, <span class="st">"@I3@"</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; Some dead record references have been removed: @S1@, @F1@</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">new</span><span class="op">)</span>
 <span class="co">#&gt; GEDCOM file summary: </span>
 <span class="co">#&gt;  </span>
 <span class="co">#&gt;  Submitter:               Reldon Poulson </span>
@@ -165,16 +161,16 @@
 <span class="co">#&gt;  Product source:          gedcom.org</span></code></pre></div>
 <p>With this new file we can see it has the exact same header and submitter information. Let’s take a look to see what records it contains:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">new</span>, <span class="va">new</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">new</span>, <span class="va">new</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"               </span>
 <span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"      </span>
 <span class="co">#&gt; [3] "Individual @I3@, Joe Williams"                </span>
 <span class="co">#&gt; [4] "Family @F2@, headed by Robert Eugene Williams"</span></code></pre></div>
 <p>By default, this function will remove references to records that do not exist in the file. The function will tell us which records these are in case you want to go back and include them.</p>
 </div>
-<div id="merging-files" class="section level2">
-<h2 class="hasAnchor">
-<a href="#merging-files" class="anchor"></a>Merging files</h2>
+<div class="section level2">
+<h2 id="merging-files">Merging files<a class="anchor" aria-label="anchor" href="#merging-files"></a>
+</h2>
 <p>Merging two files is a much more involved affair. Cross reference identifiers must be made unique across both files, potential duplicate records must be identified, and then merged. This is all done automatically using the <code><a href="../reference/merge_gedcoms.html">merge_gedcoms()</a></code> function.</p>
 <p>Unfortunately it cannot be demonstrated here since it seeks user input when potentially duplicate records are identified.</p>
 <p>The process of merging files contains many steps, and some of these steps are useful in their own right and are exposed to the user. These are:</p>
@@ -183,16 +179,16 @@
 <li>Merging selected records into a single record</li>
 <li>Removing duplicate subrecords</li>
 </ul>
-<div id="merging-records" class="section level3">
-<h3 class="hasAnchor">
-<a href="#merging-records" class="anchor"></a>Merging records</h3>
+<div class="section level3">
+<h3 id="merging-records">Merging records<a class="anchor" aria-label="anchor" href="#merging-records"></a>
+</h3>
 <p>Multiple records can be merged into one using the <code><a href="../reference/merge_records.html">merge_records()</a></code> function. To illustrate, we take the sample file and add another duplicate record for one of the individuals:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">with_dupes</span> <span class="op">&lt;-</span> <span class="va">sample555</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_names.html">add_indi_names</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/name_pieces.html">name_pieces</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">"Joe"</span>, surname <span class="op">=</span> <span class="st">"Williams"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">with_dupes</span> <span class="op">&lt;-</span> <span class="va">sample555</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"M"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_names.html" class="external-link">add_indi_names</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/name_pieces.html" class="external-link">name_pieces</a></span><span class="op">(</span>given <span class="op">=</span> <span class="st">"Joe"</span>, surname <span class="op">=</span> <span class="st">"Williams"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="va">with_dupes</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="va">with_dupes</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
 <span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"                              </span>
 <span class="co">#&gt; [3] "Individual @I2@, Mary Ann Wilson"                                     </span>
@@ -204,9 +200,9 @@
 <span class="co">#&gt; [9] "Individual @I4@, Joe Williams"</span></code></pre></div>
 <p>We now merge the two records:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_records.html">merge_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"@I3@"</span>,<span class="st">"@I4@"</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_records.html">merge_records</a></span><span class="op">(</span><span class="va">with_dupes</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"@I3@"</span>,<span class="st">"@I4@"</span><span class="op">)</span><span class="op">)</span>
 
-<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html">describe_records</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">merged</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">merged</span><span class="op">$</span><span class="va">record</span>, short_desc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Reldon Poulson"                                       </span>
 <span class="co">#&gt; [2] "Individual @I1@, Robert Eugene Williams"                              </span>
 <span class="co">#&gt; [3] "Individual @I2@, Mary Ann Wilson"                                     </span>
@@ -217,8 +213,8 @@
 <span class="co">#&gt; [8] "Individual @I3@, Joe Williams"</span></code></pre></div>
 <p>We can take a closer look at this merged record to see what has happened:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">merged</span>, <span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -360,19 +356,19 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">30 OCT 2021</td>
+<td align="left">2 JAN 2022</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="removing-duplicate-subrecords" class="section level3">
-<h3 class="hasAnchor">
-<a href="#removing-duplicate-subrecords" class="anchor"></a>Removing duplicate subrecords</h3>
+<div class="section level3">
+<h3 id="removing-duplicate-subrecords">Removing duplicate subrecords<a class="anchor" aria-label="anchor" href="#removing-duplicate-subrecords"></a>
+</h3>
 <p>We can see that we now have a duplicate sex subrecord and a duplicate name subrecord. We can remove these with the <code><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords()</a></code> function:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords</a></span><span class="op">(</span><span class="va">merged</span>, <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_duplicate_subrecords.html">remove_duplicate_subrecords</a></span><span class="op">(</span><span class="va">merged</span>, <span class="st">"@I3@"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@I3@"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">level</th>
@@ -486,7 +482,7 @@
 <td align="left">
 <span class="citation">@I3</span>@</td>
 <td align="left">DATE</td>
-<td align="left">30 OCT 2021</td>
+<td align="left">2 JAN 2022</td>
 </tr>
 </tbody>
 </table>
@@ -506,11 +502,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jamie Lendrum.</p>
+  <p></p>
+<p>Developed by Jamie Lendrum.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -518,6 +516,8 @@
 
   
 
+
+  
 
   </body>
 </html>

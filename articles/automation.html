@@ -26,6 +26,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,18 +40,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
@@ -80,7 +76,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jl5000/tidyged.utils/">
+  <a href="https://github.com/jl5000/tidyged.utils/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -101,92 +97,92 @@
       <h1 data-toc-skip>Automating data entry</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/jl5000/tidyged.utils/blob/master/vignettes/automation.Rmd"><code>vignettes/automation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jl5000/tidyged.utils/blob/HEAD/vignettes/automation.Rmd" class="external-link"><code>vignettes/automation.Rmd</code></a></small>
       <div class="hidden name"><code>automation.Rmd</code></div>
 
     </div>
 
     
     
-<div id="inserting-explicit-death-subrecords" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inserting-explicit-death-subrecords" class="anchor"></a>Inserting explicit death subrecords</h2>
+<div class="section level2">
+<h2 id="inserting-explicit-death-subrecords">Inserting explicit death subrecords<a class="anchor" aria-label="anchor" href="#inserting-explicit-death-subrecords"></a>
+</h2>
 <p>Sometimes individuals are defined with a date of birth but no death subrecord because there is no information about the death to warrant creating one. However, including an empty death subrecord is valuable in its own right to indicate the individual is dead. The <code><a href="../reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords()</a></code> function allows you to automatically insert these subrecords for individuals who would be too old to still be alive.</p>
 <p>We illustrate with the following example of five individuals with various dates of birth (including a missing birth subrecord for person 5):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/">tidyged</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils">tidyged.utils</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/" class="external-link">tidyged</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils" class="external-link">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 1"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 2"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1888</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 3"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1885</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 4"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1910</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html">add_indi_fact</a></span><span class="op">(</span><span class="st">"census"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html">date_calendar</a></span><span class="op">(</span><span class="fl">1911</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"42y"</span><span class="op">)</span>
+<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 1"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 2"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1888</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 3"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1885</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 4"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1910</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"census"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1911</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"42y"</span><span class="op">)</span>
 
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 0 × 4</span>
-<span class="co">#&gt; # … with 4 variables: level &lt;dbl&gt;, record &lt;chr&gt;, tag &lt;chr&gt;, value &lt;chr&gt;</span></code></pre></div>
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 4</span></span>
+<span class="co">#&gt; <span style="color: #949494;"># … with 4 variables: level &lt;dbl&gt;, record &lt;chr&gt;, tag &lt;chr&gt;, value &lt;chr&gt;</span></span></code></pre></div>
 <p>If we were to assume a maximum age of 120 years (the default for the function) we would want a death subrecord for the first three individuals.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">people_wds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">120</span><span class="op">)</span>
 
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">people_wds</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 3 × 4</span>
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people_wds</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
 <span class="co">#&gt;   level record tag   value</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1     1 @I1@   DEAT  ""   </span>
-<span class="co">#&gt; 2     1 @I2@   DEAT  ""   </span>
-<span class="co">#&gt; 3     1 @I3@   DEAT  ""</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I1@   DEAT  <span style="color: #949494;">""</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I2@   DEAT  <span style="color: #949494;">""</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I3@   DEAT  <span style="color: #949494;">""</span></span></code></pre></div>
 <p>If an individual has no date of birth defined, then the default action is to leave the record as is. However, setting the <code>guess</code> parameter to TRUE will cause the function to guess an age from associated facts if a date of birth does not exist.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">people_wds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/insert_explicit_death_subrecords.html">insert_explicit_death_subrecords</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">120</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
-<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">people_wds</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 4 × 4</span>
+<span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people_wds</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
 <span class="co">#&gt;   level record tag   value</span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;</span>
-<span class="co">#&gt; 1     1 @I1@   DEAT  ""   </span>
-<span class="co">#&gt; 2     1 @I2@   DEAT  ""   </span>
-<span class="co">#&gt; 3     1 @I3@   DEAT  ""   </span>
-<span class="co">#&gt; 4     1 @I5@   DEAT  ""</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I1@   DEAT  <span style="color: #949494;">""</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I2@   DEAT  <span style="color: #949494;">""</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I3@   DEAT  <span style="color: #949494;">""</span>   </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I5@   DEAT  <span style="color: #949494;">""</span></span></code></pre></div>
 <p>We can now see an additional death subrecord for the fifth individual as the function has guessed the current age of the individual from the census event.</p>
 </div>
-<div id="inserting-explicit-marriage-types" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inserting-explicit-marriage-types" class="anchor"></a>Inserting explicit marriage types</h2>
+<div class="section level2">
+<h2 id="inserting-explicit-marriage-types">Inserting explicit marriage types<a class="anchor" aria-label="anchor" href="#inserting-explicit-marriage-types"></a>
+</h2>
 <p>The GEDCOM specification recommends that all relationship events have an explicit TYPE subrecord. If one is not given, marriage is assumed. The <code><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all()</a></code> function inserts an explicit marriage TYPE if one is not given:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="va">record</span> <span class="op">==</span> <span class="st">"@F1@"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 7 × 4</span>
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">sample555</span>, <span class="va">record</span> <span class="op">==</span> <span class="st">"@F1@"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 4</span></span>
 <span class="co">#&gt;   level record tag   value                                                      </span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;                                                      </span>
-<span class="co">#&gt; 1     0 @F1@   FAM   ""                                                         </span>
-<span class="co">#&gt; 2     1 @F1@   HUSB  "@I1@"                                                     </span>
-<span class="co">#&gt; 3     1 @F1@   WIFE  "@I2@"                                                     </span>
-<span class="co">#&gt; 4     1 @F1@   CHIL  "@I3@"                                                     </span>
-<span class="co">#&gt; 5     1 @F1@   MARR  ""                                                         </span>
-<span class="co">#&gt; 6     2 @F1@   DATE  "DEC 1859"                                                 </span>
-<span class="co">#&gt; 7     2 @F1@   PLAC  "Rapid City, Pennington, South Dakota, United States of Am…</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @F1@   FAM   <span style="color: #949494;">""</span>                                                         </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @F1@   HUSB  <span style="color: #949494;">"</span>@I1@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @F1@   WIFE  <span style="color: #949494;">"</span>@I2@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @F1@   CHIL  <span style="color: #949494;">"</span>@I3@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     1 @F1@   MARR  <span style="color: #949494;">""</span>                                                         </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 @F1@   DATE  <span style="color: #949494;">"</span>DEC 1859<span style="color: #949494;">"</span>                                                 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     2 @F1@   PLAC  <span style="color: #949494;">"</span>Rapid City, Pennington, South Dakota, United States of Am…</span>
 
-<span class="fu"><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@F1@"</span><span class="op">)</span>
-<span class="co">#&gt; # A tibble: 8 × 4</span>
+<span class="fu"><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@F1@"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span>
 <span class="co">#&gt;   level record tag   value                                                      </span>
-<span class="co">#&gt;   &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;                                                      </span>
-<span class="co">#&gt; 1     0 @F1@   FAM   ""                                                         </span>
-<span class="co">#&gt; 2     1 @F1@   HUSB  "@I1@"                                                     </span>
-<span class="co">#&gt; 3     1 @F1@   WIFE  "@I2@"                                                     </span>
-<span class="co">#&gt; 4     1 @F1@   CHIL  "@I3@"                                                     </span>
-<span class="co">#&gt; 5     1 @F1@   MARR  ""                                                         </span>
-<span class="co">#&gt; 6     2 @F1@   TYPE  "marriage"                                                 </span>
-<span class="co">#&gt; 7     2 @F1@   DATE  "DEC 1859"                                                 </span>
-<span class="co">#&gt; 8     2 @F1@   PLAC  "Rapid City, Pennington, South Dakota, United States of Am…</span></code></pre></div>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                                                      </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @F1@   FAM   <span style="color: #949494;">""</span>                                                         </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @F1@   HUSB  <span style="color: #949494;">"</span>@I1@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @F1@   WIFE  <span style="color: #949494;">"</span>@I2@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @F1@   CHIL  <span style="color: #949494;">"</span>@I3@<span style="color: #949494;">"</span>                                                     </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     1 @F1@   MARR  <span style="color: #949494;">""</span>                                                         </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 @F1@   TYPE  <span style="color: #949494;">"</span>marriage<span style="color: #949494;">"</span>                                                 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     2 @F1@   DATE  <span style="color: #949494;">"</span>DEC 1859<span style="color: #949494;">"</span>                                                 </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     2 @F1@   PLAC  <span style="color: #949494;">"</span>Rapid City, Pennington, South Dakota, United States of Am…</span></code></pre></div>
 </div>
   </div>
 
@@ -201,11 +197,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jamie Lendrum.</p>
+  <p></p>
+<p>Developed by Jamie Lendrum.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
 </div>
 
       </footer>
@@ -213,6 +211,8 @@
 
   
 
+
+  
 
   </body>
 </html>
