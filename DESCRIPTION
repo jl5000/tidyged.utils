@@ -1,6 +1,6 @@
 Package: tidyged.utils
 Title: Utilities to Manage GEDCOM Files Using Tidyverse Principles
-Version: 0.3.0.9000
+Version: 0.3.1.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",
@@ -21,8 +21,7 @@ Imports:
     lubridate,
     stringr,
     tidyged,
-    tidyged.internals,
-    magrittr
+    tidyged.internals
 Suggests: 
     testthat (>= 3.0.0),
     roxytest,

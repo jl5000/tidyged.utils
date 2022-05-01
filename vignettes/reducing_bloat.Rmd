@@ -22,7 +22,7 @@ All top level records in a GEDCOM file can record the date and time they were la
 library(tidyged)
 library(tidyged.utils)
 
-gedcom(subm("Me")) %>% 
+gedcom(subm("Me")) |> 
   knitr::kable()
 ```
 
@@ -31,8 +31,8 @@ See row `r which(gedcom(subm("Me"))$tag == "CHAN")` and the row after for the ch
 For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the `remove_change_dates()` function:
 
 ```{r}
-gedcom(subm("Me")) %>% 
-  remove_change_dates() %>% 
+gedcom(subm("Me")) |> 
+  remove_change_dates() |> 
   knitr::kable()
 ```
 
@@ -42,18 +42,24 @@ gedcom(subm("Me")) %>%
 If there are any records that are not referenced anywhere else, they can be found with the `identify_unused_records()` function. In the example below we create 6 family group records, half with members, half without, and also an unreferenced Repository record:
 
 ```{r}
-some_unref <- gedcom(subm("Me")) %>% 
-  add_indi(qn = "Tom Smith") %>% 
-  add_indi(qn = "Tammy Smith") %>% 
-  add_indi(qn = "Alice White") %>% 
-  add_indi(qn = "Phil Brown") %>% 
-  add_famg(husband = find_indi_name(., "Tom"), 
-           wife = find_indi_name(., "Tammy")) %>% 
-  add_famg() %>% 
-  add_famg(husband = find_indi_name(., "Phil")) %>% 
-  add_famg() %>% 
-  add_famg(children = find_indi_name(., "Alice")) %>% 
-  add_famg() %>% 
+some_unref <- gedcom(subm("Me")) |> 
+  add_indi(qn = "Tom Smith") |> 
+  add_indi(qn = "Tammy Smith") |> 
+  add_indi(qn = "Alice White") |> 
+  add_indi(qn = "Phil Brown")
+
+tom_xref <- find_indi_name(some_unref, "Tom")
+tammy_xref <- find_indi_name(some_unref, "Tammy")
+phil_xref <- find_indi_name(some_unref, "Phil")
+alice_xref <- find_indi_name(some_unref, "Alice")
+
+some_unref <- some_unref |>
+  add_famg(husband = tom_xref, wife = tammy_xref) |> 
+  add_famg() |> 
+  add_famg(husband = phil_xref) |> 
+  add_famg() |> 
+  add_famg(children = alice_xref) |> 
+  add_famg() |> 
   add_repo("Test repo") 
   
 identify_unused_records(some_unref)
@@ -62,7 +68,7 @@ identify_unused_records(some_unref)
 We can find out more about these xrefs by using the `describe_records()` function from the `tidyged` package:
 
 ```{r}
-identify_unused_records(some_unref) %>% 
+identify_unused_records(some_unref) |> 
   describe_records(gedcom = some_unref)
 ```
 

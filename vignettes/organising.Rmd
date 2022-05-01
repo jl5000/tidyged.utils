@@ -17,24 +17,23 @@ knitr::opts_chunk$set(
 
 ## Arranging records
 
-The ability to order records by type in a GEDCOM file is a task purely done for aesthetics - it has no functional value, other than perhaps making records easier to find. We use the example above, where we can initially see the records are given in the order they were defined:
+The ability to order records by type in a GEDCOM file is a task purely done for aesthetics - it has no functional value, other than perhaps making records easier to find. We can see in the example below that records are given in the order they were defined:
 
 ```{r}
 library(tidyged)
 library(tidyged.utils)
 
-some_unref <- gedcom(subm("Me")) %>% 
-  add_indi(qn = "Tom Smith") %>% 
-  add_indi(qn = "Tammy Smith") %>% 
-  add_indi(qn = "Alice White") %>% 
-  add_indi(qn = "Phil Brown") %>% 
-  add_famg(husband = find_indi_name(., "Tom"), 
-           wife = find_indi_name(., "Tammy")) %>% 
-  add_famg() %>% 
-  add_famg(husband = find_indi_name(., "Phil")) %>% 
-  add_famg() %>% 
-  add_famg(children = find_indi_name(., "Alice")) %>% 
-  add_famg() %>% 
+some_unref <- gedcom(subm("Me")) |> 
+  add_indi(qn = "Tom Smith") |> 
+  add_indi(qn = "Tammy Smith") |> 
+  add_indi(qn = "Alice White") |> 
+  add_indi(qn = "Phil Brown") |>
+  add_famg() |> 
+  add_famg() |> 
+  add_famg() |> 
+  add_famg() |> 
+  add_famg() |> 
+  add_famg() |> 
   add_repo("Test repo") 
 
 unique(some_unref$record)
@@ -58,9 +57,9 @@ The `order_famg_children_all()` function ensures all children are represented in
 With all records and many subrecords, it's possible to include custom notes to augment the information provided. These can either be the notes themselves, or a pointer to a top level Note record:
 
 ```{r}
-notes <- gedcom(subm("Me")) %>%
-  add_note("This is a generic note.") %>% 
-  add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) %>% 
+notes <- gedcom(subm("Me")) |>
+  add_note("This is a generic note.") |> 
+  add_indi(indi_notes = c("This is a bespoke note.", "This is a generic note.")) |> 
   add_repo("My repository", repo_notes = c("This is a bespoke note.", "This is a generic note."))
 
 knitr::kable(notes)
@@ -71,6 +70,6 @@ In the above example, there is a generic note recorded in a top level Note recor
 The `consolidate_notes()` function will simplify the file, replacing note values with pointers to top level Note records (creating them if necessary) if they are repeated:
 
 ```{r}
-consolidate_notes(notes) %>% 
+consolidate_notes(notes) |> 
   knitr::kable()
 ```

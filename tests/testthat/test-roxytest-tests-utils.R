@@ -3,13 +3,13 @@
 # File R/utils.R: @tests
 
 test_that("Function identify_unused_records() @ L21", {
-  expect_equal(tidyged::gedcom() %>% tidyged::add_indi() %>% tidyged::add_famg() %>% identify_unused_records(),
+  expect_equal(tidyged::gedcom() |> tidyged::add_indi() |> tidyged::add_famg() |> identify_unused_records(),
                c("@I1@","@F1@"))
 })
 
 
 test_that("Function remove_change_dates() @ L76", {
-  expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
+  expect_snapshot_value(tidyged::sample555 |> tidyged::add_indi() |> remove_change_dates(), "json2")
 })
 
 

@@ -56,7 +56,7 @@ guess_age_from_indi_events <- function(tg, xref, agg_fn = mean) {
   indi_rec <- dplyr::filter(tg, record == xref)
   
   # give each subrecord an identifier
-  indi_rec_flags <- indi_rec %>% 
+  indi_rec_flags <- indi_rec |> 
     dplyr::mutate(new_sr = level == 1,
                   sr_no = cumsum(new_sr))
   
@@ -115,7 +115,7 @@ guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
     husb_or_wife <- dplyr::filter(fam_rec, value == xref)$tag
       
     # give each subrecord an identifier
-    fam_rec_flags <- fam_rec %>% 
+    fam_rec_flags <- fam_rec |> 
       dplyr::mutate(new_sr = level == 1,
                     sr_no = cumsum(new_sr))
     
@@ -203,7 +203,7 @@ date_diff <- function(date1,
   dates1 <- tidyged.internals::parse_gedcom_date(dates[1], minimise)
   dates2 <- tidyged.internals::parse_gedcom_date(dates[2], minimise)
   
-  lubridate::interval(dates1, dates2) %>% 
+  lubridate::interval(dates1, dates2) |> 
     lubridate::time_length("years")
 }
 

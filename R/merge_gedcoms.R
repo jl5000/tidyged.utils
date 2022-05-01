@@ -10,7 +10,7 @@
 #' @export
 merge_gedcoms <- function(tg1, tg2) {
   
-  migrate_records(tg1, tg2) %>% 
+  migrate_records(tg1, tg2) |> 
     potential_duplicates()
   
 }
@@ -92,11 +92,11 @@ make_xrefs_unique <- function(tg1, tg2) {
 #' @export
 potential_duplicates <- function(tg) {
   
-  tg <- tg %>% 
-    potential_duplicates_indi() %>% 
-    potential_duplicates_famg() %>%
-    potential_duplicates_sour() %>%
-    potential_duplicates_repo() %>%
+  tg <- tg |> 
+    potential_duplicates_indi() |> 
+    potential_duplicates_famg() |>
+    potential_duplicates_sour() |>
+    potential_duplicates_repo() |>
     potential_duplicates_media()
   
   records <- c(tidyged::xrefs_indi(tg),
@@ -131,15 +131,15 @@ potential_duplicates_indi <- function(tg,
                          given = given,
                          surname = surname,
                          yob = yob,
-                         yod = yod) %>% 
-    dplyr::filter(given != "", surname != "") %>% 
+                         yod = yod) |> 
+    dplyr::filter(given != "", surname != "") |> 
     dplyr::mutate(full = paste(given, surname))
   
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
-    dupes <- dplyr::left_join(this_row, comb, by = "full") %>% 
-      dplyr::filter(is.na(yob.y) | dplyr::between(yob.y, comb$yob[1]-year_margin, comb$yob[1]+year_margin)) %>% 
-      dplyr::filter(is.na(yod.y) | dplyr::between(yod.y, comb$yod[1]-year_margin, comb$yod[1]+year_margin)) %>%
+    dupes <- dplyr::left_join(this_row, comb, by = "full") |> 
+      dplyr::filter(is.na(yob.y) | dplyr::between(yob.y, comb$yob[1]-year_margin, comb$yob[1]+year_margin)) |> 
+      dplyr::filter(is.na(yod.y) | dplyr::between(yod.y, comb$yod[1]-year_margin, comb$yod[1]+year_margin)) |>
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -170,12 +170,12 @@ potential_duplicates_famg <- function(tg) {
   
   comb <- tibble::tibble(xref = famg_xrefs,
                          husb = husb,
-                         wife = wife) %>% 
+                         wife = wife) |> 
     dplyr::filter(husb != "", wife != "")
   
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
-    dupes <- dplyr::left_join(this_row, comb, by = c("husb","wife")) %>% 
+    dupes <- dplyr::left_join(this_row, comb, by = c("husb","wife")) |> 
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -204,12 +204,12 @@ potential_duplicates_sour <- function(tg) {
   title <- purrr::map_chr(sour_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "TITL", level = 1)
   
   comb <- tibble::tibble(xref = sour_xrefs,
-                         title = title) %>% 
+                         title = title) |> 
     dplyr::filter(title != "")
   
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
-    dupes <- dplyr::left_join(this_row, comb, by = "title") %>% 
+    dupes <- dplyr::left_join(this_row, comb, by = "title") |> 
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -238,12 +238,12 @@ potential_duplicates_repo <- function(tg) {
   name <- purrr::map_chr(repo_xrefs, tidyged.internals::gedcom_value, gedcom = tg, tag = "NAME", level = 1)
   
   comb <- tibble::tibble(xref = repo_xrefs,
-                         name = name) %>% 
+                         name = name) |> 
     dplyr::filter(name != "")
   
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
-    dupes <- dplyr::left_join(this_row, comb, by = "name") %>% 
+    dupes <- dplyr::left_join(this_row, comb, by = "name") |> 
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -274,12 +274,12 @@ potential_duplicates_media <- function(tg) {
   
   comb <- tibble::tibble(xref = media_xrefs,
                          file_ref = file_ref,
-                         format = format) %>% 
+                         format = format) |> 
     dplyr::filter(file_ref != "", format != "")
   
   while(nrow(comb) > 0) {
     this_row <- comb[1,]
-    dupes <- dplyr::left_join(this_row, comb, by = c("file_ref", "format")) %>% 
+    dupes <- dplyr::left_join(this_row, comb, by = c("file_ref", "format")) |> 
       dplyr::pull(xref.y)
     
     if (length(dupes) > 1) {
@@ -325,14 +325,17 @@ merge_records <- function(tg, xrefs) {
   merged <- dplyr::bind_rows(
     dplyr::filter(tg, record == xrefs[1], level == 0),
     dplyr::filter(tg, record %in% xrefs, level != 0)
-  ) %>% 
-    remove_change_dates() %>% 
-    dplyr::bind_rows(tidyged.internals::CHANGE_DATE() %>% tidyged.internals::add_levels(1)) %>% 
+  ) |> 
+    remove_change_dates() |> 
+    dplyr::bind_rows(tidyged.internals::CHANGE_DATE() |> 
+                       tidyged.internals::add_levels(1)) |> 
     tidyged.internals::finalise()
   
-  tg %>% 
-    dplyr::filter(!record %in% xrefs) %>% 
-    tibble::add_row(merged, .before = nrow(.)) %>% 
+  tg <- tg |> 
+    dplyr::filter(!record %in% xrefs)
+  
+  tg |>
+    tibble::add_row(merged, .before = nrow(tg)) |> 
     dplyr::mutate(value = dplyr::if_else(value %in% xrefs, xrefs[1], value),
                   record = dplyr::if_else(record %in% xrefs, xrefs[1], record))
   
@@ -353,22 +356,23 @@ remove_duplicate_subrecords <- function(tg, xref) {
   
   record <- dplyr::filter(tg, record == xref)
   
-  new_record <- record %>% 
+  new_record <- record |> 
     dplyr::mutate(new_sub = level == 1,
-                  subrecord_no = cumsum(new_sub)) %>% 
-    dplyr::select(-new_sub) %>% 
-    dplyr::group_nest(subrecord_no) %>% 
-    dplyr::select(-subrecord_no) %>%
-    dplyr::mutate(tmp = data) %>% 
+                  subrecord_no = cumsum(new_sub)) |> 
+    dplyr::select(-new_sub) |> 
+    dplyr::group_nest(subrecord_no) |> 
+    dplyr::select(-subrecord_no) |>
+    dplyr::mutate(tmp = data) |> 
     dplyr::distinct(
       tmp = purrr::map(data, dplyr::arrange, tag, value),
       .keep_all = TRUE
-    ) %>%
-    dplyr::select(-tmp) %>% 
+    ) |>
+    dplyr::select(-tmp) |> 
     tidyr::unnest(data)
   
-  dplyr::filter(tg, record != xref) %>% 
-    tibble::add_row(new_record, .before = nrow(.))
+  tg <- dplyr::filter(tg, record != xref)
+  
+  tibble::add_row(new_record, .before = nrow(tg))
   
 }
 

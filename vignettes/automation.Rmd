@@ -24,16 +24,16 @@ We illustrate with the following example of five individuals with various dates 
 library(tidyged)
 library(tidyged.utils)
 
-people <- gedcom(subm("Me")) %>% 
-  add_indi(qn = "Person 1") %>% 
-  add_indi_fact("birth", date = date_calendar(1900, 4, 4)) %>% 
-  add_indi(qn = "Person 2") %>% 
-  add_indi_fact("birth", date = date_calendar(1888)) %>%
-  add_indi(qn = "Person 3") %>% 
-  add_indi_fact("birth", date = date_calendar(1885, 6)) %>%
-  add_indi(qn = "Person 4") %>% 
-  add_indi_fact("birth", date = date_calendar(1910)) %>%
-  add_indi(qn = "Person 5") %>% 
+people <- gedcom(subm("Me")) |> 
+  add_indi(qn = "Person 1") |> 
+  add_indi_fact("birth", date = date_calendar(1900, 4, 4)) |> 
+  add_indi(qn = "Person 2") |> 
+  add_indi_fact("birth", date = date_calendar(1888)) |>
+  add_indi(qn = "Person 3") |> 
+  add_indi_fact("birth", date = date_calendar(1885, 6)) |>
+  add_indi(qn = "Person 4") |> 
+  add_indi_fact("birth", date = date_calendar(1910)) |>
+  add_indi(qn = "Person 5") |> 
   add_indi_fact("census", date = date_calendar(1911), age = "42y")
 
 dplyr::filter(people, tag == "DEAT")
@@ -64,7 +64,7 @@ The GEDCOM specification recommends that all relationship events have an explici
 ```{r}
 dplyr::filter(sample555, record == "@F1@")
 
-insert_explicit_marr_types_all(sample555) %>% 
+insert_explicit_marr_types_all(sample555) |> 
   dplyr::filter(record == "@F1@")
 ```
 

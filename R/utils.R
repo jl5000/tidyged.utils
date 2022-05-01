@@ -16,7 +16,7 @@
 #' @return A vector of xrefs that are not referenced anywhere else in the tidyged object.
 #' @export
 #' @tests
-#' expect_equal(tidyged::gedcom() %>% tidyged::add_indi() %>% tidyged::add_famg() %>% identify_unused_records(),
+#' expect_equal(tidyged::gedcom() |> tidyged::add_indi() |> tidyged::add_famg() |> identify_unused_records(),
 #'              c("@I1@","@F1@"))
 identify_unused_records <- function(tg) {
   
@@ -72,7 +72,7 @@ identify_unused_records <- function(tg) {
 #' @return A tidyged object with all CHAN structures removed.
 #' @export
 #' @tests
-#' expect_snapshot_value(tidyged::sample555 %>% tidyged::add_indi() %>% remove_change_dates(), "json2")
+#' expect_snapshot_value(tidyged::sample555 |> tidyged::add_indi() |> remove_change_dates(), "json2")
 remove_change_dates <- function(tg) {
   
   tidyged.internals::remove_section(tg, 1, "CHAN", "")
@@ -90,13 +90,13 @@ remove_change_dates <- function(tg) {
 #' @export
 consolidate_notes <- function(tg, min_occurences = 2) {
   
-  note_dupes <- tg %>% 
+  note_dupes <- tg |> 
     #get all note structures
-    dplyr::filter(level > 0, tag == "NOTE") %>% 
-    dplyr::group_by(value) %>% 
-    dplyr::filter(dplyr::n() >= min_occurences) %>% 
-    dplyr::ungroup() %>% 
-    dplyr::pull(value) %>% 
+    dplyr::filter(level > 0, tag == "NOTE") |> 
+    dplyr::group_by(value) |> 
+    dplyr::filter(dplyr::n() >= min_occurences) |> 
+    dplyr::ungroup() |> 
+    dplyr::pull(value) |> 
     unique()
   
   for(note in note_dupes) {
@@ -116,7 +116,7 @@ consolidate_notes <- function(tg, min_occurences = 2) {
     } 
     
     # change notes to references
-    tg <- tg %>% 
+    tg <- tg |> 
       dplyr::mutate(value = dplyr::if_else(level > 0 & tag == "NOTE" & value == note,
                                            xref,
                                            value))
@@ -145,8 +145,8 @@ split_gedcom <- function(tg,
   
   new <- dplyr::filter(tg, record %in% c("HD", "TR", xrefs))
   
-  links <- dplyr::filter(new, grepl(tidyged.internals::reg_xref(TRUE), value)) %>% 
-    dplyr::pull(value) %>% 
+  links <- dplyr::filter(new, grepl(tidyged.internals::reg_xref(TRUE), value)) |> 
+    dplyr::pull(value) |> 
     unique()
   
   #links to records not retained
@@ -188,16 +188,17 @@ arrange_records <- function(tg, order = "IFMSRN") {
   order <- strsplit(order, character())[[1]]
   subm_xref <- tidyged::xrefs_subm(tg)
   
-  record_order <- dplyr::filter(tg, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) %>% 
+  record_order <- dplyr::filter(tg, level == 0, !tag %in% c("HEAD","TRLR","SUBM")) |> 
     dplyr::mutate(tag = stringr::str_sub(tag, 1, 1),
-                  tag = factor(tag, levels = order, ordered = TRUE)) %>% 
-    dplyr::arrange(tag) %>% 
-    dplyr::pull(record) %>% 
-    c("HD", subm_xref, ., "TR")
+                  tag = factor(tag, levels = order, ordered = TRUE)) |> 
+    dplyr::arrange(tag) |> 
+    dplyr::pull(record)
   
-  tg %>% 
-    dplyr::mutate(record = factor(record, levels = record_order, ordered = TRUE)) %>% 
-    dplyr::arrange(record) %>%
+  record_order <- c("HD", subm_xref, record_order, "TR")
+  
+  tg |> 
+    dplyr::mutate(record = factor(record, levels = record_order, ordered = TRUE)) |> 
+    dplyr::arrange(record) |>
     dplyr::mutate(record = as.character(record))
   
 }

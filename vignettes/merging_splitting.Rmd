@@ -64,8 +64,8 @@ The process of merging files contains many steps, and some of these steps are us
 Multiple records can be merged into one using the `merge_records()` function. To illustrate, we take the sample file and add another duplicate record for one of the individuals:
 
 ```{r}
-with_dupes <- sample555 %>% 
-  add_indi(sex = "M") %>% 
+with_dupes <- sample555 |> 
+  add_indi(sex = "M") |> 
   add_indi_names(name_pieces(given = "Joe", surname = "Williams"))
 
 describe_records(with_dupes, with_dupes$record, short_desc = TRUE)
@@ -82,7 +82,7 @@ describe_records(merged, merged$record, short_desc = TRUE)
 We can take a closer look at this merged record to see what has happened:
 
 ```{r}
-dplyr::filter(merged, record == "@I3@") %>% 
+dplyr::filter(merged, record == "@I3@") |> 
   knitr::kable()
 ```
 
@@ -91,8 +91,8 @@ dplyr::filter(merged, record == "@I3@") %>%
 We can see that we now have a duplicate sex subrecord and a duplicate name subrecord. We can remove these with the `remove_duplicate_subrecords()` function:
 
 ```{r}
-remove_duplicate_subrecords(merged, "@I3@") %>% 
-  dplyr::filter(record == "@I3@") %>%
+remove_duplicate_subrecords(merged, "@I3@") |> 
+  dplyr::filter(record == "@I3@") |>
   knitr::kable()
 ```
 
