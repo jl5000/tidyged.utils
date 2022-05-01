@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9000</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -125,17 +125,21 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/" class="external-link">tidyged</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils" class="external-link">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Living person"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1996</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Confirmed dead person"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"death"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Reeeaally old person"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1796</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Implicit dead person 1"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"occupation"</span>, descriptor <span class="op">=</span> <span class="st">"Driver"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1930</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"50y"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Implicit dead person 2"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"Implicit dead person 2"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Living person"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1996</span><span class="op">)</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Confirmed dead person"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"death"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Reeeaally old person"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1796</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Implicit dead person 1"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"occupation"</span>, descriptor <span class="op">=</span> <span class="st">"Driver"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1930</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"50y"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Implicit dead person 2"</span><span class="op">)</span>
+
+<span class="va">idp2_xref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"Implicit dead person 2"</span><span class="op">)</span>
+
+<span class="va">people</span> <span class="op">&lt;-</span> <span class="va">people</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="va">idp2_xref</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg_event.html" class="external-link">add_famg_event</a></span><span class="op">(</span><span class="st">"relationship"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1856</span><span class="op">)</span>, husband_age <span class="op">=</span> <span class="st">"20y"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">people</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
@@ -148,7 +152,7 @@
 <span class="co">#&gt; [7] "Family @F1@, headed by Implicit dead person 2, and no children"</span></code></pre></div>
 <p>The default behaviour of the function is to remove data for living individuals, but also those that are ambiguous. Confirmed dead person has a death event, and Reeeaally old person was born in 1796. The function assumes a maximum age of 120.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
 <span class="co">#&gt; Individual @I1@, Living person cleansed</span>
 <span class="co">#&gt; Individual @I4@, Implicit dead person 1 cleansed</span>
@@ -162,7 +166,7 @@
 <span class="co">#&gt; [7] "Family @F1@, headed by @I5@, and no children"</span></code></pre></div>
 <p>For illustration purposes, we can increase the maximum age threshold, which will make the function treat the old person as still living:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, max_age <span class="op">=</span> <span class="fl">300</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
 <span class="co">#&gt; Individual @I1@, Living person cleansed</span>
 <span class="co">#&gt; Individual @I3@, Reeeaally old person cleansed</span>
@@ -181,7 +185,7 @@
 </h2>
 <p>The <code>guess</code> parameter will cause the function to invoke additional functionality to try to guess the age of individuals where a date of birth is not given:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
 <span class="co">#&gt; Individual @I1@, Living person cleansed</span>
 <span class="co">#&gt; [1] "Submitter @U1@, Me"                                            </span>
@@ -198,7 +202,7 @@
 </h2>
 <p>The remaining parameters determine the action to take when living individuals are found. By default, the records are preserved, but all detail is removed, leaving only a change date and an explanatory note:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> |&gt;
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span>  <span class="op">==</span> <span class="st">"@I1@"</span><span class="op">)</span>
 <span class="co">#&gt; Individual @I1@, Living person cleansed</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
@@ -207,10 +211,10 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @I1@   INDI  <span style="color: #949494;">""</span>                                                </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I1@   NOTE  <span style="color: #949494;">"</span>Information on this individual has been redacted<span style="color: #949494;">"</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I1@   CHAN  <span style="color: #949494;">""</span>                                                </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>2 JAN 2022<span style="color: #949494;">"</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>1 MAY 2022<span style="color: #949494;">"</span></span></code></pre></div>
 <p>The user has the option of changing the text of this note using the <code>explan_note</code> parameter. Alternatively it can be set to an empty string to remove it completely:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span>, explan_note <span class="op">=</span> <span class="st">""</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
+<code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span>, explan_note <span class="op">=</span> <span class="st">""</span><span class="op">)</span> |&gt;
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span>  <span class="op">==</span> <span class="st">"@I1@"</span><span class="op">)</span>
 <span class="co">#&gt; Individual @I1@, Living person cleansed</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 3 × 4</span></span>
@@ -218,7 +222,7 @@
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @I1@   INDI  <span style="color: #949494;">""</span>          </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I1@   CHAN  <span style="color: #949494;">""</span>          </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>2 JAN 2022<span style="color: #949494;">"</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>1 MAY 2022<span style="color: #949494;">"</span></span></code></pre></div>
 <p>Alternatively, the record can be removed completely:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">living_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span>, remove_record <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -244,7 +248,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

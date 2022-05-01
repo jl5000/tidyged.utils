@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9000</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -112,7 +112,7 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/" class="external-link">tidyged</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils" class="external-link">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> |&gt; 
   <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -204,7 +204,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">2 JAN 2022</td>
+<td align="left">1 MAY 2022</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -245,7 +245,7 @@
 <td align="left">
 <span class="citation">@U1</span>@</td>
 <td align="left">DATE</td>
-<td align="left">2 JAN 2022</td>
+<td align="left">1 MAY 2022</td>
 </tr>
 <tr class="odd">
 <td align="right">0</td>
@@ -258,8 +258,8 @@
 <p>See row 19 and the row after for the change date for the submitter record.</p>
 <p>For GEDCOM files with thousands of records, including change dates can add considerable bloat. For this reason it is possible to remove all change date structures with the <code><a href="../reference/remove_change_dates.html">remove_change_dates()</a></code> function:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/remove_change_dates.html">remove_change_dates</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="../reference/remove_change_dates.html">remove_change_dates</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
   <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
@@ -351,7 +351,7 @@
 <td align="right">1</td>
 <td align="left">HD</td>
 <td align="left">DATE</td>
-<td align="left">2 JAN 2022</td>
+<td align="left">1 MAY 2022</td>
 </tr>
 <tr class="odd">
 <td align="right">1</td>
@@ -394,25 +394,31 @@
 </h2>
 <p>If there are any records that are not referenced anywhere else, they can be found with the <code><a href="../reference/identify_unused_records.html">identify_unused_records()</a></code> function. In the example below we create 6 family group records, half with members, half without, and also an unreferenced Repository record:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">some_unref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Tom Smith"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Tammy Smith"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Alice White"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Phil Brown"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"Tom"</span><span class="op">)</span>, 
-           wife <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"Tammy"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"Phil"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>children <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">.</span>, <span class="st">"Alice"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">some_unref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Tom Smith"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Tammy Smith"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Alice White"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Phil Brown"</span><span class="op">)</span>
+
+<span class="va">tom_xref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">some_unref</span>, <span class="st">"Tom"</span><span class="op">)</span>
+<span class="va">tammy_xref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">some_unref</span>, <span class="st">"Tammy"</span><span class="op">)</span>
+<span class="va">phil_xref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">some_unref</span>, <span class="st">"Phil"</span><span class="op">)</span>
+<span class="va">alice_xref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/find_indi_refn.html" class="external-link">find_indi_name</a></span><span class="op">(</span><span class="va">some_unref</span>, <span class="st">"Alice"</span><span class="op">)</span>
+
+<span class="va">some_unref</span> <span class="op">&lt;-</span> <span class="va">some_unref</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="va">tom_xref</span>, wife <span class="op">=</span> <span class="va">tammy_xref</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>husband <span class="op">=</span> <span class="va">phil_xref</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span>children <span class="op">=</span> <span class="va">alice_xref</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_famg.html" class="external-link">add_famg</a></span><span class="op">(</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_repo.html" class="external-link">add_repo</a></span><span class="op">(</span><span class="st">"Test repo"</span><span class="op">)</span> 
   
 <span class="fu"><a href="../reference/identify_unused_records.html">identify_unused_records</a></span><span class="op">(</span><span class="va">some_unref</span><span class="op">)</span>
 <span class="co">#&gt; [1] "@F2@" "@F4@" "@F6@" "@R1@"</span></code></pre></div>
 <p>We can find out more about these xrefs by using the <code><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records()</a></code> function from the <code>tidyged</code> package:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/identify_unused_records.html">identify_unused_records</a></span><span class="op">(</span><span class="va">some_unref</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="fu"><a href="../reference/identify_unused_records.html">identify_unused_records</a></span><span class="op">(</span><span class="va">some_unref</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span>gedcom <span class="op">=</span> <span class="va">some_unref</span><span class="op">)</span>
 <span class="co">#&gt; [1] "Family @F2@, headed by no individuals, and no children"</span>
 <span class="co">#&gt; [2] "Family @F4@, headed by no individuals, and no children"</span>
@@ -438,7 +444,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>

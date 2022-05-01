@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.1.9000</span>
       </span>
     </div>
 
@@ -50,7 +50,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -113,16 +113,16 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://jl5000.github.io/tidyged/" class="external-link">tidyged</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jl5000/tidyged.utils" class="external-link">tidyged.utils</a></span><span class="op">)</span>
 
-<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 1"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 2"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1888</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 3"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1885</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 4"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1910</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<span class="va">people</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/gedcom.html" class="external-link">gedcom</a></span><span class="op">(</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/subm.html" class="external-link">subm</a></span><span class="op">(</span><span class="st">"Me"</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 1"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1900</span>, <span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 2"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1888</span><span class="op">)</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 3"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1885</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 4"</span><span class="op">)</span> |&gt; 
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1910</span><span class="op">)</span><span class="op">)</span> |&gt;
+  <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"census"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1911</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"42y"</span><span class="op">)</span>
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
@@ -170,7 +170,7 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     2 @F1@   DATE  <span style="color: #949494;">"</span>DEC 1859<span style="color: #949494;">"</span>                                                 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     2 @F1@   PLAC  <span style="color: #949494;">"</span>Rapid City, Pennington, South Dakota, United States of Am…</span>
 
-<span class="fu"><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> 
+<span class="fu"><a href="../reference/insert_explicit_marr_types_all.html">insert_explicit_marr_types_all</a></span><span class="op">(</span><span class="va">sample555</span><span class="op">)</span> |&gt; 
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op">==</span> <span class="st">"@F1@"</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 8 × 4</span></span>
 <span class="co">#&gt;   level record tag   value                                                      </span>
@@ -203,7 +203,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
