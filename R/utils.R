@@ -366,3 +366,99 @@ remove_living <- function(tg,
   
   tg
 }
+
+
+#' Add ancestor records for an individual
+#' 
+#' This function adds placeholder Individual records for ancestors going back a specific
+#' number of generations.
+#' 
+#' @details This function may also create Family Group records and will 
+#' not modify existing ancestors.
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an Individual record to add ancestors for.
+#' @param num_gen The number of generations to create ancestors for.
+#' @param inc_sex Whether to populate the sex of the ancestors. This will ensure
+#' that there is one male and one female parent. Otherwise the sex will be
+#' assigned as "U" (undetermined).
+#'
+#' @return A tidyged object with additional ancestor records.
+#' @export
+add_ancestors <- function(tg, xref, num_gen, inc_sex = TRUE){
+  
+  xrefs_par <- xref
+  for(gen in seq_len(num_gen)){
+    
+    for(xref_par in xrefs_par){
+      tg <- add_parents(tg, xref_par, inc_sex)
+    }
+    
+    xrefs_par <- purrr::map(xrefs_par, tidyged::get_indi_parents,
+                            gedcom = tg,
+                            birth_only = TRUE) |>
+      unlist()
+  }
+  
+  tg
+}
+
+
+#' Add parent records for an individual
+#' 
+#' This function adds placeholder records for an individual's parents.
+#' 
+#' @details This function may also create a Family Group record and will 
+#' not modify existing parents.
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an Individual record to add parents for.
+#' @param inc_sex Whether to populate the sex of the parents. This will ensure
+#' that there is one male and one female parent. Otherwise the sex will be
+#' assigned as "U" (undetermined).
+#'
+#' @return A tidyged object with additional parent records.
+#' @export
+add_parents <- function(tg, xref, inc_sex = TRUE){
+  
+  xref_par <- tidyged::get_indi_parents(tg, xref, birth_only = TRUE)
+  
+  if(length(xref_par) >= 2) return(tg)
+  
+  # check if family exists
+  xref_famc <- tidyged::get_families_as_child(tg, xref, birth_only = TRUE)
+  
+  if(length(xref_famc) == 0){
+    xref_famc <- tidyged.internals::assign_xref_famg(tg)
+    tg <- tidyged::add_famg(tg) |>
+      tidyged::activate_indi(xref) |>
+      tidyged::add_indi_links_to_families(famg_xref_chil = xref_famc)
+  }
+  
+  if(length(xref_par) == 1){
+    
+    par_sex_new <- "U"
+    
+    if(inc_sex){
+      par_sex_cur <- tg$value[tg$record == xref_par & tg$tag == "SEX"]
+      
+      if(length(par_sex_cur) == 1){
+        par_sex_new <- dplyr::case_when(par_sex_cur == "M" ~ "F",
+                                        par_sex_cur == "F" ~ "M",
+                                        TRUE ~ "U")
+      }
+    }
+    
+    tg <- tidyged::add_indi(tg, sex = dplyr::if_else(inc_sex, par_sex_new, "U")) |>
+      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc) 
+    
+  } else {
+    # No parents - add them both
+    tg <- tidyged::add_indi(tg, sex = dplyr::if_else(inc_sex, "M", "U")) |>
+      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc) |>
+      tidyged::add_indi(sex = dplyr::if_else(inc_sex, "F", "U")) |>
+      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc)
+  }
+  
+  tg
+}
