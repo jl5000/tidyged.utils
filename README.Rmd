@@ -57,6 +57,7 @@ GEDCOM files can get very large and unwieldy, resulting in inefficiencies and fi
 * Arranging children by date of birth
 * Redaction of living individuals
 * Functionality to guess the current age of individuals without dates of birth
+* Automatically creating parent/ancestor placeholder records en masse
 
 Examples are given at the [website](https://jl5000.github.io/tidyged.utils/).
 

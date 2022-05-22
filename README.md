@@ -39,17 +39,18 @@ inefficiencies and file bloat. The `tidyged.utils` package offers
 functions to automate the cleaning and handling of GEDCOM files. It
 includes:
 
-  - Splitting files
-  - Merging files
-  - Removal of ‘change date’ structures
-  - Consolidating duplicate notes
-  - Finding unreferenced records
-  - Arranging records by type
-  - Inserting explicit death subrecords
-  - Arranging children by date of birth
-  - Redaction of living individuals
-  - Functionality to guess the current age of individuals without dates
+-   Splitting files
+-   Merging files
+-   Removal of ‘change date’ structures
+-   Consolidating duplicate notes
+-   Finding unreferenced records
+-   Arranging records by type
+-   Inserting explicit death subrecords
+-   Arranging children by date of birth
+-   Redaction of living individuals
+-   Functionality to guess the current age of individuals without dates
     of birth
+-   Automatically creating parent/ancestor placeholder records en masse
 
 Examples are given at the
 [website](https://jl5000.github.io/tidyged.utils/).
