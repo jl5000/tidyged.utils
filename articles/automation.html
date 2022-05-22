@@ -184,6 +184,53 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">7</span>     2 @F1@   DATE  <span style="color: #949494;">"</span>DEC 1859<span style="color: #949494;">"</span>                                                 </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">8</span>     2 @F1@   PLAC  <span style="color: #949494;">"</span>Rapid City, Pennington, South Dakota, United States of Am…</span></code></pre></div>
 </div>
+<div class="section level2">
+<h2 id="creating-parentancestor-placeholders">Creating parent/ancestor placeholders<a class="anchor" aria-label="anchor" href="#creating-parentancestor-placeholders"></a>
+</h2>
+<p>If you are visualising your tree and would like to automatically create ancestor records going back a certain number of generations, you can use the <code><a href="../reference/add_ancestors.html">add_ancestors()</a></code> function:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">people_with_anc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_ancestors.html">add_ancestors</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"@I1@"</span>, num_gen <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+
+<span class="fu">tidyged</span><span class="fu">::</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people_with_anc</span>, <span class="va">people_with_anc</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
+<span class="co">#&gt;  [1] "Submitter @U1@, Me"                                                </span>
+<span class="co">#&gt;  [2] "Individual @I1@, Person 1, child of @I6@ and @I7@, born 4 APR 1900"</span>
+<span class="co">#&gt;  [3] "Individual @I2@, Person 2, born 1888"                              </span>
+<span class="co">#&gt;  [4] "Individual @I3@, Person 3, born JUN 1885"                          </span>
+<span class="co">#&gt;  [5] "Individual @I4@, Person 4, born 1910"                              </span>
+<span class="co">#&gt;  [6] "Individual @I5@, Person 5"                                         </span>
+<span class="co">#&gt;  [7] "Family @F1@, headed by @I6@ and @I7@, and children: Person 1"      </span>
+<span class="co">#&gt;  [8] "Individual @I6@, Unnamed individual, child of @I8@ and @I9@"       </span>
+<span class="co">#&gt;  [9] "Individual @I7@, Unnamed individual, child of @I10@ and @I11@"     </span>
+<span class="co">#&gt; [10] "Family @F2@, headed by @I8@ and @I9@, and children: @I6@"          </span>
+<span class="co">#&gt; [11] "Individual @I8@, Unnamed individual"                               </span>
+<span class="co">#&gt; [12] "Individual @I9@, Unnamed individual"                               </span>
+<span class="co">#&gt; [13] "Family @F3@, headed by @I10@ and @I11@, and children: @I7@"        </span>
+<span class="co">#&gt; [14] "Individual @I10@, Unnamed individual"                              </span>
+<span class="co">#&gt; [15] "Individual @I11@, Unnamed individual"</span></code></pre></div>
+<p>In the example above, you can see it has created parents and grandparents for Person 1, and has also created the Family Group records since they didn’t already exist.</p>
+<p>By default, the function will automatically assign the appropriate sex for new Individual records it creates:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people_with_anc</span>, <span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
+<span class="co">#&gt;   level record tag   value</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I6@   SEX   M    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I7@   SEX   F    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I8@   SEX   M    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   F</span></code></pre></div>
+<p>If the <code>inc_sex</code> parameter is FALSE or if the function cannot determine the appropriate sex, it will set it to be undetermined:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/add_ancestors.html">add_ancestors</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"@I1@"</span>, num_gen <span class="op">=</span> <span class="fl">2</span>, inc_sex <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> |&gt;
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
+<span class="co">#&gt;   level record tag   value</span>
+<span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I6@   SEX   U    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I7@   SEX   U    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I8@   SEX   U    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   U</span></code></pre></div>
+<p>The <code><a href="../reference/add_parents.html">add_parents()</a></code> function is equivalent to running <code><a href="../reference/add_ancestors.html">add_ancestors()</a></code> with <code>num_gen = 1</code>.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
