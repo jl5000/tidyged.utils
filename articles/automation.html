@@ -210,25 +210,29 @@
 <p>In the example above, you can see it has created parents and grandparents for Person 1, and has also created the Family Group records since they didn’t already exist.</p>
 <p>By default, the function will automatically assign the appropriate sex for new Individual records it creates:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people_with_anc</span>, <span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
+<code class="sourceCode R"><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people_with_anc</span>, <span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">11</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span>
 <span class="co">#&gt;   level record tag   value</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I6@   SEX   M    </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I7@   SEX   F    </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I8@   SEX   M    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   F</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   F    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     1 @I10@  SEX   M    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     1 @I11@  SEX   F</span></code></pre></div>
 <p>If the <code>inc_sex</code> parameter is FALSE or if the function cannot determine the appropriate sex, it will set it to be undetermined:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/add_ancestors.html">add_ancestors</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"@I1@"</span>, num_gen <span class="op">=</span> <span class="fl">2</span>, inc_sex <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> |&gt;
-  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">9</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
-<span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 4</span></span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">11</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
+<span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span>
 <span class="co">#&gt;   level record tag   value</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     1 @I6@   SEX   U    </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I7@   SEX   U    </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I8@   SEX   U    </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   U</span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     1 @I9@   SEX   U    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">5</span>     1 @I10@  SEX   U    </span>
+<span class="co">#&gt; <span style="color: #BCBCBC;">6</span>     1 @I11@  SEX   U</span></code></pre></div>
 <p>The <code><a href="../reference/add_parents.html">add_parents()</a></code> function is equivalent to running <code><a href="../reference/add_ancestors.html">add_ancestors()</a></code> with <code>num_gen = 1</code>.</p>
 </div>
   </div>
