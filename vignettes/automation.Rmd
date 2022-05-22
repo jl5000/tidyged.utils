@@ -83,14 +83,14 @@ In the example above, you can see it has created parents and grandparents for Pe
 By default, the function will automatically assign the appropriate sex for new Individual records it creates:
 
 ```{r}
-dplyr::filter(people_with_anc, record %in% paste0("@I", 6:9, "@"), tag == "SEX")
+dplyr::filter(people_with_anc, record %in% paste0("@I", 6:11, "@"), tag == "SEX")
 ```
 
 If the `inc_sex` parameter is FALSE or if the function cannot determine the appropriate sex, it will set it to be undetermined:
 
 ```{r}
 add_ancestors(people, "@I1@", num_gen = 2, inc_sex = FALSE) |>
-  dplyr::filter(record %in% paste0("@I", 6:9, "@"), tag == "SEX")
+  dplyr::filter(record %in% paste0("@I", 6:11, "@"), tag == "SEX")
 ```
 
 The `add_parents()` function is equivalent to running `add_ancestors()` with `num_gen = 1`.
