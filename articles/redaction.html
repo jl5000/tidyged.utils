@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidyged.utils</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.1.9000</span>
       </span>
     </div>
 
@@ -211,7 +211,7 @@
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @I1@   INDI  <span style="color: #949494;">""</span>                                                </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I1@   NOTE  <span style="color: #949494;">"</span>Information on this individual has been redacted<span style="color: #949494;">"</span></span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     1 @I1@   CHAN  <span style="color: #949494;">""</span>                                                </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>22 MAY 2022<span style="color: #949494;">"</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">4</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>12 JUN 2022<span style="color: #949494;">"</span></span></code></pre></div>
 <p>The user has the option of changing the text of this note using the <code>explan_note</code> parameter. Alternatively it can be set to an empty string to remove it completely:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span>, explan_note <span class="op">=</span> <span class="st">""</span><span class="op">)</span> |&gt;
@@ -222,7 +222,7 @@
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">1</span>     0 @I1@   INDI  <span style="color: #949494;">""</span>           </span>
 <span class="co">#&gt; <span style="color: #BCBCBC;">2</span>     1 @I1@   CHAN  <span style="color: #949494;">""</span>           </span>
-<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>22 MAY 2022<span style="color: #949494;">"</span></span></code></pre></div>
+<span class="co">#&gt; <span style="color: #BCBCBC;">3</span>     2 @I1@   DATE  <span style="color: #949494;">"</span>12 JUN 2022<span style="color: #949494;">"</span></span></code></pre></div>
 <p>Alternatively, the record can be removed completely:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">living_removed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/remove_living.html">remove_living</a></span><span class="op">(</span><span class="va">people</span>, guess <span class="op">=</span> <span class="cn">TRUE</span>, remove_record <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
