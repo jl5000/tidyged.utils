@@ -462,3 +462,66 @@ add_parents <- function(tg, xref, inc_sex = TRUE){
   
   tg
 }
+
+
+#' Create multiple siblings for an Individual
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of an Individual record to add siblings for.
+#' @param sexes A character string giving the sexes of each sibling. For example,
+#' "FFM" to add two sisters and one brother. See the help for tidyged::add_indi()
+#' for possible codes.
+#'
+#' @return A tidyged object with additional sibling records.
+#' @export
+add_siblings <- function(tg, xref, sexes = NULL){
+  
+  if(is.null(sexes)) return(tg)
+  
+  xref_famc <- tidyged::get_families_as_child(tg, xref, birth_only = TRUE)
+  
+  sexes_vec <- unlist(strsplit(sexes, split = NULL))
+  
+  for(sib in sexes_vec){
+    if(!sib %in% tidyged.internals::val_sexes()){
+      warning("Skipping sibling with unknown sex: ", sib)
+      next
+    }
+    
+    tg <- tidyged::add_indi(tg, sex = sib) |>
+      tidyged::add_indi_links_to_families(famg_xref_chil = xref_famc)
+    
+  }
+  
+  tg
+}
+
+#' Create multiple children for a Family Group
+#'
+#' @param tg A tidyged object.
+#' @param xref The xref of a Family Group record to add children for.
+#' @param sexes A character string giving the sexes of each child. For example,
+#' "FFM" to add two daughters and one son. See the help for tidyged::add_indi()
+#' for possible codes.
+#'
+#' @return A tidyged object with additional child records.
+#' @export
+add_children <- function(tg, xref, sexes = NULL){
+  
+  if(is.null(sexes)) return(tg)
+  
+  sexes_vec <- unlist(strsplit(sexes, split = NULL))
+  
+  for(chil in sexes_vec){
+    if(!chil %in% tidyged.internals::val_sexes()){
+      warning("Skipping child with unknown sex: ", chil)
+      next
+    }
+    
+    tg <- tidyged::add_indi(tg, sex = chil) |>
+      tidyged::add_indi_links_to_families(famg_xref_chil = xref)
+    
+  }
+  
+  tg
+}

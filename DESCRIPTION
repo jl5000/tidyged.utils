@@ -1,6 +1,6 @@
 Package: tidyged.utils
 Title: Utilities to Manage GEDCOM Files Using Tidyverse Principles
-Version: 0.4.0.9000
+Version: 0.4.1.9000
 Authors@R: 
     person(given = "Jamie",
            family = "Lendrum",
