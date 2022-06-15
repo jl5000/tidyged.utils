@@ -124,6 +124,11 @@
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"birth"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1910</span><span class="op">)</span><span class="op">)</span> |&gt;
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi.html" class="external-link">add_indi</a></span><span class="op">(</span>qn <span class="op">=</span> <span class="st">"Person 5"</span><span class="op">)</span> |&gt; 
   <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/add_indi_fact.html" class="external-link">add_indi_fact</a></span><span class="op">(</span><span class="st">"census"</span>, date <span class="op">=</span> <span class="fu"><a href="https://jl5000.github.io/tidyged/reference/date_calendar.html" class="external-link">date_calendar</a></span><span class="op">(</span><span class="fl">1911</span><span class="op">)</span>, age <span class="op">=</span> <span class="st">"42y"</span><span class="op">)</span>
+<span class="co">#&gt; Added Individual: @I1@</span>
+<span class="co">#&gt; Added Individual: @I2@</span>
+<span class="co">#&gt; Added Individual: @I3@</span>
+<span class="co">#&gt; Added Individual: @I4@</span>
+<span class="co">#&gt; Added Individual: @I5@</span>
 
 <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">people</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"DEAT"</span><span class="op">)</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 0 × 4</span></span>
@@ -190,6 +195,15 @@
 <p>If you are visualising your tree and would like to automatically create ancestor records going back a certain number of generations, you can use the <code><a href="../reference/add_ancestors.html">add_ancestors()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">people_with_anc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/add_ancestors.html">add_ancestors</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"@I1@"</span>, num_gen <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
+<span class="co">#&gt; Added Family Group: @F1@</span>
+<span class="co">#&gt; Added Individual: @I6@</span>
+<span class="co">#&gt; Added Individual: @I7@</span>
+<span class="co">#&gt; Added Family Group: @F2@</span>
+<span class="co">#&gt; Added Individual: @I8@</span>
+<span class="co">#&gt; Added Individual: @I9@</span>
+<span class="co">#&gt; Added Family Group: @F3@</span>
+<span class="co">#&gt; Added Individual: @I10@</span>
+<span class="co">#&gt; Added Individual: @I11@</span>
 
 <span class="fu">tidyged</span><span class="fu">::</span><span class="fu"><a href="https://jl5000.github.io/tidyged/reference/describe_records.html" class="external-link">describe_records</a></span><span class="op">(</span><span class="va">people_with_anc</span>, <span class="va">people_with_anc</span><span class="op">$</span><span class="va">record</span><span class="op">)</span>
 <span class="co">#&gt;  [1] "Submitter @U1@, Me"                                                </span>
@@ -224,6 +238,15 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/add_ancestors.html">add_ancestors</a></span><span class="op">(</span><span class="va">people</span>, <span class="st">"@I1@"</span>, num_gen <span class="op">=</span> <span class="fl">2</span>, inc_sex <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> |&gt;
   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">record</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"@I"</span>, <span class="fl">6</span><span class="op">:</span><span class="fl">11</span>, <span class="st">"@"</span><span class="op">)</span>, <span class="va">tag</span> <span class="op">==</span> <span class="st">"SEX"</span><span class="op">)</span>
+<span class="co">#&gt; Added Family Group: @F1@</span>
+<span class="co">#&gt; Added Individual: @I6@</span>
+<span class="co">#&gt; Added Individual: @I7@</span>
+<span class="co">#&gt; Added Family Group: @F2@</span>
+<span class="co">#&gt; Added Individual: @I8@</span>
+<span class="co">#&gt; Added Individual: @I9@</span>
+<span class="co">#&gt; Added Family Group: @F3@</span>
+<span class="co">#&gt; Added Individual: @I10@</span>
+<span class="co">#&gt; Added Individual: @I11@</span>
 <span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 4</span></span>
 <span class="co">#&gt;   level record tag   value</span>
 <span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
@@ -254,7 +277,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>
