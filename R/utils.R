@@ -391,7 +391,7 @@ add_ancestors <- function(tg, xref, num_gen, inc_sex = TRUE){
   for(gen in seq_len(num_gen)){
     
     for(xref_par in xrefs_par){
-      tg <- add_parents(tg, xref_par, inc_sex)
+      tg <- tidyged::add_parents(tg, xref_par, inc_sex)
     }
     
     xrefs_par <- purrr::map(xrefs_par, tidyged::get_indi_parents,
@@ -404,124 +404,68 @@ add_ancestors <- function(tg, xref, num_gen, inc_sex = TRUE){
 }
 
 
-#' Add parent records for an individual
-#' 
-#' This function adds placeholder records for an individual's parents.
-#' 
-#' @details This function may also create a Family Group record and will 
-#' not modify existing parents.
-#'
-#' @param tg A tidyged object.
-#' @param xref The xref of an Individual record to add parents for.
-#' @param inc_sex Whether to populate the sex of the parents. This will ensure
-#' that there is one male and one female parent. Otherwise the sex will be
-#' assigned as "U" (undetermined).
-#'
-#' @return A tidyged object with additional parent records.
-#' @export
-add_parents <- function(tg, xref, inc_sex = TRUE){
+# xref, census_year
+assess_census_events <- function(tg, 
+                                 max_age = 100,
+                                 census_years = seq(1841, 1921, 10)){
   
-  xref_par <- tidyged::get_indi_parents(tg, xref, birth_only = TRUE)
+  tg <- remove_change_dates(tg)
+
+  # get all individuals with a life event
+  eligibles <- tg |>
+    dplyr::filter(record %in% tidyged::xrefs_indi(tg)) |>
+    dplyr::filter(level == 2, tag == "DATE") |>
+    dplyr::pull(record) |>
+    unique()
   
-  if(length(xref_par) >= 2) return(tg)
+  purrr::map_dfr(eligibles, indi_census_df, tg = tg)
   
-  # check if family exists
-  xref_famc <- tidyged::get_families_as_child(tg, xref, birth_only = TRUE)
+
+}
+
+indi_census_df <- function(tg, xref, max_age = 100,
+                           census_years = seq(1841, 1921, 10)){
   
-  if(length(xref_famc) == 0){
-    xref_famc <- tidyged.internals::assign_xref_famg(tg)
-    tg <- tidyged::add_famg(tg) |>
-      tidyged::activate_indi(xref) |>
-      tidyged::add_indi_links_to_families(famg_xref_chil = xref_famc)
-  }
+  # for each person, get birth/death year
+  dob <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "BIRT")
+  dod <- tidyged.internals::gedcom_value(tg, xref, "DATE", 2, "DEAT")
+  if(dob == "" & dod == "") return(tibble::tibble())
   
-  if(length(xref_par) == 1){
-    
-    par_sex_new <- "U"
-    
-    if(inc_sex){
-      par_sex_cur <- tg$value[tg$record == xref_par & tg$tag == "SEX"]
-      
-      if(length(par_sex_cur) == 1){
-        par_sex_new <- dplyr::case_when(par_sex_cur == "M" ~ "F",
-                                        par_sex_cur == "F" ~ "M",
-                                        TRUE ~ "U")
-      }
-    }
-    
-    tg <- tidyged::add_indi(tg, sex = dplyr::if_else(inc_sex, par_sex_new, "U")) |>
-      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc) 
-    
+  if(dob != ""){
+    yob <- as.integer(stringr::str_extract(dob, "\\d{4}"))
   } else {
-    # No parents - add them both
-    tg <- tidyged::add_indi(tg, sex = dplyr::if_else(inc_sex, "M", "U")) |>
-      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc) |>
-      tidyged::add_indi(sex = dplyr::if_else(inc_sex, "F", "U")) |>
-      tidyged::add_indi_links_to_families(famg_xref_spou = xref_famc)
+    yob <- NA_integer_
   }
+  if(dod != ""){
+    yod <- as.integer(stringr::str_extract(dod, "\\d{4}"))
+  } else {
+    yod <- NA_integer_
+  }
+  if(is.na(yob) & is.na(yod)) return(tibble::tibble())
   
-  tg
+  guess <- FALSE
+  if(is.na(yob) | is.na(yod)) guess <- TRUE
+  if(is.na(yob)) yob <- yod - max_age
+  if(is.na(yod)) yod <- yob + max_age
+  
+  indi_name <- tidyged::describe_indi(tg, xref, name_only = TRUE)
+  cens_years <- census_years[dplyr::between(census_years, yob, yod)]
+  if(length(cens_years) == 0) return(tibble::tibble())
+  
+  # Do the census years appear?
+  # age, adr1, city
+  cens_rows <- tidyged.internals::identify_section(tg, 1, "CENS", xrefs = xref)
+  
+  
+  
+  tibble::tibble(xref = xref,
+                 name = indi_name,
+                 census_year = cens_years,
+                 birth_year = yob,
+                 death_year = yod,
+                 guess = guess,
+                 age = age,
+                 address = adr1,
+                 city = city)
 }
 
-
-#' Create multiple siblings for an Individual
-#'
-#' @param tg A tidyged object.
-#' @param xref The xref of an Individual record to add siblings for.
-#' @param sexes A character string giving the sexes of each sibling. For example,
-#' "FFM" to add two sisters and one brother. See the help for tidyged::add_indi()
-#' for possible codes.
-#'
-#' @return A tidyged object with additional sibling records.
-#' @export
-add_siblings <- function(tg, xref, sexes = NULL){
-  
-  if(is.null(sexes)) return(tg)
-  
-  xref_famc <- tidyged::get_families_as_child(tg, xref, birth_only = TRUE)
-  
-  sexes_vec <- unlist(strsplit(sexes, split = NULL))
-  
-  for(sib in sexes_vec){
-    if(!sib %in% tidyged.internals::val_sexes()){
-      warning("Skipping sibling with unknown sex: ", sib)
-      next
-    }
-    
-    tg <- tidyged::add_indi(tg, sex = sib) |>
-      tidyged::add_indi_links_to_families(famg_xref_chil = xref_famc)
-    
-  }
-  
-  tg
-}
-
-#' Create multiple children for a Family Group
-#'
-#' @param tg A tidyged object.
-#' @param xref The xref of a Family Group record to add children for.
-#' @param sexes A character string giving the sexes of each child. For example,
-#' "FFM" to add two daughters and one son. See the help for tidyged::add_indi()
-#' for possible codes.
-#'
-#' @return A tidyged object with additional child records.
-#' @export
-add_children <- function(tg, xref, sexes = NULL){
-  
-  if(is.null(sexes)) return(tg)
-  
-  sexes_vec <- unlist(strsplit(sexes, split = NULL))
-  
-  for(chil in sexes_vec){
-    if(!chil %in% tidyged.internals::val_sexes()){
-      warning("Skipping child with unknown sex: ", chil)
-      next
-    }
-    
-    tg <- tidyged::add_indi(tg, sex = chil) |>
-      tidyged::add_indi_links_to_families(famg_xref_chil = xref)
-    
-  }
-  
-  tg
-}
