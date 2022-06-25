@@ -455,8 +455,18 @@ indi_census_df <- function(tg, xref, max_age = 100,
   # Do the census years appear?
   # age, adr1, city
   cens_rows <- tidyged.internals::identify_section(tg, 1, "CENS", xrefs = xref)
-  
-  
+  if(length(cens_rows) == 0){ 
+    age = "?"
+    address = "?"
+    city = "?"
+  } else {
+    tg <- dplyr::slice(tg, cens_rows) |> 
+      dplyr::mutate(new_cens = tag == "CENS",
+                    cens_num = cumsum(new_cens)) |>
+      tidyr::pivot_wider(cens_num, names_from = tag, values_from = value) |>
+      dplyr::mutate(DATE = as.integer(stringr::str_extract(DATE, "\\d{4}"))) |>
+      tidyr::complete(DATE = cens_years)
+  }
   
   tibble::tibble(xref = xref,
                  name = indi_name,
@@ -464,8 +474,8 @@ indi_census_df <- function(tg, xref, max_age = 100,
                  birth_year = yob,
                  death_year = yod,
                  guess = guess,
-                 age = age,
-                 address = adr1,
-                 city = city)
+                 age = tg$AGE,
+                 address = tg$ADR1,
+                 city = tg$CITY)
 }
 
