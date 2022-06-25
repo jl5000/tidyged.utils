@@ -161,6 +161,17 @@ guess_age_from_famg_events <- function(tg, xref, agg_fn = mean) {
 #'
 #' @return A numeric value giving the number of years. A numeric value less than zero means no
 #' determination could be made.
+#' @tests
+#' expect_equal(date_diff("1900", "2000"), 99, tolerance = 0.01)
+#' expect_equal(date_diff("1900", "2000", minimise = FALSE), 101, tolerance = 0.01)
+#' expect_equal(date_diff("25 JAN", "8 MAR"), -1)
+#' expect_equal(date_diff("800", "2020"), 1219, tolerance = 0.01)
+#' expect_equal(date_diff("AFT 1900", "2000"), -1)
+#' expect_equal(date_diff("1900", "BEF 2000"), -1)
+#' expect_equal(date_diff("28 JAN 2006", "14 DEC 2008"), 2.877, tolerance = 0.01)
+#' expect_equal(date_diff("BET JAN 2000 AND 2007", "FROM 2012 TO 8 MAY 2016"), 4, tolerance = 0.01)
+#' expect_equal(date_diff("BET JAN 2000 AND 2007", "FROM 2012 TO 8 MAY 2016", minimise = FALSE), 16.35, tolerance = 0.01)
+#' expect_equal(date_diff("ABT 1932", "CAL 2000"), 67, tolerance = 0.01)
 date_diff <- function(date1,
                       date2 = tidyged::date_current(),
                       minimise = TRUE) {
@@ -171,19 +182,24 @@ date_diff <- function(date1,
   # dates must have years
   if(!all(stringr::str_detect(dates, "\\d{3,4}"))) return(-1)
   
+  dates <- stringr::str_remove_all(dates, "ABT |CAL |EST ")
+  
   regex_ic <- purrr::partial(stringr::regex, ignore_case = TRUE)
   
   # if date is a range/period, get the appropriate bound
   if(any(stringr::str_detect(dates, regex_ic("AND|FROM.+TO")))) {
     
     dates <- stringr::str_replace_all(dates, regex_ic("FROM |BET "), "")
+    date_reg <- tidyged.internals::reg_date(flatten = FALSE, only = FALSE)
+    first_date <- paste(paste0("^", date_reg), collapse = "|")
+    sec_date <- paste(paste0(date_reg, "$"), collapse = "|")
     
     if(minimise) {
-      dates[1] <- stringr::str_extract(dates[1], "(\\d{1,2} )?([A-Za-z]{3} )?(\\d{3,4})?$")
-      dates[2] <- stringr::str_extract(dates[2], "^(\\d{1,2} )?([A-Za-z]{3} )?(\\d{3,4})?")
+      dates[1] <- stringr::str_extract(dates[1], sec_date)
+      dates[2] <- stringr::str_extract(dates[2], first_date)
     } else {
-      dates[1] <- stringr::str_extract(dates[1], "^(\\d{1,2} )?([A-Za-z]{3} )?(\\d{3,4})?")
-      dates[2] <- stringr::str_extract(dates[2], "(\\d{1,2} )?([A-Za-z]{3} )?(\\d{3,4})?$")
+      dates[1] <- stringr::str_extract(dates[1], first_date)
+      dates[2] <- stringr::str_extract(dates[2], sec_date)
     }
     
   } else if(any(stringr::str_detect(dates, regex_ic("BEF|AFT")))) {
@@ -200,8 +216,13 @@ date_diff <- function(date1,
     
   }
   
-  dates1 <- tidyged.internals::parse_gedcom_date(dates[1], minimise)
-  dates2 <- tidyged.internals::parse_gedcom_date(dates[2], minimise)
+  if(minimise){
+    dates1 <- tidyged.internals::parse_gedcom_date(dates[1], FALSE)
+    dates2 <- tidyged.internals::parse_gedcom_date(dates[2], TRUE)
+  } else {
+    dates1 <- tidyged.internals::parse_gedcom_date(dates[1], TRUE)
+    dates2 <- tidyged.internals::parse_gedcom_date(dates[2], FALSE)
+  }
   
   lubridate::interval(dates1, dates2) |> 
     lubridate::time_length("years")
